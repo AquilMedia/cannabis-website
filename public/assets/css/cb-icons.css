@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'cannabis-icon';
+  src:  url('../fonts/cannabis-icon.eot?wz3kx0');
+  src:  url('../fonts/cannabis-icon.eot?wz3kx0#iefix') format('embedded-opentype'),
+    url('../fonts/cannabis-icon.ttf?wz3kx0') format('truetype'),
+    url('../fonts/cannabis-icon.woff?wz3kx0') format('woff'),
+    url('../fonts/cannabis-icon.svg?wz3kx0#cannabis-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.cb-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'cannabis-icon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cb-calendar:before {
+  content: "\e901";
+}
+.cb-clipboard:before {
+  content: "\e902";
+}
+.cb-heart:before {
+  content: "\e903";
+}
+.cb-security:before {
+  content: "\e904";
+}
+.cb-brain:before {
+  content: "\e905";
+}
+.cb-balance:before {
+  content: "\e906";
+}
+.cb-clock:before {
+  content: "\e907";
+}
+.cb-users:before {
+  content: "\e908";
+}
+.cb-file:before {
+  content: "\e909";
+}
+.cb-lock:before {
+  content: "\e90a";
+}
+.cb-truck:before {
+  content: "\e90b";
+}
+.cb-certificate:before {
+  content: "\e90c";
+}
+.cb-arrow-left:before {
+  content: "\e90d";
+}
+.cb-arrow-right:before {
+  content: "\e90e";
+}
+.cb-youtube:before {
+  content: "\e90f";
+}
+.cb-twitter:before {
+  content: "\e910";
+}
+.cb-instagram:before {
+  content: "\e911";
+}
+.cb-facebook-f:before {
+  content: "\e912";
+}
+.cb-message:before {
+  content: "\e913";
+}
+.cb-filter:before {
+  content: "\e914";
+}
+.cb-phone:before {
+  content: "\e900";
+}
