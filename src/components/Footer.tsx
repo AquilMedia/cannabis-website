@@ -91,12 +91,12 @@ const Footer: React.FC = () => {
                 <div className="footerTitle text-white mb__10"> Quick Links </div>
                 <div className="footer_linksWrap">
                   <ul className="list-unstyled">
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> About Us </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> How It Works </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Consultation </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> FAQs </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Blog </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Contact </a></li>
+                    <li className="footer-item mb__5"> <a href="/about" className="footer-link text-white opacity-8"> About Us </a></li>
+                    <li className="footer-item mb__5"> <a href="/howItWorks" className="footer-link text-white opacity-8"> How It Works </a></li>
+                    <li className="footer-item mb__5"> <a href="/consultation" className="footer-link text-white opacity-8"> Consultation </a></li>
+                    <li className="footer-item mb__5"> <a href="/faq" className="footer-link text-white opacity-8"> FAQs </a></li>
+                    <li className="footer-item mb__5"> <a href="/blog" className="footer-link text-white opacity-8"> Blog </a></li>
+                    <li className="footer-item mb__5"> <a href="/contact" className="footer-link text-white opacity-8"> Contact </a></li>
                   </ul>
                 </div>
               </div>
@@ -106,8 +106,8 @@ const Footer: React.FC = () => {
                 <div className="footerTitle text-white mb__10"> Legal </div>
                 <div className="footer_linksWrap">
                   <ul className="list-unstyled">
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Terms & Conditions </a></li>
-                    <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Privacy Policy </a></li>
+                    <li className="footer-item mb__5"> <a href="/termsConditions" className="footer-link text-white opacity-8"> Terms & Conditions </a></li>
+                    <li className="footer-item mb__5"> <a href="/privacyPolicy" className="footer-link text-white opacity-8"> Privacy Policy </a></li>
                     <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8">Legal Notice </a></li>
                     <li className="footer-item mb__5"> <a href="" className="footer-link text-white opacity-8"> Cookie Policy </a></li>                    
                   </ul>

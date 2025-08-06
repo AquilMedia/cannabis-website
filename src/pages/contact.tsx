@@ -4,7 +4,7 @@ const Contact: React.FC = () => {
     return (
         <div className="contact-page">
             <h1>Contact Us</h1>
-            <p>If you have any questions, feel free to reach out!</p>
+            {/* <p>If you have any questions, feel free to reach out!</p>
             <form>
                 <div>
                     <label htmlFor="name">Name:</label>
@@ -19,7 +19,7 @@ const Contact: React.FC = () => {
                     <textarea id="message" name="message" required></textarea>
                 </div>
                 <button type="submit">Send Message</button>
-            </form>
+            </form> */}
         </div>
     );
 };

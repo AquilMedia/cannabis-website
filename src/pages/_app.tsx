@@ -7,7 +7,7 @@ import '../../public/assets/css/stylesheet.css';
 import type { AppProps } from 'next/app';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { LikeProvider } from '../context/LikeContext';
+
 import { AuthProvider } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -17,8 +17,7 @@ import AOS from 'aos';
 
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
-    import('bootstrap/dist/js/bootstrap.bundle.min.js');
-  }, []);
+    import('bootstrap/dist/js/bootstrap.bundle.min.js'); }, []);
     const router = useRouter();
     const noLayoutRoutes = ['/login', '/register'];
     const hideLayout = noLayoutRoutes.includes(router.pathname);
@@ -43,9 +42,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
 
     return (
-        <AuthProvider>
-            <LikeProvider>{content}</LikeProvider>
-        </AuthProvider>
+  <AuthProvider>
+  {content}
+</AuthProvider>
+
     );
 }
 
