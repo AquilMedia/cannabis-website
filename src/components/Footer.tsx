@@ -2,7 +2,70 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-       <div className="footer overflow-hidden">
+    <div>
+      <div className="secWrap home_sec_six green-bg">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="section-title text-center mb__30">
+                <div className="title f-size-34 f-w-B text-white" data-aos="fade-up" data-aos-delay="300"> Stay Informed About Medical Cannabis </div>
+                <div className="subtitle opacity-5 text-white" data-aos="fade-up" data-aos-delay="400"> Get the latest research, legal updates, and health insights delivered to your inbox. Join our community of informed patients and healthcare professionals. </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="row justify-content-center mb__40">
+            <div className="col-lg-6">
+              <div className="newsletter_sec mb__15" data-aos="fade-up" data-aos-delay="300">
+                <form>
+                  <div className="d-lg-flex align-items-center justify-content-center gap-2">
+                    <div className="formGroup w-100">
+                      <input type="text" name="" placeholder="Enter your Email Address" className="cst-input" />
+                    </div>
+                    <div className="subscribe_btnWrap">
+                      <button type="submit" className="subscribe_btn secondary-clr"> Subscribe </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div className="subtitle opacity-5 text-white text-center" data-aos="fade-up" data-aos-delay="600"> No spam. Unsubscribe anytime. Your privacy is protected. </div>
+            </div>
+          </div>
+
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="row justify-content-center">
+                <div className="col-sm-6 col-lg-3">
+                  <div className="subBx text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div className="subscTitle f-size-24 text-white f-w-B"> 10,000+ </div>
+                    <div className="subsc_subTitle text-white opacity-5 f-size-18"> Subscribers </div>
+                  </div>
+                </div>
+                <div className="col-sm-6 col-lg-3">
+                  <div className="subBx text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div className="subscTitle f-size-24 text-white f-w-B"> Weekly </div>
+                    <div className="subsc_subTitle text-white opacity-5 f-size-18"> Updates </div>
+                  </div>
+                </div>
+                <div className="col-sm-6 col-lg-3">
+                  <div className="subBx text-center" data-aos="fade-up" data-aos-delay="500">
+                    <div className="subscTitle f-size-24 text-white f-w-B"> Expert </div>
+                    <div className="subsc_subTitle text-white opacity-5 f-size-18"> Content </div>
+                  </div>
+                </div>
+                <div className="col-sm-6 col-lg-3">
+                  <div className="subBx text-center" data-aos="fade-up" data-aos-delay="600">
+                    <div className="subscTitle f-size-24 text-white f-w-B"> Free </div>
+                    <div className="subsc_subTitle text-white opacity-5 f-size-18"> Forever </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer overflow-hidden">
   <div className="container">
     <div className="row justify-content-between">
       <div className="col-lg-4">
@@ -132,6 +195,9 @@ const Footer: React.FC = () => {
   </div>
 
 </div>
+      
+    </div>
+       
     );
 };
 

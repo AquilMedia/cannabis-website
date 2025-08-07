@@ -24,7 +24,24 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.cb-capsule:before {
+  content: "\e918";
+}
+.cb-oil:before {
+  content: "\e919";
+}
+.cb-drop:before {
+  content: "\e91a";
+}
+.cb-filter-btn:before {
+  content: "\e917";
+}
+.cb-cart:before {
+  content: "\e916";
+}
+.cb-leaf:before {
+  content: "\e900";
+}
 .cb-calendar:before {
   content: "\e901";
 }
