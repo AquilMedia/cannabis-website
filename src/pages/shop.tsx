@@ -8,7 +8,7 @@ const Shop: React.FC = () => {
 			<div
 				className="inner_sec_banner position-relative"
 				style={{
-					backgroundImage: `url('${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/listing-banner.jpg')`,
+					backgroundImage: `url("/assets/images/listing-banner.jpg")`,
 				}}
 			>
 
@@ -428,7 +428,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -480,7 +480,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -532,7 +532,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -584,7 +584,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -636,7 +636,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -688,7 +688,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -740,7 +740,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough
@@ -792,7 +792,7 @@ const Shop: React.FC = () => {
 										<div className="productLbl"> indica </div>
 
 										<div className="productImg mb__15">
-											<img   src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+											<img   src="/assets/images/product-img-1.png"className="w-100" alt="" />
 										</div>
 										<div className="productTitle f-size-18 f-w-M clr-black">
 											Sourdough

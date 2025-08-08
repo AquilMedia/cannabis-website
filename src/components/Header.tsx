@@ -15,7 +15,7 @@ const Header: React.FC = () => {
                         <nav className="navbar navbar-expand-lg">
                             <div className="container-fluid">
                                 <Link className="navbar-brand" href="/">
-                                    <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/Digital-Clinic-Area_logo.png`} className="w-100" alt="" />
+                                    <img src="/assets/images/Digital-Clinic-Area_logo.png" className="w-100" alt="" />
                                 </Link >
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                     <span className="navbar-toggler-icon"></span>
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
                                             <li className="list-inline-item">
                                                 <Link href="tel:+49123456789" className="d-flex gap-1 align-items-center">
                                                     <div className="call_icon">
-                                                        <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/call-icon.svg`} className="w-100" alt="" />
+                                                        <img src="/assets/images/call-icon.svg"className="w-100" alt="" />
                                                     </div>
                                                     <div className="call_txt primary-clr">
                                                         +49 123 456 789
