@@ -154,8 +154,8 @@ animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
 .cstArrows .slick-prev {left: 1.25rem;z-index: 9;}
 .cstArrows .slick-next {right: 1.25rem;z-index: 9;}
 .cstArrows .slick-next:before, .cstArrows .slick-prev:before{content: '';width: 1.063rem;display: block;background-size: 1.063rem;height: 0.75rem;background-position: center;background-repeat: no-repeat;}
-.cstArrows .slick-next:before {background-image: url(/assets/images/right-arrow.svg);}
-.cstArrows .slick-prev:before {background-image: url(/assets/images/left-arrow.svg);}
+.cstArrows .slick-next:before {background-image: url(../images/right-arrow.svg);}
+.cstArrows .slick-prev:before {background-image: url(../images/left-arrow.svg);}
 .section-bg{background-color: #F5F8F7;}
 .aboutIcon{width: 5.125rem;height: 5.125rem;border-radius: 100%;background: rgba(69, 161, 77, 0.2);}
 .aboutBx{background: #FFFFFF;border: 1px solid rgba(49, 129, 56, 0.2);border-radius: 1.25rem;padding: 1.563rem;}

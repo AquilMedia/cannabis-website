@@ -1,11 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { useAuth } from '@/context/AuthContext';
-
+import Link from 'next/link';
+import { getHomepageData } from '@/services/user';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 const Home: React.FC = () => {
-  const { user } = useAuth();
+
   const [showModal, setShowModal] = useState(false);
   const [ignore, setIgnore] = useState(false);
+  const { user } = useAuth();
+  const [data, setData] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchHomepageData = async () => {
+  //     try {
+  //       if (!user?.token) {
+  //         toast.error('User not authenticated');
+  //         return;
+  //       }
+
+  //       const response = await getHomepageData(user.token);
+  //       setData(response.data);
+  //       console.log(response.data);
+  //     } catch (err: any) {
+  //       toast.error(err.message || 'Failed to load homepage');
+  //     }
+  //   };
+
+  //   fetchHomepageData();
+  // }, [user]);
 
   useEffect(() => {
     let openTimer: NodeJS.Timeout;
@@ -105,21 +129,22 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <div className="secWrap home_sec_one bgWrap" style={{ backgroundImage: "url('/assets/images/banner-bg.jpg')" }}>
+      <div className="secWrap home_sec_one bgWrap" style={{ backgroundImage: "url('assets/images/banner-bg.jpg')" }}>
         {/* style="background-image: url(assets/images/banner-bg.jpg)" */}
         <div className="container">
+          
           <div className="row">
             <div className="col-lg-5 order-lg-2">
               <div data-aos="fade-up" data-aos-delay="600">
                 <Slider {...settings} className='main-slider cstArrows'>
                   <div className="slide-item">
-                    <div className="banner-img position-relative overflow-hidden"><img src="/assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
+                    <div className="banner-img position-relative overflow-hidden"><img src="assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
                   </div>
                   <div className="slide-item">
-                    <div className="banner-img position-relative overflow-hidden"><img src="/assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
+                    <div className="banner-img position-relative overflow-hidden"><img src="assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
                   </div>
                   <div className="slide-item">
-                    <div className="banner-img position-relative overflow-hidden"><img src="/assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
+                    <div className="banner-img position-relative overflow-hidden"><img src="assets/images/banner-image-1.jpg" alt="" className='w-100' /></div>
                   </div>
                 </Slider>
               </div>
@@ -175,6 +200,7 @@ const Home: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
@@ -524,7 +550,7 @@ const Home: React.FC = () => {
           </div>
           <div className="row">
             <div className="col-sm-6 col-lg-3">
-              <a href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="300">
+              <Link href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="300">
                 <div className="insightsBx-img"> <img src="assets/images/insights-img-1.jpg" className="w-100" alt="" /> </div>
                 <div className="insight_cont">
                   <div className="insight_date d-flex align-items-center gap-1 mb__15">
@@ -537,11 +563,11 @@ const Home: React.FC = () => {
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown...
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
 
             <div className="col-sm-6 col-lg-3">
-              <a href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="400">
+              <Link href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="400">
                 <div className="insightsBx-img"> <img src="assets/images/insights-img-2.jpg" className="w-100" alt="" /> </div>
                 <div className="insight_cont">
                   <div className="insight_date d-flex align-items-center gap-1 mb__15">
@@ -554,11 +580,11 @@ const Home: React.FC = () => {
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown...
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
 
             <div className="col-sm-6 col-lg-3">
-              <a href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="500">
+              <Link href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="500">
                 <div className="insightsBx-img"> <img src="assets/images/insights-img-3.jpg" className="w-100" alt="" /> </div>
                 <div className="insight_cont">
                   <div className="insight_date d-flex align-items-center gap-1 mb__15">
@@ -571,11 +597,11 @@ const Home: React.FC = () => {
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown...
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
 
             <div className="col-sm-6 col-lg-3">
-              <a href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="600">
+              <Link href="#" className="insightsBx d-block mb__30" data-eq="insightHq" data-aos="fade-up" data-aos-delay="600">
                 <div className="insightsBx-img"> <img src="assets/images/insights-img-4.jpg" className="w-100" alt="" /> </div>
                 <div className="insight_cont">
                   <div className="insight_date d-flex align-items-center gap-1 mb__15">
@@ -588,13 +614,13 @@ const Home: React.FC = () => {
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown...
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
           <div className="row justify-content-center">
             <div className="col-lg-8">
               <div className="viewAll_article text-center" data-aos="fade-up" data-aos-delay="300">
-                <a href="" className="viewAll_article_btn">
+                <Link href="" className="viewAll_article_btn">
                   <div className="d-flex align-items-center gap-1 justify-content-center">
                     <div className="viewTxt f-size-16 f-w-M secondary-clr">
                       View All Articles
@@ -603,7 +629,7 @@ const Home: React.FC = () => {
                       <img src="assets/images/btn-arrow.svg" className="btn-arrow" alt="" />
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
