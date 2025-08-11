@@ -70,6 +70,7 @@
     --f-size-28:1.75rem;
     --f-size-34:2.125rem;
     --f-size-60:3.75rem;
+
     --body-txt-clr:#677E67;
     --clr-green:#45A14D;
     --clr-black:#000000;
@@ -81,7 +82,7 @@ a, button {transition:all 0.3s ease-in-out;text-decoration: none;}
 a:hover {text-decoration:none;}
 img {max-width:100%;}
 p,ul{margin-bottom: 0.938rem}
-input:focus, button:focus, .form-control:focus, .bootstrap-select .dropdown-toggle:focus, .slide-item:focus {outline: none !important;box-shadow: none !important;border: none;}
+input:focus, button:focus, .form-control:focus, .bootstrap-select .dropdown-toggle:focus, .slide-item:focus {outline: none !important;box-shadow: none !important;}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {-webkit-appearance: none; margin: 0;}
@@ -363,12 +364,15 @@ animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
     text-align: center;
 }
 
+body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
 .cb_linkBtn { display: inline-flex; align-items: center; gap: .75rem; font-size: var(--f-size-16); padding: 0; border-radius: 0; border: none; color: #677E67; }
 .cb_cmnBtn {background: linear-gradient(90deg, #318138 0%, #45A14D 100%) !important;color: #fff !important; border: 1px solid transparent !important;border-radius: .5rem;padding: .5rem .875rem; font-weight: 500; line-height: 1.2;display: inline-flex;justify-content: center; align-items: center; gap: .5rem;min-height: 2.5rem;}
 .cb_cmnBtn.btn-o {background: transparent !important;border-color: rgba(69, 161, 77, 0.2) !important; color: #000 !important;}
 .cb_prodDtl_img { border: 1px solid #D9D9D9; border-radius: .625rem; }
 .cb_cstLabel { border: 1px solid rgba(69, 161, 77, 0.2); border-radius: 8px; font-size: var(--f-size-14); font-weight: 500; color: #000; padding: .375rem .625rem; min-width: 6.25rem; line-height: 1.3; text-align: center; }
 .cb_cstLabel.fill { background-color: var(--clr-green); color: #fff; }
+.cb_cstLabel_2 {font-size: 10px; color: #000;font-weight: 500;background: #F3F3F3;border: 1px solid rgba(69, 161, 77, 0.2);border-radius: 100px;padding: .25rem 1.125rem;display: inline-block;}
+
 .cb_prod_title { font-size: 2.375rem; line-height: 1.3; }
 .cb_prod_price { font-size: 1.625rem; }
 .cb_border_1 {border: 1px solid rgba(69, 161, 77, 0.2);}
@@ -379,6 +383,44 @@ animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
 .cb_cstTab .nav-link {color: #000000;display: inline-flex; justify-content: center;align-items: center;gap: .25rem; width: 100%; font-weight: 600;font-size: var(--f-size-16);line-height: 1.3;border-radius: .25rem;padding: .563rem .75rem;}
 .cb_cstTab .nav-link.active {background-color: #45A14D;color: #fff;}
 .eb_cardStyle_1 {border: 1px solid #F6F6F6;border-radius: 1.25rem;padding: 2rem;}
+
+.cb_post_card {padding: 1rem 1.375rem;border: 1px solid rgba(69, 161, 77, 0.2);border-radius: .5rem;}
+.cb_post_card .headWrapper {gap: .75rem;margin-bottom: .938rem;}
+.cb_post_card .iconbx {background-color: rgba(69, 161, 77, 0.2);border-radius: .313rem;min-width: 3.375rem;width: 3.375rem;height: 3.375rem;display: inline-flex;justify-content: center;align-items: center;font-size: 1.75rem;color: #45A14D;}
+.cb_post_card .cb_post_title {font-size: var(--f-size-16);}
+.cb_post_card .post_summary { height: 2.563rem; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cb_post_card .bt_wrapp {margin-top: .25rem;}
+.cb_patientSatisfaction_card {border: 1px solid rgba(49, 129, 56, 0.2);border-radius: 20px;padding: 2rem 1rem;}
+.cb_patientSatisfaction_card .lg_text {font-size: 2rem;margin-bottom: .5rem;}
+.cb_testimonialCard {padding: 1.75rem 1.75rem 1rem 1.75rem;border: 1px solid rgba(49, 129, 56, 0.2);border-radius: 1.25rem;}
+.cb_testimonialCard .wrap_head {margin-bottom: .875rem;gap: .5rem;}
+.cb_testimonialCard .pic_wrap {min-width: 3.25rem;width: 3.25rem;height: 3.25rem;display: flex; justify-content: center; align-items: center; border-radius: 100%;overflow: hidden; background-color: rgba(69, 161, 77, 0.2);color: var(--clr-secondary);font-size: 1.5rem;}
+.cb_testimonialCard .pic_wrap img {object-fit: cover;width: 100%;height: 100%;}
+.cb_testimonialCard .bt_Info_row {margin-top: .5rem;}
+.cb_testimonialStars {display: inline-flex;color: #EAE43E;gap: .25rem;font-size: var(--f-size-16);}
+.cb_cstSlider .slick-list {margin-left: -.75rem;margin-right: -.75rem;}
+.cb_cstSlider .slick-slide {padding-left: .75rem;padding-right: .75rem;}
+.cb_cstSlider.arrow-sm-stl .slick-arrow {width: 1.75rem;height: 1.75rem; border-radius: 100%;background-color: #fff;z-index: 9; box-shadow: 0 0 6px 0 rgba(0, 0, 0, .2) !important;transform: translate(0, -50%);top: 50%; }
+.cb_cstSlider.arrow-sm-stl .slick-arrow::before {width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;color: #000;font-family: 'cannabis-icon';font-size: var(--f-size-14);}
+.cb_cstSlider.arrow-sm-stl .slick-prev::before {content: "\e90d";}
+.cb_cstSlider.arrow-sm-stl .slick-next::before {content: "\e90e";}
+.cb_cstSlider.arrow-sm-stl .slick-prev {left: -.625rem;}
+.cb_cstSlider.arrow-sm-stl .slick-next {right: -.625rem;}
+.cb_qty_selector.field-w {min-width: 9.375rem;max-width: 9.375rem;}
+.cb_qty_selector {position: relative;display: flex;flex-direction: column;}
+.cb_qty_selector .qtyValue {text-align: center;border: 1px solid rgba(69, 161, 77, 0.2);border-radius: 8px;height: 2.5rem;padding-left: 2.625rem;padding-right: 2.625rem;font-size: var(--f-size-16);color: #000 !important;font-weight: 500;flex-grow: 1;}
+.cb_qty_selector .decreaseQty, .cb_qty_selector .increaseQty {position: absolute;z-index: 1;padding: 0;display: flex;justify-content: center;align-items: center; top: 0;bottom: 0;width: 2.25rem;font-size: var(--f-size-12); color: #000; border-color: rgba(69, 161, 77, 0.2) !important;border-top-width: 0;border-bottom-width: 0;border-radius: 0;}
+.cb_qty_selector .decreaseQty {left: 0;border-left-width: 0;}
+.cb_qty_selector .increaseQty {right: 0;border-right-width: 0;}
+.cb_pharmacyCard {border: 1px solid rgba(69, 161, 77, 0.2);border-radius: .5rem;padding: .875rem 1.125rem;}
+.cb_pharmacyCard .cb_iconInfo { display: flex; gap: 6px; }
+.cb_pharmacyCard .cb_iconInfo .icon {align-self: center;}
+.cb_pharmaItem .pharmaInput_item:checked ~ .cb_pharmacyCard {background-color: rgba(69, 161, 77, 0.07);box-shadow: 0 0 0 1px rgba(69, 161, 77, 0.2);}
+.cb_cstModal {border-radius: .625rem;}
+.cb_cstModal .modal-content {border-color: transparent;}
+.cb_cstModal .cb_cst_close { width: 1.125rem; min-width: 1.125rem; height: 1.125rem; padding: 0; opacity: 1 !important; }
+.cb_cstModal .modal-header, .cb_cstModal .modal-body, .cb_cstModal .modal-footer {padding-left: 1.5rem;padding-right: 1.5rem;}
+
 
 
 
@@ -398,11 +440,25 @@ animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   }
 }
-@media (max-width:991px){
-    :root{        
-        --f-size-34: 24px;    
+@media (max-width:1199px) {
+    :root{    
+        --f-size-14:13px;
+        --f-size-16:14px;
+        --f-size-18:17px;
+        --f-size-20:18px;
+        --f-size-22:20px;
+        --f-size-24:21px;
+        --f-size-28:22px;   
+
+        --f-size-34:26px;    
         --f-size-60:30px;    
     }
+   .cb_prod_title {font-size: 26px;}
+   .cb_patientSatisfaction_card .lg_text {font-size: 28px;}
+
+}
+@media (max-width:991px){
+
     .mt__80 {margin-top: 30px;}
     body{padding-top: 68px;}
     .header .navbar-brand{max-width: 120px;}
@@ -433,8 +489,12 @@ animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
     .cont_info {margin-bottom: 30px;}
     .footer-widget {margin-bottom: 30px;}
     .main-slider {max-width: 90%;margin-right: auto;margin-left: auto;}
+
+    .eb_cardStyle_1 { padding: 1.25rem; }
 }
 @media (max-width:767px){
+    .cb_patientSatisfaction_card { padding: 18px 12px; }
+    .cb_cstModal .modal-header, .cb_cstModal .modal-body, .cb_cstModal .modal-footer { padding-left: 1rem; padding-right: 1rem; }
 
 }
 @media (max-width:575px){
