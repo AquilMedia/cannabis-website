@@ -24,6 +24,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.cb-circle-check:before {
+  content: "\e924";
+}
+.cb-circle-close:before {
+  content: "\e925";
+}
+.cb-circle-tick:before {
+  content: "\e922";
+}
+.cb-user:before {
+  content: "\e923";
+}
+.cb-check:before {
+  content: "\e921";
+}
 .cb-upload:before {
   content: "\e91f";
 }
