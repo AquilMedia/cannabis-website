@@ -171,7 +171,7 @@ const Productdetails: React.FC = () => {
                     </div>
                     <div className="tab-content">
                         <div className="tab-pane fade show active" id="tab_1" role="tabpanel">
-                            <div className="eb_cardStyle_1">
+                            <div className="cb_cardStyle_1">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="mb-3">
@@ -196,7 +196,7 @@ const Productdetails: React.FC = () => {
                             </div>
                         </div>
                         <div className="tab-pane fade" id="tab_2" role="tabpanel">
-                            <div className="eb_cardStyle_1">
+                            <div className="cb_cardStyle_1">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="mb-3">
@@ -220,7 +220,7 @@ const Productdetails: React.FC = () => {
                             </div>
                         </div>
                         <div className="tab-pane fade" id="tab_3" role="tabpanel">
-                            <div className="eb_cardStyle_1">
+                            <div className="cb_cardStyle_1">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="mb-3">
@@ -244,7 +244,7 @@ const Productdetails: React.FC = () => {
                             </div>
                         </div>
                         <div className="tab-pane fade" id="tab_4" role="tabpanel">
-                            <div className="eb_cardStyle_1">
+                            <div className="cb_cardStyle_1">
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="mb-3">
