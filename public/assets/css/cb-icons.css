@@ -24,6 +24,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.cb-upload:before {
+  content: "\e91f";
+}
+.cb-notepad:before {
+  content: "\e920";
+}
 .cb-minus:before {
   content: "\e91d";
 }
