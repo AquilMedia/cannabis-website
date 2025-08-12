@@ -3,8 +3,7 @@ import Link from 'next/link';
 
 
 
-const Uploadprescription: React.FC = () => {
-    const [prescriptionFileName, setPrescriptionFileName] = useState('No File chosen');
+const Onlineprescription: React.FC = () => {
     const [identificationFileName, setIdentificationFileName] = useState('Upload your ID document');
 
     const handleFileChange = (
@@ -13,17 +12,11 @@ const Uploadprescription: React.FC = () => {
         const file = event.target.files?.[0];
         const inputId = event.target.id;
 
-        if (file) {
-            if (inputId === 'uploadPrescription') {
-            setPrescriptionFileName(file.name);
-            } else if (inputId === 'uploadIdentification') {
-            setIdentificationFileName(file.name);
-            }
-        } else {
-            if (inputId === 'uploadPrescription') {
-            setPrescriptionFileName('No File chosen');
-            } else if (inputId === 'uploadIdentification') {
-            setIdentificationFileName('No File chosen');
+        if (inputId === 'uploadIdentification') {
+            if (file) {
+                setIdentificationFileName(file.name);
+            } else {
+                setIdentificationFileName('No File chosen');
             }
         }
     };
@@ -33,7 +26,7 @@ const Uploadprescription: React.FC = () => {
             <div className="container">
                     <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">Prescription for Big Purple Dragon</h1>
                     <div className="text-center mb-4 pb-md-3">
-                        <h4 className="text-black f-size-22 f-w-N mb-0">Upload Prescription</h4>
+                        <h4 className="text-black f-size-22 f-w-N mb-0">Online Prescription</h4>
                     </div>
 
                     <div className="cb_wrapSteps_tab overflow-y-auto">
@@ -41,30 +34,36 @@ const Uploadprescription: React.FC = () => {
                             <li className="nav-item"> 
                                 <button data-bs-toggle="tab" data-bs-target="#tab_step_1" className="nav-link active">
                                     <span className="nbr">1</span>
-                                    <span className="nav-text">Upload Prescription</span>
+                                    <span className="nav-text">Medical Questionnaire</span>
                                 </button> 
                             </li>
                             <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_2" className="nav-link disabled">
+                                <button data-bs-toggle="tab" data-bs-target="#tab_step_2" className="nav-link">
                                     <span className="nbr">2</span>
                                     <span className="nav-text">Patient Information</span>
                                 </button> 
                             </li>
                             <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_3" className="nav-link disabled">
+                                <button data-bs-toggle="tab" data-bs-target="#tab_step_3" className="nav-link">
                                     <span className="nbr">3</span>
                                     <span className="nav-text">Legal Document</span>
                                 </button> 
                             </li>
                             <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_4" className="nav-link disabled">
+                                <button data-bs-toggle="tab" data-bs-target="#tab_step_4" className="nav-link">
                                     <span className="nbr">4</span>
                                     <span className="nav-text">Delivery Method</span>
                                 </button> 
                             </li>
                             <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_5" className="nav-link disabled">
+                                <button data-bs-toggle="tab" data-bs-target="#tab_step_5" className="nav-link">
                                     <span className="nbr">5</span>
+                                    <span className="nav-text">Submit for Review</span>
+                                </button> 
+                            </li>
+                            <li className="nav-item"> 
+                                <button data-bs-toggle="tab" data-bs-target="#tab_step_6" className="nav-link">
+                                    <span className="nbr">6</span>
                                     <span className="nav-text">Order Summary</span>
                                 </button> 
                             </li>
@@ -74,28 +73,117 @@ const Uploadprescription: React.FC = () => {
                     <div className="tab-content">
                         <div className="tab-pane fade show active" id="tab_step_1" role="tabpanel">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
-                                <div className="text-center text-black f-size-18 mb-2">Upload Prescription (Max 10MB)</div>
-                                <div className="row g-0 justify-content-center">
-                                    <div className="col-sm-9 col-md-7 col-lg-5 col-xl-4">
-                                        <div className="fieldWrap_upload">
-                                            <input
-                                                className="d-none"
-                                                type="file"
-                                                id="uploadPrescription"
-                                                onChange={handleFileChange}
-                                            />
-                                            <label
-                                                className="cb_uploadField_wrap style-No-brd px-0 py-1"
-                                                htmlFor="uploadPrescription"
-                                            >
-                                                <span className="btn chooseBtn">Choose File</span>
-                                                <span className="min-w-0">
-                                                <span className="fileName">{prescriptionFileName}</span>
-                                                </span>
-                                            </label>
+                                <div className="mb-4 pb-lg-2">
+                                    <div className="text-black f-size-20 line_H_1_2">Medical Questionnaire</div>
+                                    <div>for Big Purple Dragon</div>
+                                </div>
+
+                                <div className="cb_cardStyle_1 spc-sm">
+                                    <div className="text-black line_H_1_3 mb-4">Have you ordered the same product before?</div>
+                                    <div className="">
+                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-3">
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="radio" name="sameProduct" /> Yes, I have used this product before</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="radio" name="sameProduct" /> No, this is my first time</label> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 spc-sm mt-4">
+                                    <div className="text-black line_H_1_3 mb-4">What medical complaints do you have?</div>
+                                    <div className="row row-gap-2">
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Chronic Pain</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Anxiety</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Depression</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Insomnia</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Epilepsy</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Cancer Treatment Side Effects</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Multiple Sclerosis</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> PTSD</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Arthritis</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Migraine</label>
+                                        </div>
+                                        <div className="col-sm-6 col-lg-5 d-flex">
+                                            <label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" /> Other</label>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 spc-sm mt-4">
+                                    <div className="text-black line_H_1_3 mb-2">Anamnesis (Medical History)</div>
+                                    <div>
+                                       <textarea className="form-control cst-form-f resize-none" placeholder="Please describe your medical history, previous treatments, and current symptoms..." rows={3}></textarea>
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 spc-sm mt-4">
+                                    <div className="text-black line_H_1_3 mb-2">Expected Therapy Effects</div>
+                                    <div>
+                                       <textarea className="form-control cst-form-f resize-none" placeholder="What effects are you hoping to achieve with this treatment?" rows={3}></textarea>
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 spc-sm mt-4">
+                                    <div className="text-black line_H_1_3 mb-3">Exclusion Criteria <span className="f-f-size-14 primary-clr">(Please check any that apply to you:)</span> </div>
+                                    <div className="">
+                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-2">
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Pregnancy</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Breastfeeding</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Severe Heart Condition</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Psychosis</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Substance Abuse History</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Allergy to Cannabis</label> </li>
+                                            <li className="d-flex"><label className="d-flex gap-2"><input className="cb_input_rc" type="checkbox" />Under 18 years old</label> </li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 spc-sm mt-4">
+                                    <div className="text-black line_H_1_3 mb-2">Current Medications</div>
+                                    <div>
+                                       <textarea className="form-control cst-form-f resize-none" placeholder="Please list any medications you are currently taking..." rows={3}></textarea>
+                                    </div>
+                                </div>
+                                <div className="cb_cardStyle_1 cardYellow spc-sm mt-4">
+                                    <div className="d-flex gap-2">
+                                        <div className="iconSpc_tp">
+                                            <i className="cb-icon cb-file text-black f-size-20"></i>
+                                        </div>
+                                        <div className="flex-grow-1">
+                                            <div className="text-black mb-1">Important Medical Information:</div>
+                                            <ul className="d-flex flex-column row-gap-1 list_align_L">
+                                                <li>Cannabis may interact with other medications</li>
+                                                <li>Do not drive or operate machinery while using this medication</li>
+                                                <li>Keep away from children and pets</li>
+                                                <li>Store in a cool, dry place</li>
+                                                <li>Consult your doctor if you experience any adverse effects</li>
+                                            </ul>
+
+                                            <div>
+                                                <label className="d-flex gap-2 f-w-SB"><input className="cb_input_rc" type="checkbox" />I have read and understood the above information</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div className="text-center mt-4">
+                                    <button className="btn cb_cmnBtn px-4">Complete Questionnaire</button>
+                                </div>
+                                
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
                                 <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
@@ -137,7 +225,7 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mb-3">
+                                <div className="">
                                     <h5 className="secondary-clr f-size-14 f-w-M mb-2">Address Information</h5>
                                     <div className="row">
                                         <div className="col-md-12">
@@ -162,9 +250,7 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-center">
-                                    <button className="btn cb_cmnBtn px-4">Save Patient Information</button>
-                                </div>
+                                
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
                                 <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
@@ -215,9 +301,7 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-center mt-4">
-                                    <button className="btn cb_cmnBtn px-4">Continue with Document</button>
-                                </div>
+                                
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
                                 <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
@@ -303,9 +387,6 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-center mt-4">
-                                    <button className="btn cb_cmnBtn px-4">Continue with Pickup</button>
-                                </div>
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
                                 <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
@@ -314,6 +395,51 @@ const Uploadprescription: React.FC = () => {
                         </div>
                         <div className="tab-pane fade" id="tab_step_5" role="tabpanel">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
+
+                                <div className="text-center mb-4 pb-3">
+                                    <div className="mb-3"><i className="lg-iconform cb-icon cb-circle-close clr-red"></i></div>
+                                    <div className="f-size-28 clr-red f-w-M line_H_1_2 mb-1">Prescription Requires Review</div>
+                                    <div>Our doctor needs additional information before approving your prescription.</div>
+                                </div>
+                            
+                                <div className="cb_cardStyle_1 cardRed spc-sm">
+                                    <div className="f-w-SB f-size-18 clr-darkred line_H_1_3 mb-2">Reason for Review:</div>
+                                    <div className="f-size-18 clr-red">Insufficient medical history provided</div>
+                                </div>
+
+                                <div className="text-center mt-4">
+                                    <span className="alerterror_Msg_cst text-black">
+                                        <i className="icon cb-icon cb-circle-close"></i>
+                                        Requires Additional Information
+                                    </span>
+                                </div>
+
+                                <div className="mt-4 pt-2">
+                                    <div className="text-center mb-3">Please contact our support team or schedule a consultation to provide additional information.</div>
+                                    <div className="d-flex justify-content-center gap-2 gap-sm-3 flex-wrap">
+                                        <button className="btn cb_cmnBtn btn-o px-sm-4">Contact Support</button>
+                                        <button className="btn cb_cmnBtn btn-o px-sm-4">Schedule Consultation</button>
+                                    </div>
+                                </div>
+                               
+                           
+                              
+                              
+                            </div>
+                            <div className="mt-4 d-flex justify-content-between gap-2">
+                                <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
+                                <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
+                            </div>
+                        </div>
+                        <div className="tab-pane fade" id="tab_step_6" role="tabpanel">
+                            <div className="cb_cardStyle_1 cb_prescriptn_card">
+
+                                <div className="text-center mb-4 pb-3">
+                                    <div className="mb-3"><i className="lg-iconform cb-icon cb-circle-check clr-green"></i></div>
+                                    <div className="f-size-28 clr-green f-w-M line_H_1_2 mb-1">Prescription Approved!</div>
+                                    <div>Your prescription has been approved. Review your order details below.</div>
+                                </div>
+
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Order Summary</div>
                                     <div>Review your order details before placing</div>
@@ -394,4 +520,4 @@ const Uploadprescription: React.FC = () => {
     );
 };
 
-export default Uploadprescription;
+export default Onlineprescription;
