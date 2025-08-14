@@ -600,3 +600,50 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
 }
 
 
+
+.orderConfirmationModal {
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.orderIconWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  background-color: #e6faf5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successIcon i {
+  font-size: 28px;
+  color: #00b894;
+}
+
+.orderDetailsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.orderDetailsList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.orderDetailsList i {
+  color: #00b894;
+}

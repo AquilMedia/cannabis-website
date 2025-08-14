@@ -51,6 +51,7 @@ try {
         setSelectedPharmacy(pharmacist);
         setShowPharmacyModal(false);
         setShowConflictModal(true);
+        fetchCartData();
         return;
     }
 
@@ -64,6 +65,7 @@ try {
     );
     toast.success("Added to cart successfully");
     setShowPharmacyModal(false);
+    fetchCartData();
     return;
 } catch {
     // toast.error("Failed to add to cart 1");
@@ -116,6 +118,7 @@ const openSelector = async (product: any, updatedquantity: any) => {
         );
         toast.success("Added to cart successfully");
         setShowConflictModal(false);
+        fetchCartData();
     } catch {
         toast.error("Failed to start a new order");
     }

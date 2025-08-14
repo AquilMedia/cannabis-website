@@ -57,3 +57,6 @@ export const getProductsDetails = async (id) => {
  export const getPatientinfo = async ( token) => {
   return await callApiWithAuth(`/api/user/getPatientInfo`, token, 'GET');
 };
+ export const getMedicalQuestions = async ( token) => {
+  return await callApiWithAuth(`/api/public/getMedicalQuestions`, token, 'GET');
+};
