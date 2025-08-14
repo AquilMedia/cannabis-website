@@ -5,59 +5,67 @@ import { toast } from "react-toastify";
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
 import { useRouter } from "next/navigation";
 
+
+import OrderConfirmationModal from "@/Modals/OrderConfirmationModal";
+import { useCart } from "@/context/CartContext";
+
 const geocodingClient = mbxGeocoding({
     accessToken: "sk.eyJ1Ijoic2FteWFiaXNhbGVoIiwiYSI6ImNtM2ZmdnkxMTBqMXMyaXNlcHMzeTV1cmEifQ.p3Zc6DhFHND0OAD7FCRKtA"
 });
 const Uploadprescription: React.FC = () => {
     const { user } = useAuth();
-   const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
+    const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
 
-interface PatientInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  dob: string;
-  addressline1: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  latitude?: number;
-  longitude?: number;
-}
+    interface PatientInfo {
+        firstName: string;
+        lastName: string;
+        email: string;
+        mobile: string;
+        dob: string;
+        addressline1: string;
+        city: string;
+        postalCode: string;
+        country: string;
+        latitude?: number;
+        longitude?: number;
+    }
 
 
-interface FormDataType {
-  prescriptionImg: File | null;
-  legalDocImg: File | null;
-  deliveryMethod: string;
-  patientInfo: PatientInfo;
-}
+    interface FormDataType {
+        prescriptionImg: File | null;
+        legalDocImg: File | null;
+        deliveryMethod: string;
+        patientInfo: PatientInfo;
+    }
 
-const [formData, setFormData] = useState<FormDataType>({
-  prescriptionImg: null,
-  legalDocImg: null,
-  deliveryMethod: "",
-  patientInfo: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobile: "",
-    dob: "",
-    addressline1: "",
-    city: "",
-    postalCode: "",
-    country: "",
-    latitude: undefined,
-    longitude: undefined,
-  },
-});
+    const [formData, setFormData] = useState<FormDataType>({
+        prescriptionImg: null,
+        legalDocImg: null,
+        deliveryMethod: "",
+        patientInfo: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            mobile: "",
+            dob: "",
+            addressline1: "",
+            city: "",
+            postalCode: "",
+            country: "",
+            latitude: undefined,
+            longitude: undefined,
+        },
+    });
 
     const router = useRouter();
     const [step, setStep] = useState(1);
     const totalSteps = 5;
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
+    const [showOrderModal, setShowOrderModal] = useState(false);
+    const [orderId, setOrderId] = useState("");
+
+    const { fetchCartData } = useCart();
 
     const [prescriptionImgName, setprescriptionImgName] = useState("No file chosen");
     const [legalDocImgName, setlegalDocImgName] = useState("Upload your ID document");
@@ -123,20 +131,6 @@ const [formData, setFormData] = useState<FormDataType>({
     };
 
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        const inputId = e.target.id;
-        if (file) {
-            if (inputId === "uploadPrescription") {
-                setprescriptionImgName(file.name);
-                setFormData((prev) => ({ ...prev, prescriptionImg: file }));
-            } else if (inputId === "uploadIdentification") {
-                setlegalDocImgName(file.name);
-                setFormData((prev) => ({ ...prev, legalDocImg: file }));
-            }
-        }
-    };
-
 
 
     const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,20 +149,27 @@ const [formData, setFormData] = useState<FormDataType>({
         try {
             const fd = new FormData();
 
-            // Append files
+            const items = cartItems.map(item => ({
+                product_id: item.product_id,
+                product_name: item.product_name,
+                price: item.inventory_price,
+                weight: item.weight,
+                weight_unit: item.weight_unit,
+                quantity: item.quantity,
+                pharmacist_id: item.pharmacist_id
+            }));
+
+
+            fd.append("items", JSON.stringify(items));
+
             fd.append("legalDocImg", formData.legalDocImg ?? "");
             fd.append("prescriptionImg", formData.prescriptionImg ?? "");
 
-
-            // Append patientInfo as JSON string
             fd.append("patientInfo", JSON.stringify(formData.patientInfo));
 
-            // Append delivery method
             fd.append("deliveryMethod", formData.deliveryMethod);
 
-            //    for (let pair of fd.entries()) {
-            //   console.log(pair[0], pair[1]);
-            // }
+
 
 
             const res = await uploadPrescription(fd, user?.token);
@@ -176,8 +177,9 @@ const [formData, setFormData] = useState<FormDataType>({
                 throw new Error("Failed to create order");
             }
             toast.success(" Your order Placed");
-
-            router.push("/shop");
+            fetchCartData();
+            setOrderId(res.orderNumber);
+            setShowOrderModal(true);
 
 
 
@@ -190,16 +192,16 @@ const [formData, setFormData] = useState<FormDataType>({
 
     const isActive = (num: number) => (step === num ? "active" : "disabled");
 
-interface MapboxContextItem {
-  id: string;
-  text: string;
-}
+    interface MapboxContextItem {
+        id: string;
+        text: string;
+    }
 
-interface MapboxFeature {
-  place_name: string;
-  center: [number, number]; 
-  context?: MapboxContextItem[];
-}
+    interface MapboxFeature {
+        place_name: string;
+        center: [number, number];
+        context?: MapboxContextItem[];
+    }
 
     const handleSearch = async (e: { target: { value: any; }; }) => {
         const query = e.target.value;
@@ -230,32 +232,36 @@ interface MapboxFeature {
         }
     };
 
-const selectSuggestion = (suggestion: MapboxFeature) => {
-  let city = "";
-  let state = "";
-  let postalCode = "";
-  let country = "";
+    const selectSuggestion = (suggestion: MapboxFeature) => {
+        let city = "";
+        let state = "";
+        let postalCode = "";
+        let country = "";
 
-  suggestion.context?.forEach((item) => {
-    if (item.id.startsWith("place.")) city = item.text;
-    else if (item.id.startsWith("region.")) state = item.text;
-    else if (item.id.startsWith("postcode.")) postalCode = item.text;
-    else if (item.id.startsWith("country.")) country = item.text;
-  });
+        suggestion.context?.forEach((item) => {
+            if (item.id.startsWith("place.")) city = item.text;
+            else if (item.id.startsWith("region.")) state = item.text;
+            else if (item.id.startsWith("postcode.")) postalCode = item.text;
+            else if (item.id.startsWith("country.")) country = item.text;
+        });
 
-  setFormData((prev) => ({
-    ...prev,
-    patientInfo: {
-      ...prev.patientInfo,
-      addressline1: suggestion.place_name,
-      city,
-      postalCode,
-      country,
-      latitude: suggestion.center[1],
-      longitude: suggestion.center[0],
-    },
-  }));
-};
+        setFormData((prev) => ({
+            ...prev,
+            patientInfo: {
+                ...prev.patientInfo,
+                addressline1: suggestion.place_name,
+                city,
+                postalCode,
+                country,
+                latitude: suggestion.center[1],
+                longitude: suggestion.center[0],
+            },
+        }));
+
+        // Clear suggestions dropdown
+        setSuggestions([]);
+    };
+
 
     const handleSavePatientInfo = () => {
         const { firstName, lastName, email, mobile, dob, addressline1, city, postalCode, country } = formData.patientInfo;
@@ -294,21 +300,32 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
         }
         goNext();
     };
-
+    const handleModalClose = () => {
+        setShowOrderModal(false);
+        router.push("/shop");
+    };
     return (
         <div className="secWrap tp-md cb_innerPg_wrp">
+            {showOrderModal && (
+                <OrderConfirmationModal
+                    orderId={orderId}
+                    onClose={handleModalClose}
+                />
+            )}
+
+
             <div className="container">
-                  {cartItems.length > 0 && (
-                <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">
-                    Prescription for
-                    <br />
-                    {cartItems.map((item, index) => (
-                    <span key={index}>
-                        {item.product_name}
+                {cartItems.length > 0 && (
+                    <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">
+                        Prescription for
                         <br />
-                    </span>
-                    ))}
-                </h1>
+                        {cartItems.map((item, index) => (
+                            <span key={index}>
+                                {item.product_name}
+                                <br />
+                            </span>
+                        ))}
+                    </h1>
                 )}
 
                 <div className="text-center mb-4 pb-md-3">
@@ -353,14 +370,14 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                                 className="d-none"
                                                 type="file"
                                                 id="uploadPrescription"
-                                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const file = e.target.files && e.target.files[0];
                                                     setFormData((prev) => ({
                                                         ...prev,
                                                         prescriptionImg: file || null,
                                                     }));
-                                                    }}
-></input>
+                                                }}
+                                            ></input>
                                             <label
                                                 className="cb_uploadField_wrap style-No-brd px-0 py-1"
                                                 htmlFor="uploadPrescription"
@@ -452,7 +469,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                             Address Information
                                         </h5>
 
-                                        {/* Address Search Input */}
+
                                         <div className="form-group position-relative">
                                             <input
                                                 type="text"
@@ -463,7 +480,8 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                                 className="form-control cst-form-f"
                                                 placeholder="Search Address"
                                             />
-                                            {/* Suggestions Dropdown */}
+
+
                                             {suggestions.length > 0 && (
                                                 <ul className="list-group position-absolute w-100">
                                                     {suggestions.map((s, index) => (
@@ -479,7 +497,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                             )}
                                         </div>
 
-                                        {/* City / Postal Code / Country Fields */}
+
                                         <div className="row mt-2">
                                             <div className="col-sm-6 col-md-4">
                                                 <input
@@ -567,7 +585,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                                     ...prev,
                                                     legalDocImg: e.target.files?.[0] ?? null, // File or null
                                                 }))
-                                                }
+                                            }
 
                                         />
                                         <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
@@ -579,7 +597,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                     </div>
                                 </div>
 
-                                {/* Preview Section */}
+
                                 {formData.legalDocImg && (
                                     <div className="mt-3">
                                         {formData.legalDocImg.type.includes("image") ? (
@@ -691,7 +709,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                                 type="radio"
                                                 value="pickup"
                                                 name="deliveryMethod"
-                                                checked={formData.deliveryMethod === "pickup"}
+                                                checked={formData.deliveryMethod === "pharmacyPickup"}
                                                 onChange={handleDeliveryChange}
                                             />
                                         </div>
@@ -833,12 +851,12 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                     <div>
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                             <li><span className="text-black">Type: </span> Uploaded </li>
-                                            <li><span className="text-black">Prescription : </span>    {prescriptionImgName}
+                                            <li><span className="text-black">Prescription : </span>   {formData.prescriptionImg ? formData.prescriptionImg.name : "Not uploaded"}
 
                                             </li>
                                             <li>
-                                            <span className="text-black">Legal Document: </span>  
-                                            {formData.legalDocImg ? formData.legalDocImg.name : "Not uploaded"}
+                                                <span className="text-black">Legal Document: </span>
+                                                {formData.legalDocImg ? formData.legalDocImg.name : "Not uploaded"}
                                             </li>
 
                                         </ul>
@@ -872,7 +890,7 @@ const selectSuggestion = (suggestion: MapboxFeature) => {
                                         </ul>
                                     )}
 
-                                    {formData.deliveryMethod === "pickup" && (
+                                    {formData.deliveryMethod === "pharmacyPickup" && (
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                             <div className="cb_cardStyle_1 spc-sm mt-4">
                                                 <div className="text-black line_H_1_3 mb-4">
