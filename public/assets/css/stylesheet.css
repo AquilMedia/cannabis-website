@@ -575,8 +575,8 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
     .cb_wrapSteps_tab {margin-bottom: 2rem;}
     .form-group { margin-bottom: 1.125rem; }
     .lg-iconform {font-size: 5rem;}
-
-
+    .headTopicon .headIcon {width:35px; height:35px; }
+   
 }
 @media (max-width:767px){
     .cb_patientSatisfaction_card { padding: 18px 12px; }
@@ -587,7 +587,8 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
     .cb_stepsTab .nav-item::before, .cb_stepsTab .nav-item::after {width: 1px;height: 50%;right: auto;left: 16px;}
     .cb_stepsTab .nav-item::before {top: 0;}
     .cb_stepsTab .nav-item::after {bottom: 0; top: auto;}
-
+    .cartButtonTop {display: flex ; position: relative; align-items: center; justify-content: center; border-radius: 100%; background-color: #ffffff; color: #318138; width: 35px; height: 35px; border: 1px solid #318138; padding:0}
+    .cartButtonTop .proNoBadge{background-color: #318138; color:#ffffff; display:block; position:absolute; top:-5px; right:-5px; line-height:17px; width:17px; height:17px;font-size:12px; border-radius:17px;}
 }
 @media (max-width:575px){
     

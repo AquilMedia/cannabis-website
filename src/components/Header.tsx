@@ -18,9 +18,6 @@ const { summary } = useCart();
                                 <Link className="navbar-brand" href="/">
                                     <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/Digital-Clinic-Area_logo.png`} className="w-100" alt="" />
                                 </Link >
-                                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span className="navbar-toggler-icon"></span>
-                                </button>
                                 <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                                     <div className="navMng-In mx-auto">
                                         <ul className="navbar-nav me-auto ms-auto">
@@ -42,8 +39,8 @@ const { summary } = useCart();
 
                                         </ul>
                                     </div>
-
-                                    <div className="head_right_sec">
+                                </div>
+                                <div className="head_right_sec d-flex gap-2 gap-md-3">
                                         <ul className="list-inline mb-0 headTopicon">
                                             {/* <li className="list-inline-item">
                                                 <Link href="tel:+49123456789" className="d-flex gap-1 align-items-center">
@@ -83,23 +80,24 @@ const { summary } = useCart();
                                                 </div>
                                             </li>
                                         </ul>
+                                         <div>
+                                            <button className="cartButtonTop" onClick={() => setShowCartModal(true)}>
+                                                <i className="cb-icon cb-cart"></i>
+                                                <span className="proNoBadge d-md-none">{summary.total_items}</span>
+                                                {summary && (
+                                                <span className="cartBadge d-none d-md-inline-block  ms-2">
+                                                        {summary.total_items} | €
+                                                        {Number(summary.total_cart_price || 0).toFixed(2)}
+                                                </span>
+                                                )}
+                                            </button>
+                                            {showCartModal && <CartModal onClose={() => setShowCartModal(false)} />}
+                                        </div>
 
+                                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                            <span className="navbar-toggler-icon"></span>
+                                        </button>
                                     </div>
-
-                                </div>
-
-                                <div className="ms-3">
-                                    <button className="cartButtonTop" onClick={() => setShowCartModal(true)}>
-                                        <i className="cb-icon cb-cart me-2"></i>
-                                        {summary && (
-                                          <span className="cartBadge">
-                                                {summary.total_items} | €
-                                                {Number(summary.total_cart_price || 0).toFixed(2)}
-                                            </span>
-                                        )}
-                                    </button>
-                                    {showCartModal && <CartModal onClose={() => setShowCartModal(false)} />}
-                                </div>
                             </div>
                         </nav>
                     </div>
