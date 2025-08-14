@@ -89,7 +89,7 @@ const { summary } = useCart();
                                         )}
                                     </button>
                                     {showCartModal && <CartModal onClose={() => setShowCartModal(false)} />}
-                                    </div>
+                                </div>
                             </div>
                         </nav>
                     </div>

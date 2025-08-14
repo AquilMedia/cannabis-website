@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { cartItemDelete, cartUpdateQuantity, CreateCartOrder, getCartList, getClearCart } from "@/services/user";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -35,6 +36,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
     };
  
     useEffect(() => {
+        if (!user?.token) return;
         fetchCart();
     }, []);
     const handleDeleteItem = async (id: number) => {
@@ -141,8 +143,21 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
  
                     <button className="closeBtn" onClick={onClose}>✖</button>
                 </div>
+
+                
+
                 <div className="cartItems">
-                    {cartItems.map((item) => (
+                    {!cartItems || cartItems.length === 0 ? (
+                            <div className="h-100 d-flex flex-column align-items-center justify-content-center">
+                                <div className="noCart py-4 text-center">
+                                    <div className="cartIcon mx-auto mb__15"> <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/empty-cart.png`} className="w-100" alt="" /></div>
+                                    <div className=" f-size-24 f-w-SB clr-black mb__15">No products in the cart.</div>
+                                    <Link href="/shop" onClick={onClose} className="btn cb_cmnBtn text-nowrap">Return To Shop</Link>
+                                </div>
+                            </div>
+                        ) : (
+                    cartItems.map((item) => (
+                        
                         <div key={item.cart_item_id} className="cartItem">
                             {/* <img
                                 src={item.product_image?.startsWith("http")
@@ -175,10 +190,12 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                             </div>
 
                            
-                            <button className="text-danger btn p-0" onClick={() => handleDeleteItem(item.cart_item_id)}><span className="cb-icon cb-notepad"></span></button>
+                            <button className="text-danger btn p-0 border-0 deleteBtn" onClick={() => handleDeleteItem(item.cart_item_id)}><img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/delete-icon.svg`} className="w-100" alt="" /></button>
                         </div>
-                    ))}
+                   ))
+                )}
                 </div>
+                
  
                 <div className="mb__15">
                     <div className="text-center py-1">
