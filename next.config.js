@@ -1,10 +1,15 @@
-module.exports = {
-    reactStrictMode: true,
-    env: {
-        API_URL: process.env.API_URL,
-        OTHER_SERVICE_URL: process.env.OTHER_SERVICE_URL,
-    },
-    images: {
-        domains: ['your-image-domain.com'],
-    },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  basePath: '/cannabis',
+  assetPrefix: '/cannabis',
+  trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_ASSET_PREFIX: '/cannabis',
+  },
 };
+
+module.exports = nextConfig;

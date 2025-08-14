@@ -1,6 +1,13 @@
 import React from 'react';
-
+import { useRouter } from "next/navigation";
 const Consultation: React.FC = () => {
+           const router = useRouter();
+               const handleCheckout = async () => {
+    
+  router.push("/uploadprescription"); 
+
+    
+    };
     return (
         <div className="secWrap tp-md cb_innerPg_wrp">
             <div className="container">
@@ -24,7 +31,7 @@ const Consultation: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="btn_wrapper">
-                                            <button className="btn cb_cmnBtn px-4">Upload Prescription</button>
+                                            <button  onClick={handleCheckout} className="btn cb_cmnBtn px-4">Upload Prescription</button>
                                         </div>
                                     </div>
                                 </div>

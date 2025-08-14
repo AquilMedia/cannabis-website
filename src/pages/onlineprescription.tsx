@@ -24,7 +24,7 @@ const Onlineprescription: React.FC = () => {
     return (
         <div className="secWrap tp-md cb_innerPg_wrp">
             <div className="container">
-                    <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">Prescription for Big Purple Dragon</h1>
+                    <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">Prescription</h1>
                     <div className="text-center mb-4 pb-md-3">
                         <h4 className="text-black f-size-22 f-w-N mb-0">Online Prescription</h4>
                     </div>

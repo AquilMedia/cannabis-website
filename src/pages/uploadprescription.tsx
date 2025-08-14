@@ -1,80 +1,351 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { getCartList, getPatientinfo, uploadPrescription } from "@/services/user";
+import { toast } from "react-toastify";
+import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
+import { useRouter } from "next/navigation";
 
-
-
+const geocodingClient = mbxGeocoding({
+    accessToken: "sk.eyJ1Ijoic2FteWFiaXNhbGVoIiwiYSI6ImNtM2ZmdnkxMTBqMXMyaXNlcHMzeTV1cmEifQ.p3Zc6DhFHND0OAD7FCRKtA"
+});
 const Uploadprescription: React.FC = () => {
-    const [prescriptionFileName, setPrescriptionFileName] = useState('No File chosen');
-    const [identificationFileName, setIdentificationFileName] = useState('Upload your ID document');
+    const { user } = useAuth();
+   const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
 
-    const handleFileChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-        ) => {
-        const file = event.target.files?.[0];
-        const inputId = event.target.id;
+interface PatientInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  dob: string;
+  addressline1: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  latitude?: number;
+  longitude?: number;
+}
 
-        if (file) {
-            if (inputId === 'uploadPrescription') {
-            setPrescriptionFileName(file.name);
-            } else if (inputId === 'uploadIdentification') {
-            setIdentificationFileName(file.name);
+
+interface FormDataType {
+  prescriptionImg: File | null;
+  legalDocImg: File | null;
+  deliveryMethod: string;
+  patientInfo: PatientInfo;
+}
+
+const [formData, setFormData] = useState<FormDataType>({
+  prescriptionImg: null,
+  legalDocImg: null,
+  deliveryMethod: "",
+  patientInfo: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    dob: "",
+    addressline1: "",
+    city: "",
+    postalCode: "",
+    country: "",
+    latitude: undefined,
+    longitude: undefined,
+  },
+});
+
+    const router = useRouter();
+    const [step, setStep] = useState(1);
+    const totalSteps = 5;
+    const [cartItems, setCartItems] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+
+    const [prescriptionImgName, setprescriptionImgName] = useState("No file chosen");
+    const [legalDocImgName, setlegalDocImgName] = useState("Upload your ID document");
+    useEffect(() => {
+        getPatientinfoData();
+        fetchCart();
+
+    }, []);
+
+    const handleNextClick = () => {
+        if (!formData.deliveryMethod) {
+            toast.error("Please select a delivery method before continuing.");
+            return;
+        }
+        goNext();
+    };
+
+    const fetchCart = async () => {
+        try {
+            const data = await getCartList(user?.token);
+            if (data?.success) {
+                setCartItems(data.cartItems || []);
+                setTotal(data.summary?.total_cart_price || 0);
+                console.log('data.cartItems', data.cartItems);
+
+            } else {
+                toast.error(data?.message || "Failed to load cart items");
             }
-        } else {
-            if (inputId === 'uploadPrescription') {
-            setPrescriptionFileName('No File chosen');
-            } else if (inputId === 'uploadIdentification') {
-            setIdentificationFileName('No File chosen');
+        } catch (err) {
+            toast.error("Failed to load cart items");
+        }
+    };
+
+    const getPatientinfoData = async () => {
+        try {
+            const res = await getPatientinfo(user?.token);
+
+            if (!res || !res.success) {
+                throw new Error("No patient info found");
+            }
+
+            // const { name, email, phone, dob } = res.user || {};
+            // const [firstName = "", lastName = ""] = name?.split(" ") || [];
+
+            setFormData((prev) => ({
+                ...prev,
+                patientInfo: {
+                    ...prev.patientInfo,
+                    firstName: res.user.firstName || "",
+                    lastName: res.user.lastName || "",
+                    email: res.user.email || "",
+                    mobile: res.user.phone || "",
+                    dob: res.user.dob || "",
+                }
+            }));
+
+
+
+        } catch (error) {
+            console.error("Error starting new order:", error);
+            toast.error("Failed to start a new order");
+        }
+    };
+
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        const inputId = e.target.id;
+        if (file) {
+            if (inputId === "uploadPrescription") {
+                setprescriptionImgName(file.name);
+                setFormData((prev) => ({ ...prev, prescriptionImg: file }));
+            } else if (inputId === "uploadIdentification") {
+                setlegalDocImgName(file.name);
+                setFormData((prev) => ({ ...prev, legalDocImg: file }));
             }
         }
+    };
+
+
+
+    const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prev) => ({ ...prev, deliveryMethod: e.target.value }));
+    };
+
+    const goNext = () => {
+        setStep((prev) => Math.min(prev + 1, totalSteps));
+    };
+
+    const goPrev = () => {
+        setStep((prev) => Math.max(prev - 1, 1));
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const fd = new FormData();
+
+            // Append files
+            fd.append("legalDocImg", formData.legalDocImg ?? "");
+            fd.append("prescriptionImg", formData.prescriptionImg ?? "");
+
+
+            // Append patientInfo as JSON string
+            fd.append("patientInfo", JSON.stringify(formData.patientInfo));
+
+            // Append delivery method
+            fd.append("deliveryMethod", formData.deliveryMethod);
+
+            //    for (let pair of fd.entries()) {
+            //   console.log(pair[0], pair[1]);
+            // }
+
+
+            const res = await uploadPrescription(fd, user?.token);
+            if (!res.success) {
+                throw new Error("Failed to create order");
+            }
+            toast.success(" Your order Placed");
+
+            router.push("/shop");
+
+
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+
+    const isActive = (num: number) => (step === num ? "active" : "disabled");
+
+interface MapboxContextItem {
+  id: string;
+  text: string;
+}
+
+interface MapboxFeature {
+  place_name: string;
+  center: [number, number]; 
+  context?: MapboxContextItem[];
+}
+
+    const handleSearch = async (e: { target: { value: any; }; }) => {
+        const query = e.target.value;
+
+        setFormData((prev) => ({
+            ...prev,
+            patientInfo: { ...prev.patientInfo, addressline1: query }
+        }));
+
+        if (!query) {
+            setSuggestions([]);
+            return;
+        }
+
+        try {
+            const response = await geocodingClient
+                .forwardGeocode({
+                    query,
+                    autocomplete: true,
+                    limit: 5
+                })
+                .send();
+
+            const results = response.body.features || [];
+            setSuggestions(results);
+        } catch (err) {
+            console.error("Mapbox search error:", err);
+        }
+    };
+
+const selectSuggestion = (suggestion: MapboxFeature) => {
+  let city = "";
+  let state = "";
+  let postalCode = "";
+  let country = "";
+
+  suggestion.context?.forEach((item) => {
+    if (item.id.startsWith("place.")) city = item.text;
+    else if (item.id.startsWith("region.")) state = item.text;
+    else if (item.id.startsWith("postcode.")) postalCode = item.text;
+    else if (item.id.startsWith("country.")) country = item.text;
+  });
+
+  setFormData((prev) => ({
+    ...prev,
+    patientInfo: {
+      ...prev.patientInfo,
+      addressline1: suggestion.place_name,
+      city,
+      postalCode,
+      country,
+      latitude: suggestion.center[1],
+      longitude: suggestion.center[0],
+    },
+  }));
+};
+
+    const handleSavePatientInfo = () => {
+        const { firstName, lastName, email, mobile, dob, addressline1, city, postalCode, country } = formData.patientInfo;
+
+        if (
+            !firstName.trim() ||
+            !lastName.trim() ||
+            !email.trim() ||
+            !mobile.trim() ||
+            !dob.trim() ||
+            !addressline1.trim() ||
+            !city.trim() ||
+            !postalCode.trim() ||
+            !country.trim()
+        ) {
+            toast.error("Please fill in all required fields.");
+
+
+            return;
+        }
+        goNext();
+    };
+
+    const handleContinueWithDocument = () => {
+        if (!formData.legalDocImg) {
+            toast.error("Please upload a valid government-issued ID before continuing.");
+            return;
+        }
+
+        goNext();
+    };
+    const handleNextStep1 = () => {
+        if (!formData.prescriptionImg) {
+            toast.error("Please upload a prescription before continuing.");
+            return;
+        }
+        goNext();
     };
 
     return (
         <div className="secWrap tp-md cb_innerPg_wrp">
             <div className="container">
-                    <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">Prescription for Big Purple Dragon</h1>
-                    <div className="text-center mb-4 pb-md-3">
-                        <h4 className="text-black f-size-22 f-w-N mb-0">Upload Prescription</h4>
-                    </div>
+                  {cartItems.length > 0 && (
+                <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">
+                    Prescription for
+                    <br />
+                    {cartItems.map((item, index) => (
+                    <span key={index}>
+                        {item.product_name}
+                        <br />
+                    </span>
+                    ))}
+                </h1>
+                )}
 
-                    <div className="cb_wrapSteps_tab overflow-y-auto">
-                        <ul className="nav flex-nowrap cb_stepsTab">
-                            <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_1" className="nav-link active">
-                                    <span className="nbr">1</span>
-                                    <span className="nav-text">Upload Prescription</span>
-                                </button> 
-                            </li>
-                            <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_2" className="nav-link disabled">
-                                    <span className="nbr">2</span>
-                                    <span className="nav-text">Patient Information</span>
-                                </button> 
-                            </li>
-                            <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_3" className="nav-link disabled">
-                                    <span className="nbr">3</span>
-                                    <span className="nav-text">Legal Document</span>
-                                </button> 
-                            </li>
-                            <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_4" className="nav-link disabled">
-                                    <span className="nbr">4</span>
-                                    <span className="nav-text">Delivery Method</span>
-                                </button> 
-                            </li>
-                            <li className="nav-item"> 
-                                <button data-bs-toggle="tab" data-bs-target="#tab_step_5" className="nav-link disabled">
-                                    <span className="nbr">5</span>
-                                    <span className="nav-text">Order Summary</span>
-                                </button> 
-                            </li>
-                        </ul>
-                    </div>
+                <div className="text-center mb-4 pb-md-3">
+                    <h4 className="text-black f-size-22 f-w-N mb-0">Upload Prescription</h4>
+                </div>
 
-                    <div className="tab-content">
-                        <div className="tab-pane fade show active" id="tab_step_1" role="tabpanel">
+                <div className="cb_wrapSteps_tab overflow-y-auto">
+                    <ul className="nav flex-nowrap cb_stepsTab">
+                        {[1, 2, 3, 4, 5].map((num) => (
+                            <li className="nav-item" key={num}>
+                                <button
+                                    className={`nav-link ${isActive(num)}`}
+                                    onClick={() => setStep(num)}
+                                >
+                                    <span className="nbr">{num}</span>
+                                    <span className="nav-text">
+                                        {[
+                                            "Upload Prescription",
+                                            "Patient Information",
+                                            "Legal Document",
+                                            "Delivery Method",
+                                            "Order Summary",
+                                        ][num - 1]}
+                                    </span>
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="tab-content">
+                    {step === 1 && (
+                        <div className={`tab-pane fade ${step === 1 ? "show active" : ""}`} id="tab_step_1">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
-                                <div className="text-center text-black f-size-18 mb-2">Upload Prescription (Max 10MB)</div>
+                                <div className="text-center text-black f-size-18 mb-2">
+                                    Upload Prescription (Max 10MB)
+                                </div>
                                 <div className="row g-0 justify-content-center">
                                     <div className="col-sm-9 col-md-7 col-lg-5 col-xl-4">
                                         <div className="fieldWrap_upload">
@@ -82,96 +353,198 @@ const Uploadprescription: React.FC = () => {
                                                 className="d-none"
                                                 type="file"
                                                 id="uploadPrescription"
-                                                onChange={handleFileChange}
-                                            />
+                                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    const file = e.target.files && e.target.files[0];
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        prescriptionImg: file || null,
+                                                    }));
+                                                    }}
+></input>
                                             <label
                                                 className="cb_uploadField_wrap style-No-brd px-0 py-1"
                                                 htmlFor="uploadPrescription"
                                             >
                                                 <span className="btn chooseBtn">Choose File</span>
                                                 <span className="min-w-0">
-                                                <span className="fileName">{prescriptionFileName}</span>
+                                                    <span className="fileName">{prescriptionImgName}</span>
                                                 </span>
                                             </label>
                                         </div>
+
+                                        {/* Show uploaded document preview */}
+                                        {formData.prescriptionImg && (
+                                            <div className="mt-3">
+                                                {formData.prescriptionImg.type.startsWith("image/") ? (
+                                                    <img
+                                                        src={URL.createObjectURL(formData.prescriptionImg)}
+                                                        alt="Prescription Preview"
+                                                        style={{
+                                                            maxWidth: "100%",
+                                                            maxHeight: "200px",
+                                                            border: "1px solid #ccc",
+                                                            borderRadius: "4px",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <a
+                                                        href={URL.createObjectURL(formData.prescriptionImg)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary"
+                                                    >
+                                                        View uploaded document
+                                                    </a>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
+                                <button onClick={handleNextStep1} className="btn cb_cmnBtn px-4 ms-auto">
+                                    Next
+                                </button>
                             </div>
                         </div>
-                        <div className="tab-pane fade" id="tab_step_2" role="tabpanel">
-                            <div className="cb_cardStyle_1 cb_prescriptn_card">
-                                <div className="mb-4 pb-lg-2">
-                                    <div className="text-black f-size-20 line_H_1_2">Patient Information</div>
-                                    <div>Please provide your personal details</div>
-                                </div>
-                                <div className="mb-3">
-                                    <h5 className="secondary-clr f-size-14 f-w-M mb-2">Personal Details</h5>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter First Name"></input>
+                    )}
+
+                    {step === 2 && (
+                        <div className={`tab-pane fade ${step === 2 ? "show active" : ""}`} id="tab_step_2">
+                            <form onSubmit={handleSavePatientInfo}>
+                                <div className="cb_cardStyle_1 cb_prescriptn_card">
+                                    <div className="mb-4 pb-lg-2">
+                                        <div className="text-black f-size-20 line_H_1_2">Patient Information</div>
+                                        <div>Please provide your personal details</div>
+                                    </div>
+                                    <div className="mb-3">
+                                        <h5 className="secondary-clr f-size-14 f-w-M mb-2">Personal Details</h5>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <input value={formData.patientInfo.firstName} type="text" required name="firstName" className="form-control cst-form-f" placeholder="Enter First Name"></input>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter Last Name"></input>
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <input type="text" required value={formData.patientInfo.lastName} name="lastName" className="form-control cst-form-f" placeholder="Enter Last Name"></input>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-12">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter Email Address"></input>
+                                            <div className="col-sm-12">
+                                                <div className="form-group">
+                                                    <input type="text" required name="email" value={formData.patientInfo.email} className="form-control cst-form-f" placeholder="Enter Email Address"></input>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <input type="number" className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <input type="number" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="mm/dd/yyyy"></input>
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <input type="text" required name="dob" value={formData.patientInfo.dob} className="form-control cst-form-f" placeholder="mm/dd/yyyy"></input>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mb-3">
-                                    <h5 className="secondary-clr f-size-14 f-w-M mb-2">Address Information</h5>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter Street Address"></input>
-                                            </div>
+                                    <div className="mb-3">
+                                        <h5 className="secondary-clr f-size-14 f-w-M mb-2">
+                                            Address Information
+                                        </h5>
+
+                                        {/* Address Search Input */}
+                                        <div className="form-group position-relative">
+                                            <input
+                                                type="text"
+                                                required
+                                                name="addressline1"
+                                                value={formData.patientInfo.addressline1}
+                                                onChange={handleSearch}
+                                                className="form-control cst-form-f"
+                                                placeholder="Search Address"
+                                            />
+                                            {/* Suggestions Dropdown */}
+                                            {suggestions.length > 0 && (
+                                                <ul className="list-group position-absolute w-100">
+                                                    {suggestions.map((s, index) => (
+                                                        <li
+                                                            key={index}
+                                                            className="list-group-item list-group-item-action"
+                                                            onClick={() => selectSuggestion(s)}
+                                                        >
+                                                            {s.place_name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
                                         </div>
-                                        <div className="col-sm-6 col-md-4">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter City"></input>
+
+                                        {/* City / Postal Code / Country Fields */}
+                                        <div className="row mt-2">
+                                            <div className="col-sm-6 col-md-4">
+                                                <input
+                                                    type="text"
+                                                    name="city"
+                                                    required
+                                                    value={formData.patientInfo.city}
+                                                    onChange={(e) =>
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            patientInfo: { ...prev.patientInfo, city: e.target.value }
+                                                        }))
+                                                    }
+                                                    className="form-control cst-form-f"
+                                                    placeholder="City"
+                                                />
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6 col-md-4">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter Postal Code"></input>
+                                            <div className="col-sm-6 col-md-4">
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    name="postalCode"
+                                                    value={formData.patientInfo.postalCode}
+                                                    onChange={(e) =>
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            patientInfo: {
+                                                                ...prev.patientInfo,
+                                                                postalCode: e.target.value
+                                                            }
+                                                        }))
+                                                    }
+                                                    className="form-control cst-form-f"
+                                                    placeholder="Postal Code"
+                                                />
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6 col-md-4">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control cst-form-f" placeholder="Enter Country"></input>
+                                            <div className="col-sm-6 col-md-4">
+                                                <input
+                                                    required
+                                                    type="text"
+                                                    name="country"
+                                                    value={formData.patientInfo.country}
+                                                    onChange={(e) =>
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            patientInfo: { ...prev.patientInfo, country: e.target.value }
+                                                        }))
+                                                    }
+                                                    className="form-control cst-form-f"
+                                                    placeholder="Country"
+                                                />
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                <div className="text-center">
-                                    <button className="btn cb_cmnBtn px-4">Save Patient Information</button>
+                                <div className="mt-4 d-flex justify-content-between gap-2">
+                                    <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
+                                    <button className="btn cb_cmnBtn px-4 ms-auto" type="submit">Save Patient Information</button>
                                 </div>
-                            </div>
-                            <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
-                                <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
-                            </div>
+                            </form>
                         </div>
-                        <div className="tab-pane fade" id="tab_step_3" role="tabpanel">
+                    )}
+                    {step === 3 && (
+                        <div className={`tab-pane fade ${step === 3 ? "show active" : ""}`} id="tab_step_3">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Legal Document Upload</div>
@@ -188,16 +561,50 @@ const Uploadprescription: React.FC = () => {
                                             className="d-none"
                                             type="file"
                                             id="uploadIdentification"
-                                            onChange={handleFileChange}
+                                            accept=".jpg,.jpeg,.png,.pdf"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    legalDocImg: e.target.files?.[0] ?? null, // File or null
+                                                }))
+                                                }
+
                                         />
                                         <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
                                             <span className="btn chooseBtn">Choose File</span>
                                             <span className="min-w-0">
-                                            <span className="fileName">{identificationFileName}</span>
+                                                <span className="fileName">{legalDocImgName}</span>
                                             </span>
                                         </label>
                                     </div>
                                 </div>
+
+                                {/* Preview Section */}
+                                {formData.legalDocImg && (
+                                    <div className="mt-3">
+                                        {formData.legalDocImg.type.includes("image") ? (
+                                            <img
+                                                src={URL.createObjectURL(formData.legalDocImg)}
+                                                alt="Uploaded Document"
+                                                style={{ maxWidth: "200px", border: "1px solid #ccc", borderRadius: "5px" }}
+                                            />
+                                        ) : formData.legalDocImg.type === "application/pdf" ? (
+                                            <iframe
+                                                src={URL.createObjectURL(formData.legalDocImg)}
+                                                title="PDF Preview"
+                                                width="100%"
+                                                height="300px"
+                                                style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                                            />
+                                        ) : (
+                                            <p className="text-muted">
+                                                File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
+                                            </p>
+
+                                        )}
+                                    </div>
+                                )}
+
 
                                 <div className="cb_cardStyle_1 spc-sm cardBg">
                                     <div className="d-flex gap-2">
@@ -215,16 +622,18 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-center mt-4">
+                                {/* <div className="text-center mt-4">
                                     <button className="btn cb_cmnBtn px-4">Continue with Document</button>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
-                                <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
+                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goNext}>Previous</button>
+                                <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleContinueWithDocument}>  Continue with Document</button>
                             </div>
                         </div>
-                        <div className="tab-pane fade" id="tab_step_4" role="tabpanel">
+                    )}
+                    {step === 4 && (
+                        <div className={`tab-pane fade ${step === 4 ? "show active" : ""}`} id="tab_step_3">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Delivery Method</div>
@@ -234,7 +643,14 @@ const Uploadprescription: React.FC = () => {
                                 <div className="cb_cardStyle_1 spc-sm">
                                     <div className="d-flex gap-3">
                                         <div className="iconSpc_tp">
-                                            <input className="cb_input_rc" type="radio" name="deliveryMethod" />
+                                            <input
+                                                className="cb_input_rc"
+                                                type="radio"
+                                                value="homeDelivery"
+                                                name="deliveryMethod"
+                                                checked={formData.deliveryMethod === "homeDelivery"}
+                                                onChange={handleDeliveryChange}
+                                            />
                                         </div>
                                         <div className="flex-grow-1">
                                             <div className="mb-4">
@@ -270,13 +686,29 @@ const Uploadprescription: React.FC = () => {
                                 <div className="cb_cardStyle_1 spc-sm mt-4">
                                     <div className="d-flex gap-3">
                                         <div className="iconSpc_tp">
-                                            <input className="cb_input_rc" type="radio" name="deliveryMethod" />
+                                            <input
+                                                className="cb_input_rc"
+                                                type="radio"
+                                                value="pickup"
+                                                name="deliveryMethod"
+                                                checked={formData.deliveryMethod === "pickup"}
+                                                onChange={handleDeliveryChange}
+                                            />
                                         </div>
                                         <div className="flex-grow-1">
                                             <div className="mb-4">
-                                                <div className="text-black line_H_1_3"><i className="textsm-icon cb-icon cb-location me-1"></i> Pharmacy Pickup</div>
-                                                <div>Collect from nearest pharmacy</div>
+                                                <div className="text-black line_H_1_3">
+                                                    <i className="textsm-icon cb-icon cb-location me-1"></i> Pharmacy Pickup
+                                                </div>
                                             </div>
+
+                                            {cartItems.length > 0 && (
+                                                <div className="mb-3">
+                                                    <b>{cartItems[0].pharmacist_name}</b> <br />
+                                                    <small>{cartItems[0].pharmacist_address}</small>
+                                                </div>
+                                            )}
+
                                             <div className="row row-gap-3">
                                                 <div className="col-md-6 col-lg-5 col-xl-4">
                                                     <div className="d-flex gap-2">
@@ -284,83 +716,184 @@ const Uploadprescription: React.FC = () => {
                                                             <i className="textsm-icon cb-icon cb-clock text-black"></i>
                                                         </div>
                                                         <div className="flex-grow-1">
-                                                            <div className="text-black mb-1">Details</div>
+                                                            <div className="text-black mb-1">Pickup Information</div>
                                                             <ul className="mb-0 f-size-14 d-flex flex-column row-gap-1 list_align_L">
-                                                                <li>Same day availability</li>
-                                                                <li>Pharmacy consultation</li>
+                                                                <li>Same-day pickup if prescription & payment are received before 1:00 PM</li>
+                                                                <li>Next working day pickup if received after 1:00 PM</li>
+                                                                <li>Pharmacy consultation available</li>
                                                                 <li>No delivery charges</li>
                                                                 <li>ID verification required</li>
                                                             </ul>
-
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div className="col-md-6 col-lg-5 col-xl-4">
-                                                    <div className="text-black mb-1">$ Cost</div>
+                                                    <div className="col-12 mt-2">
+                                                        <div className="text-black mb-1">Opening Hours</div>
+                                                        <ul className="mb-0 f-size-14 list_align_L">
+                                                            <li>Mon – 08:30 – 18:30</li>
+                                                            <li>Tue – 08:30 – 18:30</li>
+                                                            <li>Wed – 08:30 – 18:30</li>
+                                                            <li>Thu – 08:30 – 18:30</li>
+                                                            <li>Fri – 08:30 – 18:30</li>
+                                                            <li>Sat – 08:30 – 13:00</li>
+                                                            <li>Sun – Closed</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-md-6 col-lg-5 col-xl-4">
+                                                    <div className="text-black mb-1">Cost</div>
                                                     <div className="clr-green">Free</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                <div className="text-center mt-4">
+                                {/* <div className="text-center mt-4">
                                     <button className="btn cb_cmnBtn px-4">Continue with Pickup</button>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
-                                <button className="btn cb_cmnBtn px-4 ms-auto">Next</button>
+                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
+                                <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleNextClick}>Continue with Pickup</button>
                             </div>
                         </div>
-                        <div className="tab-pane fade" id="tab_step_5" role="tabpanel">
+                    )}
+                    {step === 5 && (
+                        <div className={`tab-pane fade ${step === 5 ? "show active" : ""}`} id="tab_step_3">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Order Summary</div>
                                     <div>Review your order details before placing</div>
                                 </div>
-
                                 <div className="cb_cardStyle_1 spc-sm">
-                                    <div className="text-black line_H_1_3 mb-4"><i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information</div>
-                                    <div className="row row-gap-2">
-                                        <div className="col-md-8">
-                                            <span className="text-black">Big Purple Dragon</span> <br />
-                                            Medical Cannabis Product
+                                    <div className="cb_cardStyle_1 spc-sm">
+                                        <div className="text-black line_H_1_3 mb-4">
+                                            <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information
                                         </div>
-                                        <div className="col-md-4 align-self-end text-md-end">
-                                            <span className="cb_cstLabel_3">Prescription Required</span>
+
+                                        {/* Pharmacy Info - from first item */}
+                                        {cartItems.length > 0 && (
+                                            <div className="mb-3">
+                                                <b>Pharmacy:</b> {cartItems[0].pharmacist_name} <br />
+                                                <small>{cartItems[0].pharmacist_address}</small>
+                                            </div>
+                                        )}
+
+                                        {/* Products List */}
+                                        <div className="row row-gap-2 mb-3">
+                                            {cartItems.map((item) => (
+                                                <div className="col-md-12" key={item.cart_item_id}>
+                                                    <div className="border rounded p-2 mb-2">
+                                                        <span className="text-black">{item.product_name}</span> <br />
+                                                        <small>Medical Cannabis Product</small> <br />
+                                                        <small className="text-muted">
+                                                            {item.weight} {item.weight_unit} — €{Number(item.inventory_price).toFixed(2)}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+
+
+                                        <div className="text-end">
+                                            <span className="cb_cstLabel_3">Prescription Required</span> <br />
+                                            <span className="fw-bold">
+                                                Total: €{Number(total || 0).toFixed(2)}
+                                            </span>
+
                                         </div>
                                     </div>
+
+
+
                                 </div>
+
+
+
+
                                 <div className="cb_cardStyle_1 spc-sm mt-4">
                                     <div className="text-black line_H_1_3 mb-4"><i className="textsm-icon cb-icon cb-user me-1"></i> Patient Information</div>
                                     <div>
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
-                                            <li><span className="text-black">Name: </span> Demo Demo</li>
-                                            <li><span className="text-black">Email: </span> demo@gmail.com</li>
-                                            <li><span className="text-black">Phone: </span> 9876543210</li>
-                                            <li><span className="text-black">Date of Birth: </span> 1992-08-18</li>
+                                            <li><span className="text-black">Name: </span>{formData.patientInfo.firstName} {formData.patientInfo.lastName}</li>
+                                            <li><span className="text-black">Email: </span> {formData.patientInfo.email}</li>
+                                            <li><span className="text-black">Phone: </span> {formData.patientInfo.mobile}</li>
+                                            <li><span className="text-black">Date of Birth: </span>{formData.patientInfo.dob}</li>
                                         </ul>
                                     </div>
                                 </div>
+
                                 <div className="cb_cardStyle_1 spc-sm mt-4">
                                     <div className="text-black line_H_1_3 mb-4"><i className="textsm-icon cb-icon cb-file me-1"></i> Prescription Details</div>
                                     <div>
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
-                                            <li><span className="text-black">Type: </span> Uploaded Prescription</li>
-                                            <li><span className="text-black">File: </span> sample.pdf</li>
-                                            <li><span className="text-black">Legal Document: </span> sample.pdf</li>
+                                            <li><span className="text-black">Type: </span> Uploaded </li>
+                                            <li><span className="text-black">Prescription : </span>    {prescriptionImgName}
+
+                                            </li>
+                                            <li>
+                                            <span className="text-black">Legal Document: </span>  
+                                            {formData.legalDocImg ? formData.legalDocImg.name : "Not uploaded"}
+                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>
-                                <div className="cb_cardStyle_1 spc-sm mt-4">
-                                    <div className="text-black line_H_1_3 mb-4"><i className="textsm-icon cb-icon cb-file me-1"></i> Delivery Method</div>
-                                    <div>
+                                <div>
+                                    {formData.deliveryMethod === "homeDelivery" && (
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
-                                            <li><span className="text-black">Method: </span> Home Delivery</li>
-                                            <li>2-3 business days delivery</li>
+                                            <div className="cb_cardStyle_1 spc-sm mt-4">
+                                                <li>
+                                                    <div className="text-black line_H_1_3 mb-4">
+                                                        <i className="textsm-icon cb-icon cb-file me-1"></i> Delivery Method
+                                                    </div>
+                                                    Home Delivery
+                                                </li>
+
+
+
+                                                <div className="text-black line_H_1_3 mb-4 mt-4">
+                                                    Address Information
+                                                </div>
+                                                <div>
+                                                    <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
+                                                        <li>
+                                                            {`${formData.patientInfo.addressline1}, ${formData.patientInfo.city}, ${formData.patientInfo.postalCode}, ${formData.patientInfo.country}`}
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </ul>
-                                    </div>
+                                    )}
+
+                                    {formData.deliveryMethod === "pickup" && (
+                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
+                                            <div className="cb_cardStyle_1 spc-sm mt-4">
+                                                <div className="text-black line_H_1_3 mb-4">
+                                                    <i className="textsm-icon cb-icon cb-file me-1"></i> Delivery Method
+                                                </div>
+
+                                                <li>Pharmacy Pickup</li>
+
+
+                                                {cartItems.length > 0 && (
+                                                    <li>
+                                                        <b>{cartItems[0].pharmacist_name}</b> <br />
+                                                        <small>{cartItems[0].pharmacist_address}</small>
+                                                    </li>
+                                                )}
+                                            </div>
+                                        </ul>
+                                    )}
                                 </div>
+
+
                                 <div className="cb_cardStyle_1 cardYellow spc-sm mt-4">
                                     <div className="text-black line_H_1_3 mb-4"><i className="textsm-icon cb-icon cb-file me-1"></i> Payment Information</div>
                                     <div>
@@ -384,12 +917,13 @@ const Uploadprescription: React.FC = () => {
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
                                 <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
-                                <button className="btn cb_cmnBtn px-4 ms-auto">Place Order</button>
+                                <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleSubmit}>Place Order</button>
                             </div>
                         </div>
-                    </div>
+                    )}
+                </div>
             </div>
-      
+
         </div>
     );
 };

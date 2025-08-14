@@ -1,3 +1,4 @@
+import { decryptData, encryptData } from '@/utils/storageHelper';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 type User = {
@@ -27,21 +28,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+useEffect(() => {
+  const storedUser = localStorage.getItem('user');
+  if (storedUser && storedUser !== 'undefined' && storedUser !== 'null') {
+    const decryptedUser = decryptData(storedUser);
+    if (decryptedUser) {
+      setUser(decryptedUser);
+    } else {
+      localStorage.removeItem('user');
     }
-    setIsMounted(true);
-  }, []);
+  }
+  setIsMounted(true);
+}, []);
 
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
+
+const login = (userData: User) => {
+  if (!userData) {
+    console.warn("Tried to login with null/undefined user");
+    return;
+  }
+  setUser(userData);
+  localStorage.setItem("user", encryptData(userData));
+};
+
 
   const logout = () => {
     setUser(null);
+    
     localStorage.removeItem('user');
   };
 

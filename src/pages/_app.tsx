@@ -16,6 +16,7 @@ import AOS from 'aos';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import { CartProvider } from '@/context/CartContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -36,10 +37,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-  <AuthProvider>
+  <AuthProvider >
+    <CartProvider>
      <Head>
       
-         <link rel="icon" href="/assets/favicon.ico"/>
+         <link rel="icon" href={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/favicon.ico`} />
       </Head>
   <div>
     {hideLayout ? (
@@ -55,6 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     )}
     <ToastContainer position="top-right" autoClose={3000} />
   </div>
+  </CartProvider>
 </AuthProvider>
 
   );
