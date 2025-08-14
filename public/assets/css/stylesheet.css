@@ -496,6 +496,14 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
 .deleteBtn{max-width: 20px;}
 .deleteBtn img{filter: invert(31%) sepia(66%) saturate(6878%) hue-rotate(335deg) brightness(96%) contrast(108%);}
 
+.headTopicon{display: flex; gap:0.625rem}
+.headTopicon .headIcon{display: flex; align-items: center; justify-content: center; border-radius: 100%; color:#318138; width: 2.5rem; height: 2.5rem; border:1px solid #318138;}
+.cartButtonTop{background-color: #318138; height:2.5rem; color:#ffffff; border:0; padding: 0.5rem 1.25rem; border-radius:0.5rem;}
+.userDropdown .dropdown-menu{padding: 0.625rem;  border: 1px solid rgba(49, 129, 56, 0.2); border-radius:0.625rem; margin-top:0.625rem}
+.userDropdown .dropdown-menu { transform: translateY(-0.625rem); opacity: 0; visibility: hidden; transition: all 0.3s ease; display: block; }
+.userDropdown .dropdown-menu.show { transform: translateY(0); opacity: 1; visibility: visible; }
+.userDropdown .dropdown-menu-end { right: 0; left: auto; }
+
 /**********************/
 /*** Responsive ***/
 /**********************/

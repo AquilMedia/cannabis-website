@@ -44,8 +44,8 @@ const { summary } = useCart();
                                     </div>
 
                                     <div className="head_right_sec">
-                                        <ul className="list-inline mb-0">
-                                            <li className="list-inline-item">
+                                        <ul className="list-inline mb-0 headTopicon">
+                                            {/* <li className="list-inline-item">
                                                 <Link href="tel:+49123456789" className="d-flex gap-1 align-items-center">
                                                     <div className="call_icon">
                                                         <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/call-icon.svg`} className="w-100" alt="" />
@@ -54,33 +54,43 @@ const { summary } = useCart();
                                                         +49 123 456 789
                                                     </div>
                                                 </Link >
+                                            </li> */}
+
+                                            <li>
+                                                <Link href="tel:+49123456789" className='headIcon'><i className="cb-icon cb-phone"></i></Link>
                                             </li>
+                                            <li>
+                                                <div className="dropdown userDropdown">
+                                                    <a  className='headIcon' href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i className="cb-icon cb-user"></i>
+                                                    </a>
 
-
-
-                                            {user ? (
-                                                <>
-                                                    <li className="list-inline-item"><span style={{ color: '#4caf50', fontWeight: 600 }}>Hello, {user.name}</span></li>
-                                                    <li className="list-inline-item"> <Link href={''} onClick={logout} className="login_btn f-size-18 f-w-M line_H_1"> LogOut </Link >
-                                                    </li>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <li className="list-inline-item">
-                                                        <Link href="/login" className="login_btn f-size-18 f-w-M line_H_1"> Login </Link >
-                                                    </li>
-                                                </>
-                                            )}
-
+                                                    <ul className="dropdown-menu dropdown-menu-end">
+                                                        {user ? (
+                                                            <>
+                                                                <li className='mb__5 d-grid'><span className='clr-green f-w-SB text-truncate'>Hello, <span>{user.name}</span></span></li>
+                                                                <li className="d-inline-flex w-100"> <Link href={''} onClick={logout} className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Logout </Link >
+                                                                </li>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <li className="d-inline-flex w-100">
+                                                                    <Link href="/login" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Login </Link >
+                                                                </li>
+                                                            </>
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            </li>
                                         </ul>
 
                                     </div>
 
                                 </div>
 
-                                <div className="cart-icon mt ms-2">
-                                    <button className="cartBtn clr-black" onClick={() => setShowCartModal(true)}>
-                                        <i className="cb-icon cb-cart"></i>
+                                <div className="ms-3">
+                                    <button className="cartButtonTop" onClick={() => setShowCartModal(true)}>
+                                        <i className="cb-icon cb-cart me-2"></i>
                                         {summary && (
                                           <span className="cartBadge">
                                                 {summary.total_items} | €
