@@ -17,7 +17,7 @@ const PharmacistSelector = forwardRef((_, ref) => {
     const [showPharmacyModal, setShowPharmacyModal] = useState(false);
     const [showConflictModal, setShowConflictModal] = useState(false);
     const [conflictPharmacyName, setConflictPharmacyName] = useState("");
-  const { fetchCart } = useCart();
+  const { fetchCartData } = useCart();
 const handlePharmacistSelect = async (pharmacist: any) => {
     if (!pharmacist) {
         toast.error("Please select a pharmacy first");
@@ -25,7 +25,7 @@ const handlePharmacistSelect = async (pharmacist: any) => {
     }
 
 try {
-    const response = await getPharmsistList(selectedProduct.id, user.token);
+    const response = await getPharmsistList(selectedProduct.id, user?.token);
 
     if (response.cartData) {
         const cartPharmacy = response.cartData?.pharmacist || null;
@@ -39,12 +39,12 @@ try {
                     quantity: updatedquantity,
                     
                 },
-                user.token
+                user?.token
             );
             toast.success("Added to cart successfully");
             setShowPharmacyModal(false);
-            fetchCart();
-            return;  // <== return here to avoid further code execution
+            fetchCartData();
+            return;  
         }
 
         setConflictPharmacyName(pharmacyName || "this pharmacy");
@@ -60,7 +60,7 @@ try {
             pharmacist_id: pharmacist.pharmacist_id,
           quantity: updatedquantity,
         },
-        user.token
+        user?.token
     );
     toast.success("Added to cart successfully");
     setShowPharmacyModal(false);
@@ -71,7 +71,7 @@ try {
 
 };
 
-const openSelector = async (product: any, updatedquantity: number) => {
+const openSelector = async (product: any, updatedquantity: any) => {
 
     console.log('product',product);
     console.log('updatedquantity',updatedquantity);
@@ -84,7 +84,7 @@ const openSelector = async (product: any, updatedquantity: number) => {
   }
 
   setSelectedProduct(product);
-  setSelectedQuantity(updatedquantity);  // store quantity in state if you want to keep it
+  setSelectedQuantity(updatedquantity); 
 
   try {
     const response = await getPharmsistList(product.id, user.token);
@@ -105,14 +105,14 @@ const openSelector = async (product: any, updatedquantity: number) => {
 
     const handleConfirmNewOrder = async () => {
     try {
-        await getClearCart(user.token);
+        await getClearCart(user?.token);
         await AddCart(
             {
                 product_id: selectedProduct.id,
                 pharmacist_id: selectedPharmacy.pharmacist_id,
                 quantity: updatedquantity,
             },
-            user.token
+            user?.token
         );
         toast.success("Added to cart successfully");
         setShowConflictModal(false);

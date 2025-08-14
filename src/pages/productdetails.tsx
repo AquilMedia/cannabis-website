@@ -18,7 +18,7 @@ import PharmacistSelector from '@/components/PharmacistSelector';
 
 const Productdetails: React.FC = () => {
     const pharmacistSelectorRef = useRef<any>(null);
-    const handleAddToCart = (prductDetails: any, quantity: number) => {
+    const handleAddToCart = (prductDetails: any, quantity: any) => {
         console.log(prductDetails);
 
         pharmacistSelectorRef.current.openSelector(prductDetails, quantity);
@@ -57,25 +57,28 @@ const Productdetails: React.FC = () => {
         ],
     };
 
-    const [quantity, setQuantity] = useState('5');
+    const [quantity, setQuantity] = useState<string>("1");
 
     const parseQuantity = (value: string) => {
         const number = parseFloat(value);
         return isNaN(number) ? 0 : number;
     };
+
     const increaseQty = () => {
         const current = parseQuantity(quantity);
         const newQty = current + 1;
-        setQuantity(newQty);
+        setQuantity(newQty.toString());
     };
     const decreaseQty = () => {
         const current = parseQuantity(quantity);
         const newQty = current > 1 ? current - 1 : 1;
-        setQuantity(newQty);
+        setQuantity(newQty.toString());
     };
-    const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuantity(e.target.value);
     };
+
 
     const fetchProductsDetails = async () => {
         try {
@@ -219,7 +222,7 @@ const Productdetails: React.FC = () => {
                 </div>
 
 
-                 <div className="mb-5" data-aos="fade-up">
+                <div className="mb-5" data-aos="fade-up">
                     <div className="cb_tabsWrapp overflow-y-auto mb__30">
                         <ul className="nav cb_cstTab flex-nowrap">
                             <li className="nav-item"> <button data-bs-toggle="tab" data-bs-target="#tab_1" className="nav-link text-nowrap active">Effects</button> </li>
@@ -233,11 +236,11 @@ const Productdetails: React.FC = () => {
                             <div className="cb_cardStyle_1">
                                 <div className="row">
                                     {!prductDetails?.effects || prductDetails.effects.length === 0 ? (
-                                    <div className="col-12 text-center">
-                                        <p className="f-size-18 clr-black mb-0">No Data found.</p>
-                                    </div>
+                                        <div className="col-12 text-center">
+                                            <p className="f-size-18 clr-black mb-0">No Data found.</p>
+                                        </div>
                                     ) : (
-                                     prductDetails?.effects?.map((item: any, index: number) => {
+                                        prductDetails?.effects?.map((item: any, index: number) => {
                                             const [title, count] = Object.entries(item)[0] as [string, any];
                                             return (
                                                 <div key={index} className="col-md-3">
@@ -246,18 +249,18 @@ const Productdetails: React.FC = () => {
                                             );
                                         }))}
                                 </div>
- 
+
                             </div>
                         </div>
                         <div className="tab-pane fade" id="tab_2" role="tabpanel">
                             <div className="cb_cardStyle_1">
                                 <div className="row row-gap-3">
                                     {!prductDetails?.complaints || prductDetails.complaints.length === 0 ? (
-                                    <div className="col-12 text-center">
-                                        <p className="f-size-18 clr-black mb-0">No Data found.</p>
-                                    </div>
+                                        <div className="col-12 text-center">
+                                            <p className="f-size-18 clr-black mb-0">No Data found.</p>
+                                        </div>
                                     ) : (
-                                    prductDetails?.complaints?.map((item: any, index: number) => {
+                                        prductDetails?.complaints?.map((item: any, index: number) => {
                                             const [title, count] = Object.entries(item)[0] as [string, any];
                                             return (
                                                 <div key={index} className="col-md-3">
@@ -272,18 +275,18 @@ const Productdetails: React.FC = () => {
                             <div className="cb_cardStyle_1">
                                 <div className="row">
                                     {!prductDetails?.terpenes || prductDetails.terpenes.length === 0 ? (
-                                    <div className="col-12 text-center">
-                                        <p className="f-size-18 clr-black mb-0">No Data found.</p>
-                                    </div>
+                                        <div className="col-12 text-center">
+                                            <p className="f-size-18 clr-black mb-0">No Data found.</p>
+                                        </div>
                                     ) : (
-                                    prductDetails?.terpenes?.map((item: any, index: number) => {
+                                        prductDetails?.terpenes?.map((item: any, index: number) => {
                                             const [title, count] = Object.entries(item)[0] as [string, any];
                                             return (
                                                 <div key={index} className="col-md-3">
                                                     <div><strong className="f-w-SB text-black">{title}:</strong> {count}</div>
                                                 </div>
                                             );
-                                       }))}
+                                        }))}
                                 </div>
                             </div>
                         </div>
