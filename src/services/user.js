@@ -16,6 +16,9 @@ export const getHomepageData = async () => {
 export const getBlogspageData = async () => {
   return await callApiWithAuth('/api/public/blogs', 'GET');
 };
+export const getBlogDetails = async (id) => {
+  return await callApiWithAuth(`/api/public/blogs/${id}`, 'GET');
+};
 export const getAboutUspageData = async () => {
   return await callApiWithAuth('/api/public/aboutus', 'GET');
 };

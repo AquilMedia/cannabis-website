@@ -35,26 +35,26 @@ const Footer: React.FC = () => {
 
           <div className="row justify-content-center">
             <div className="col-lg-8">
-              <div className="row justify-content-center">
-                <div className="col-sm-6 col-lg-3">
+              <div className="row justify-content-center row-gap-3">
+                <div className="col-6 col-sm-3 col-md-3">
                   <div className="subBx text-center" data-aos="fade-up" data-aos-delay="300">
                     <div className="subscTitle f-size-24 text-white f-w-B"> 10,000+ </div>
                     <div className="subsc_subTitle text-white opacity-5 f-size-18"> Subscribers </div>
                   </div>
                 </div>
-                <div className="col-sm-6 col-lg-3">
+                <div className="col-6 col-sm-3 col-md-3">
                   <div className="subBx text-center" data-aos="fade-up" data-aos-delay="400">
                     <div className="subscTitle f-size-24 text-white f-w-B"> Weekly </div>
                     <div className="subsc_subTitle text-white opacity-5 f-size-18"> Updates </div>
                   </div>
                 </div>
-                <div className="col-sm-6 col-lg-3">
+                <div className="col-6 col-sm-3 col-md-3">
                   <div className="subBx text-center" data-aos="fade-up" data-aos-delay="500">
                     <div className="subscTitle f-size-24 text-white f-w-B"> Expert </div>
                     <div className="subsc_subTitle text-white opacity-5 f-size-18"> Content </div>
                   </div>
                 </div>
-                <div className="col-sm-6 col-lg-3">
+                <div className="col-6 col-sm-3 col-md-3">
                   <div className="subBx text-center" data-aos="fade-up" data-aos-delay="600">
                     <div className="subscTitle f-size-24 text-white f-w-B"> Free </div>
                     <div className="subsc_subTitle text-white opacity-5 f-size-18"> Forever </div>
