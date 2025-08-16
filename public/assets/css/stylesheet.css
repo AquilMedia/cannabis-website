@@ -69,6 +69,7 @@
     --f-size-24:1.5rem;
     --f-size-28:1.75rem;
     --f-size-34:2.125rem;
+    --f-size-38:2.375rem;
     --f-size-60:3.75rem;
 
     --body-txt-clr:#677E67;
@@ -114,6 +115,7 @@ input[type=number] {-moz-appearance: textfield;}
 .f-size-24{font-size: var(--f-size-24)}
 .f-size-28{font-size: var(--f-size-28)}
 .f-size-34{font-size: var(--f-size-34)}
+.f-size-38{font-size: var(--f-size-38)}
 .f-size-60{font-size: var(--f-size-60)}
 .mb__5{margin-bottom: 0.313rem}
 .mb__10{margin-bottom: 0.625rem}
@@ -124,6 +126,7 @@ input[type=number] {-moz-appearance: textfield;}
 .mb__35{margin-bottom: 2.188rem}
 .mb__40{margin-bottom: 2.5rem}
 .mt__80{margin-top: 5rem;}
+.lats-p p:last-child{margin-bottom: 0;}
 .primary-clr{color: var(--body-txt-clr)}
 .secondary-clr{color: var(--clr-secondary)}
 .clr-green{color:var(--clr-green) !important;}
@@ -504,6 +507,12 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
 .userDropdown .dropdown-menu.show { transform: translateY(0); opacity: 1; visibility: visible; }
 .userDropdown .dropdown-menu-end { right: 0; left: auto; }
 
+.blogCard{ border: 1px solid rgba(49, 129, 56, .2); display:block; border-radius: 0.938rem; overflow: hidden; }
+.blogCard .blogImg{height: 15.625rem;}
+.blogCard .blogImg img{height: 100%; object-fit: cover;}
+.truncate-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
 /**********************/
 /*** Responsive ***/
 /**********************/
@@ -530,11 +539,12 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
         --f-size-28:22px;   
 
         --f-size-34:26px;    
+        --f-size-38:28px;    
         --f-size-60:30px;    
     }
    .cb_prod_title {font-size: 26px;}
    .cb_patientSatisfaction_card .lg_text {font-size: 28px;}
-
+    .blogCard .blogImg{height: 200px;}
 }
 @media (max-width:991px){
 
