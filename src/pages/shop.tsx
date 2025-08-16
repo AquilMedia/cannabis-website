@@ -118,12 +118,14 @@ const Shop: React.FC = () => {
 	};
   const pharmacistSelectorRef = useRef<any>(null);
 
-  const handleAddToCart = (product: any) => {
-	console.log(product);
-	
-	const  quantity =1;
-    pharmacistSelectorRef.current.openSelector(product, quantity);
-  };
+const handleAddToCart = (product: any) => {
+  if (!user) {
+    setShowLogin(true);
+    return;
+  }
+  const quantity = 1;
+  pharmacistSelectorRef.current.openSelector(product, quantity);
+};
   const id1 = 42;
 
 	return (
@@ -433,7 +435,14 @@ const Shop: React.FC = () => {
 
 
 													<div className="productImg mb__15">
-														<img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+														<Link href={`/productdetails?slug=${product.slug}&id=${item.product_id}`} >
+														<img
+															src={`${product?.image}`}
+															className="w-100"
+															alt=""
+															/>
+															</Link>
+
 													</div>
 													<div className='flex-grow-1'>
 													<div className="productTitle f-size-18 f-w-M clr-black">

@@ -54,9 +54,15 @@ export const getProductsDetails = async (id) => {
  export const uploadPrescription = async (data, token) => {
   return await callPostFormData(`/api/user/uploadPrescriptionData`, token, 'POST', data);
 };
+ export const uploadPrescriptionDr = async (data, token) => {
+  return await callPostFormData(`/api/user/createPrescription`, token, 'POST', data);
+};
+ export const medicalQuestionnaire = async (data, token) => {
+  return await callPostApi(`/api/public/medicalQuestionnaire`, token, 'POST', data);
+};
  export const getPatientinfo = async ( token) => {
   return await callApiWithAuth(`/api/user/getPatientInfo`, token, 'GET');
 };
  export const getMedicalQuestions = async ( token) => {
-  return await callApiWithAuth(`/api/public/getMedicalQuestions`, token, 'GET');
+  return await callApiWithAuth(`/api/user/medicalQuestions`, token, 'GET');
 };

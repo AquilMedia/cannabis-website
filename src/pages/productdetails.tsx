@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { getProductsDetails } from '@/services/user';
 import { toast } from 'react-toastify';
 import PharmacistSelector from '@/components/PharmacistSelector';
+import LoginModal from '@/Modals/LoginModal';
+import { useAuth } from '@/context/AuthContext';
 // interface ProductData {
 //   name: string;
 //   subtitle: string;
@@ -17,8 +19,14 @@ import PharmacistSelector from '@/components/PharmacistSelector';
 // }
 
 const Productdetails: React.FC = () => {
+    const { user } = useAuth();
+
     const pharmacistSelectorRef = useRef<any>(null);
     const handleAddToCart = (prductDetails: any, quantity: any) => {
+        if (!user?.token) {
+            setShowLogin(true);
+            return;
+        }
         console.log(prductDetails);
 
         pharmacistSelectorRef.current.openSelector(prductDetails, quantity);
@@ -26,7 +34,7 @@ const Productdetails: React.FC = () => {
 
     const { id } = useRouter().query;
     const [prductDetails, setPrductDetails] = useState<any>(null);
-
+    const [showLogin, setShowLogin] = useState(false);
     const [selectedPharmacyId, setSelectedPharmacyId] = useState<string | null>(null);
 
     const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,17 +105,18 @@ const Productdetails: React.FC = () => {
     return (
         <div className="secWrap pt-3">
             <PharmacistSelector ref={pharmacistSelectorRef} />
+            {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
 
             <div className="container">
                 <div className="mb-3" data-aos="fade-up">
-                    <Link href="/" className="btn cb_linkBtn"><i className="cb-icon cb-arrow-left"></i> Back to Products</Link>
+                    <Link href="/shop" className="btn cb_linkBtn"><i className="cb-icon cb-arrow-left"></i> Back to Products</Link>
 
                 </div>
                 <div className="mb-4 pb-4">
                     <div className="row row-gap-4">
                         <div className="col-lg-6">
                             <div className="cb_prodDtl_img overflow-hidden" data-aos="fade-up">
-                                <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/prod-detail.jpg`} className="w-100" alt="" />
+                                <img src={`${prductDetails?.image}`} className="w-100" alt="" />
                             </div>
                         </div>
                         <div className="col-lg-6">

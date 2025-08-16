@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 import OrderConfirmationModal from "@/Modals/OrderConfirmationModal";
 import { useCart } from "@/context/CartContext";
+import PendingOrderPage from "@/Modals/pending-order";
 
 const geocodingClient = mbxGeocoding({
     accessToken: "sk.eyJ1Ijoic2FteWFiaXNhbGVoIiwiYSI6ImNtM2ZmdnkxMTBqMXMyaXNlcHMzeTV1cmEifQ.p3Zc6DhFHND0OAD7FCRKtA"
@@ -32,7 +33,9 @@ const Uploadprescription: React.FC = () => {
 
 
     interface FormDataType {
+        
         prescriptionImg: File | null;
+        legalDocUrl: any;
         legalDocImg: File | null;
         deliveryMethod: string;
         patientInfo: PatientInfo;
@@ -42,6 +45,7 @@ const Uploadprescription: React.FC = () => {
         prescriptionImg: null,
         legalDocImg: null,
         deliveryMethod: "",
+    legalDocUrl:"",
         patientInfo: {
             firstName: "",
             lastName: "",
@@ -66,6 +70,7 @@ const Uploadprescription: React.FC = () => {
     const [orderId, setOrderId] = useState("");
 
     const { fetchCartData } = useCart();
+const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
 
     const [prescriptionImgName, setprescriptionImgName] = useState("No file chosen");
     const [legalDocImgName, setlegalDocImgName] = useState("Upload your ID document");
@@ -106,27 +111,37 @@ const Uploadprescription: React.FC = () => {
             if (!res || !res.success) {
                 throw new Error("No patient info found");
             }
+//    if (res.pendingOrders === 1) {
+           
+//             setShowPendingOrderModal(true); 
+//             return;
+//         }
+console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}${res.user.legalDocument}`);
+setFormData((prev) => ({
+  ...prev,
+  legalDocUrl: res.user.legalDocument
+    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${res.user.legalDocument}`
+    : "",
+  patientInfo: {
+    ...prev.patientInfo,
+    firstName: res.user.firstName || "",
+    lastName: res.user.lastName || "",
+    email: res.user.email || "",
+    mobile: res.user.phone || "",
+    dob: res.user.dob ? res.user.dob.replace(/[{}]/g, "") : "",
 
-            // const { name, email, phone, dob } = res.user || {};
-            // const [firstName = "", lastName = ""] = name?.split(" ") || [];
-
-            setFormData((prev) => ({
-                ...prev,
-                patientInfo: {
-                    ...prev.patientInfo,
-                    firstName: res.user.firstName || "",
-                    lastName: res.user.lastName || "",
-                    email: res.user.email || "",
-                    mobile: res.user.phone || "",
-                    dob: res.user.dob || "",
-                }
-            }));
-
-
+    addressline1: res.address?.address_line1 || "",
+    city: res.address?.city || "",
+    postalCode: res.address?.zip || "",
+    country: res.address?.country || "",
+    latitude: res.address?.latitude ? Number(res.address.latitude) : undefined,
+    longitude: res.address?.longitude ? Number(res.address.longitude) : undefined,
+  }
+}));
 
         } catch (error) {
             console.error("Error starting new order:", error);
-            toast.error("Failed to start a new order");
+            toast.error("Failed to fetch patient info");
         }
     };
 
@@ -312,19 +327,24 @@ const Uploadprescription: React.FC = () => {
                     onClose={handleModalClose}
                 />
             )}
-
+{showPendingOrderModal && (
+ <PendingOrderPage
+                    
+                   
+                />
+)}
 
             <div className="container">
                 {cartItems.length > 0 && (
                     <h1 className="f-w-M text-center f-size-24 mb-4 pb-1 text-black">
-                        Prescription for
-                        <br />
+                        Prescription
+                        {/* <br />
                         {cartItems.map((item, index) => (
                             <span key={index}>
                                 {item.product_name}
                                 <br />
                             </span>
-                        ))}
+                        ))} */}
                     </h1>
                 )}
 
@@ -465,11 +485,9 @@ const Uploadprescription: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="mb-3">
-                                        <h5 className="secondary-clr f-size-14 f-w-M mb-2">
-                                            Address Information
-                                        </h5>
+                                        <h5 className="secondary-clr f-size-14 f-w-M mb-2">Address Information</h5>
 
-
+                                        {/* Search Address */}
                                         <div className="form-group position-relative">
                                             <input
                                                 type="text"
@@ -480,7 +498,6 @@ const Uploadprescription: React.FC = () => {
                                                 className="form-control cst-form-f"
                                                 placeholder="Search Address"
                                             />
-
 
                                             {suggestions.length > 0 && (
                                                 <ul className="list-group position-absolute w-100">
@@ -497,7 +514,7 @@ const Uploadprescription: React.FC = () => {
                                             )}
                                         </div>
 
-
+                                        {/* City, Postal Code, Country */}
                                         <div className="row mt-2">
                                             <div className="col-sm-6 col-md-4">
                                                 <input
@@ -508,7 +525,7 @@ const Uploadprescription: React.FC = () => {
                                                     onChange={(e) =>
                                                         setFormData((prev) => ({
                                                             ...prev,
-                                                            patientInfo: { ...prev.patientInfo, city: e.target.value }
+                                                            patientInfo: { ...prev.patientInfo, city: e.target.value },
                                                         }))
                                                     }
                                                     className="form-control cst-form-f"
@@ -524,10 +541,7 @@ const Uploadprescription: React.FC = () => {
                                                     onChange={(e) =>
                                                         setFormData((prev) => ({
                                                             ...prev,
-                                                            patientInfo: {
-                                                                ...prev.patientInfo,
-                                                                postalCode: e.target.value
-                                                            }
+                                                            patientInfo: { ...prev.patientInfo, postalCode: e.target.value },
                                                         }))
                                                     }
                                                     className="form-control cst-form-f"
@@ -543,7 +557,7 @@ const Uploadprescription: React.FC = () => {
                                                     onChange={(e) =>
                                                         setFormData((prev) => ({
                                                             ...prev,
-                                                            patientInfo: { ...prev.patientInfo, country: e.target.value }
+                                                            patientInfo: { ...prev.patientInfo, country: e.target.value },
                                                         }))
                                                     }
                                                     className="form-control cst-form-f"
@@ -552,6 +566,7 @@ const Uploadprescription: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
+
 
                                 </div>
                                 <div className="mt-4 d-flex justify-content-between gap-2">
@@ -573,55 +588,72 @@ const Uploadprescription: React.FC = () => {
                                     <div className="f-size-12">Accepted documents: Passport, Driver's License, National ID Card</div>
                                 </div>
 
-                                <div className="form-group">
-                                    <div className="fieldWrap_upload">
-                                        <input
-                                            className="d-none"
-                                            type="file"
-                                            id="uploadIdentification"
-                                            accept=".jpg,.jpeg,.png,.pdf"
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                setFormData((prev) => ({
-                                                    ...prev,
-                                                    legalDocImg: e.target.files?.[0] ?? null, // File or null
-                                                }))
-                                            }
+<div className="form-group">
+  <div className="fieldWrap_upload">
+    <input
+      className="d-none"
+      type="file"
+      id="uploadIdentification"
+      accept=".jpg,.jpeg,.png,.pdf"
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] ?? null;
+        setFormData((prev) => ({
+          ...prev,
+          legalDocImg: file,
+        }));
+        setlegalDocImgName(file ? file.name : "Upload your ID document");
+      }}
+    />
+    <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
+      <span className="btn chooseBtn">Choose File</span>
+      <span className="min-w-0">
+        <span className="fileName">{legalDocImgName}</span>
+      </span>
+    </label>
+  </div>
+</div>
 
-                                        />
-                                        <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
-                                            <span className="btn chooseBtn">Choose File</span>
-                                            <span className="min-w-0">
-                                                <span className="fileName">{legalDocImgName}</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
+{/* Preview Section */}
+{(formData.legalDocImg || formData.legalDocUrl) && (
+  <div className="mt-3">
+    {formData.legalDocImg ? (
+      formData.legalDocImg.type.includes("image") ? (
+        <img
+          src={URL.createObjectURL(formData.legalDocImg)}
+          alt="Uploaded Document"
+          style={{
+            maxWidth: "200px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        />
+      ) : formData.legalDocImg.type === "application/pdf" ? (
+        <iframe
+          src={URL.createObjectURL(formData.legalDocImg)}
+          title="PDF Preview"
+          width="100%"
+          height="300px"
+          style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+        />
+      ) : (
+        <p className="text-muted">
+          File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
+        </p>
+      )
+    ) : (
+      <img
+        src={formData.legalDocUrl}
+        alt="Legal Document"
+        style={{
+          maxWidth: "200px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+        }}
+      />
+    )}
+  </div>
+)}
 
-
-                                {formData.legalDocImg && (
-                                    <div className="mt-3">
-                                        {formData.legalDocImg.type.includes("image") ? (
-                                            <img
-                                                src={URL.createObjectURL(formData.legalDocImg)}
-                                                alt="Uploaded Document"
-                                                style={{ maxWidth: "200px", border: "1px solid #ccc", borderRadius: "5px" }}
-                                            />
-                                        ) : formData.legalDocImg.type === "application/pdf" ? (
-                                            <iframe
-                                                src={URL.createObjectURL(formData.legalDocImg)}
-                                                title="PDF Preview"
-                                                width="100%"
-                                                height="300px"
-                                                style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                                            />
-                                        ) : (
-                                            <p className="text-muted">
-                                                File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
-                                            </p>
-
-                                        )}
-                                    </div>
-                                )}
 
 
                                 <div className="cb_cardStyle_1 spc-sm cardBg">
@@ -645,13 +677,13 @@ const Uploadprescription: React.FC = () => {
                                 </div> */}
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goNext}>Previous</button>
+                                <button className="btn cb_cmnBtn btn-o px-4"onClick={goPrev}>Previous</button>
                                 <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleContinueWithDocument}>  Continue with Document</button>
                             </div>
                         </div>
                     )}
                     {step === 4 && (
-                        <div className={`tab-pane fade ${step === 4 ? "show active" : ""}`} id="tab_step_3">
+                        <div className={`tab-pane fade ${step === 4 ? "show active" : ""}`} id="tab_step_4">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Delivery Method</div>
@@ -707,7 +739,7 @@ const Uploadprescription: React.FC = () => {
                                             <input
                                                 className="cb_input_rc"
                                                 type="radio"
-                                                value="pickup"
+                                                value="pharmacyPickup"
                                                 name="deliveryMethod"
                                                 checked={formData.deliveryMethod === "pharmacyPickup"}
                                                 onChange={handleDeliveryChange}
@@ -781,7 +813,7 @@ const Uploadprescription: React.FC = () => {
                         </div>
                     )}
                     {step === 5 && (
-                        <div className={`tab-pane fade ${step === 5 ? "show active" : ""}`} id="tab_step_3">
+                        <div className={`tab-pane fade ${step === 5 ? "show active" : ""}`} id="tab_step_5">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
                                 <div className="mb-4 pb-lg-2">
                                     <div className="text-black f-size-20 line_H_1_2">Order Summary</div>
@@ -934,7 +966,7 @@ const Uploadprescription: React.FC = () => {
                                 </div>
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4">Previous</button>
+                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev} >Previous</button>
                                 <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleSubmit}>Place Order</button>
                             </div>
                         </div>

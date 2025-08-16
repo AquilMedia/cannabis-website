@@ -168,7 +168,9 @@ useEffect(() => {
               </div>
             </div>
             <div className="row justify-content-center">
-              {data?.sectionTwo?.dataList?.map((item: { title: any; description: any; }, index: number) => (
+              {data?.sectionTwo?.dataList?.map((item: {
+                icon: string | undefined; title: any; description: any; 
+}, index: number) => (
                 <div className="col-sm-6 col-lg-4" key={index}>
                   <div
                     className="aboutBx mb__30"
@@ -186,7 +188,7 @@ useEffect(() => {
                     className="aboutIcon-img"
                     alt={item?.title || "about"}
                   /> */}
-                      <span className="cb-icon cb-heart"></span>
+                      <span className={item.icon}></span>
                     </div>
                     <div className="about-title text-center f-size-18 f-w-M clr-black mb__10">
                       {item?.title || "Default Title"}
@@ -367,7 +369,9 @@ useEffect(() => {
                 data-aos="fade-up"
                 data-aos-delay="300"
               >
-                {data?.sectionFour?.section?.map((sec: { title: any; }, idx: React.Key | null | undefined) => (
+                {data?.sectionFour?.section?.map((sec: {
+                  icon: string | undefined; title: any; 
+}, idx: React.Key | null | undefined) => (
                   <button
                     key={idx}
                     className={`nav-link ${idx === 0 ? "active" : ""}`}
@@ -381,7 +385,9 @@ useEffect(() => {
                   >
                     <div className="tab-nav">
                       <div className="tabNav-icon mx-auto mb__5">
-                        <img src="assets/images/tab-icon-1.svg" className="w-100" />
+                              <i className={sec?.icon} ></i>
+
+                        {/* <img src="assets/images/tab-icon-1.svg" className="w-100" /> */}
                       </div>
                       <div className="tab_txt text-center secondary-clr">
                         {sec?.title || "Untitled"}
@@ -406,12 +412,14 @@ useEffect(() => {
                     aria-labelledby={`nav-tab-${idx}`}
                   >
                     <div className="row">
-                      {sec?.dataList?.map((stepItem: { step: any; title: any; description: any; }, stepIdx: number) => (
+                      {sec?.dataList?.map((stepItem: {
+                        [x: string]: string | undefined; step: any; title: any; description: any; 
+}, stepIdx: number) => (
                         <div className="col-sm-6 col-lg-3" key={stepIdx}>
                           <div className="prescriptionBx" data-eq="preHq">
                             <div className="aboutIcon d-flex align-items-center justify-content-center mx-auto mb__15">
 
-                              <span className="cb-icon cb-upload"></span>
+                              <span className={stepItem?.icon}></span>
                             </div>
                             <div className="stepNum mx-auto mb__10">
                               {stepItem?.step || stepIdx + 1}
@@ -560,7 +568,9 @@ useEffect(() => {
           </div>
 
           <div className="row justify-content-center">
-            {data?.sectionFive?.dataList?.map((item: { title: any; description: any; }, idx: number) => (
+            {data?.sectionFive?.dataList?.map((item: {
+              icon: string | undefined; title: any; description: any; 
+}, idx: number) => (
               <div className="col-sm-6 col-md-3" key={idx}>
                 <div
                   className="whyTrust_bx mb__30"
@@ -568,7 +578,7 @@ useEffect(() => {
                   data-aos-delay={300 + idx * 100}
                 >
                   <div className="aboutIcon d-flex align-items-center justify-content-center mx-auto mb__15">
-                    <span className="cb-icon cb-security"></span>
+                    <span className={item?.icon}></span>
                   </div>
                   <div className="about-title text-center f-size-18 f-w-M clr-black mb__5">
                     {item?.title || "Title"}

@@ -6,7 +6,7 @@ import LoginModal from "@/Modals/LoginModal";
 import { useCart } from "@/context/CartContext";
 
 const PharmacistSelector = forwardRef((_, ref) => {
-    const { user } = useAuth();
+    const { user,logout } = useAuth();
     const [pharmacists, setPharmacists] = useState<any[]>([]);
     const [updatedquantity, setSelectedQuantity] = useState<any[]>([]);
 
@@ -90,12 +90,20 @@ const openSelector = async (product: any, updatedquantity: any) => {
 
   try {
     const response = await getPharmsistList(product.id, user.token);
+    console.log(response);
+    
+if (response.status === 401 || response.status === 403) {
+  logout(); 
+
+  throw new Error("Invalid or expired token");
+}
 
     if (response.success && Array.isArray(response.data)) {
       setPharmacists(response.data);
       if (response.data.length > 0) {
         setSelectedPharmacy(response.data[0]);
       }
+
       setShowPharmacyModal(true);
     } else {
       toast.error("Failed to fetch pharmacists");
