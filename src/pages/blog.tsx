@@ -35,7 +35,7 @@ const fetchProductsDetails = async () => {
 			<div
 				className="inner_sec_banner position-relative"
 				style={{
-					backgroundImage: `url('${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/listing-banner.jpg')`,
+					backgroundImage: "assets/images/listing-banner.jpg",
 				}}
 			>
 				{/* {showLogin && <LoginModal onClose={() => setShowLogin(false)} />} */}
@@ -59,7 +59,7 @@ const fetchProductsDetails = async () => {
               <div key={index} className="col-sm-6 col-md-6 col-lg-4">
                 <Link href={`/blogDetails?slug=${item.slug}&id=${item.id}`}  className="blogCard h-100 d-flex flex-column" data-aos="fade-up">
                   <div className="blogImg"><img src={item.featured_image} className="w-100" alt=""  
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = `${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/blogImg.jpg` }}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/blogImg.jpg"}}
                   />
                   </div>
                   <div className="blogContent p-3 d-flex flex-column flex-grow-1">

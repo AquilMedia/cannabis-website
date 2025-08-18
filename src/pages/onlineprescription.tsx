@@ -73,7 +73,7 @@ const Onlineprescription: React.FC = () => {
     firstName: res.user.firstName || "",
     lastName: res.user.lastName || "",
     email: res.user.email || "",
-    mobile: res.user.phone || "",
+    phone: res.user.phone || "",
     dob: res.user.dob ? res.user.dob.replace(/[{}]/g, "") : "",
 
     addressline1: res.address?.address_line1 || "",
@@ -100,7 +100,7 @@ const Onlineprescription: React.FC = () => {
         firstName: string;
         lastName: string;
         email: string;
-        mobile: string;
+        phone: string;
         dob: string;
         addressline1: string;
         city: string;
@@ -127,7 +127,7 @@ legalDocUrl:"",
             firstName: "",
             lastName: "",
             email: "",
-            mobile: "",
+            phone: "",
             dob: "",
             addressline1: "",
             city: "",
@@ -270,13 +270,13 @@ legalDocUrl:"",
 
 
     const handleSavePatientInfo = () => {
-        const { firstName, lastName, email, mobile, dob, addressline1, city, postalCode, country } = formData.patientInfo;
+        const { firstName, lastName, email, phone, dob, addressline1, city, postalCode, country } = formData.patientInfo;
 
         if (
             !firstName.trim() ||
             !lastName.trim() ||
             !email.trim() ||
-            !mobile.trim() ||
+            !phone.trim() ||
             !dob.trim() ||
             !addressline1.trim() ||
             !city.trim() ||
@@ -465,7 +465,7 @@ legalDocUrl:"",
                                             </div>
                                             <div className="col-sm-6">
                                                 <div className="form-group">
-                                                    <input type="number" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
+                                                    <input type="number" required name="phone" value={formData.patientInfo.phone} className="form-control cst-form-f" placeholder="Enter phone Number"></input>
                                                 </div>
                                             </div>
                                             <div className="col-sm-6">
@@ -939,7 +939,7 @@ legalDocUrl:"",
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                             <li><span className="text-black">Name: </span>{formData.patientInfo.firstName} {formData.patientInfo.lastName}</li>
                                             <li><span className="text-black">Email: </span> {formData.patientInfo.email}</li>
-                                            <li><span className="text-black">Phone: </span> {formData.patientInfo.mobile}</li>
+                                            <li><span className="text-black">Phone: </span> {formData.patientInfo.phone}</li>
                                             <li><span className="text-black">Date of Birth: </span>{formData.patientInfo.dob}</li>
                                         </ul>
                                     </div>

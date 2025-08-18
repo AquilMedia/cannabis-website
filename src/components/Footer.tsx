@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
             <div className="col-lg-4">
               <div className="footer-widget" data-aos="fade-up" data-aos-delay="300">
                 <div className="footerLogo mb__15">
-                  <img  src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/footer-logo.png`}  className="footer-logo" alt="" />
+                  <img  src="assets/images/footer-logo.png" className="footer-logo" alt="" />
                 </div>
                 <div className="footerTxt_summary text-white opacity-8 line_H_1_3 mb__25">
                   Germany's leading digital clinic for medical cannabis. Professional, legal, and secure access to quality cannabis products with 24/7 medical support.
@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="tel:+4917640587385" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/cont-icon-1.svg`} className="w-100" alt="" />
+                            <img  src="assets/images/cont-icon-1.svg"className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             +49 176 40 58 73 85
@@ -94,7 +94,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="mailto:xyz@deinarztundapotheker.de" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/cont-icon-2.svg`}   className="w-100" alt="" />
+                            <img  src="assets/images/cont-icon-2.svg"  className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             xyz@deinarztundapotheker.de
@@ -104,7 +104,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="#" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/cont-icon-3.svg`} className="w-100" alt="" />
+                            <img  src="assets/images/cont-icon-3.svg"className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             Berlin, Germany
@@ -116,16 +116,16 @@ const Footer: React.FC = () => {
                   <div className="socialWrap">
                     <ul className="list-inline mb-0">
                       <li className="list-inline-item">
-                        <Link href="" className="social-icon" target="_blank"> <img  src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/social-icon-1.svg`}  className="w-100" alt="" /> </Link>
+                        <Link href="" className="social-icon" target="_blank"> <img  src="assets/images/social-icon-1.svg" className="w-100" alt="" /> </Link>
                       </li>
                       <li className="list-inline-item">
-                        <Link href="" className="social-icon" target="_blank"> <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/social-icon-2.svg`}  className="w-100" alt="" /> </Link>
+                        <Link href="" className="social-icon" target="_blank"> <img src="assets/images/social-icon-2.svg" className="w-100" alt="" /> </Link>
                       </li>
                       <li className="list-inline-item">
-                        <Link href="" className="social-icon" target="_blank"> <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/social-icon-3.svg`}  className="w-100" alt="" /> </Link>
+                        <Link href="" className="social-icon" target="_blank"> <img src="assets/images/social-icon-3.svg" className="w-100" alt="" /> </Link>
                       </li>
                       <li className="list-inline-item">
-                        <Link href="" className="social-icon" target="_blank"> <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/social-icon-4.svg`}  className="w-100" alt="" /> </Link>
+                        <Link href="" className="social-icon" target="_blank"> <img src="assets/images/social-icon-4.svg" className="w-100" alt="" /> </Link>
                       </li>
                     </ul>
                   </div>

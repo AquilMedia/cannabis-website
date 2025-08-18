@@ -42,7 +42,7 @@ const PendingOrderPage = () => {
               <div className="noCart py-4">
                 <div className="cartIcon mx-auto mb__15">
                   <img
-                    src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/alert-icon.png`}
+                    src="assets/images/alert-icon.png"
                     className="w-100"
                     alt="Pending Order"
                   />

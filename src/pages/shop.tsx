@@ -103,8 +103,8 @@ const Shop: React.FC = () => {
 			...prev,
 			[key]:
 				key === 'manufacturers' || key === 'effects' || key === 'complaints'
-					? selectedIds.map(id => String(id)) 
-					: selectedIds.map(id => Number(id)), 
+					? selectedIds.map(id => String(id))
+					: selectedIds.map(id => Number(id)),
 		}));
 	};
 
@@ -116,17 +116,17 @@ const Shop: React.FC = () => {
 			setCurrentPage(page);
 		}
 	};
-  const pharmacistSelectorRef = useRef<any>(null);
+	const pharmacistSelectorRef = useRef<any>(null);
 
-const handleAddToCart = (product: any) => {
-  if (!user) {
-    setShowLogin(true);
-    return;
-  }
-  const quantity = 1;
-  pharmacistSelectorRef.current.openSelector(product, quantity);
-};
-  const id1 = 42;
+	const handleAddToCart = (product: any) => {
+		if (!user) {
+			setShowLogin(true);
+			return;
+		}
+		const quantity = 1;
+		pharmacistSelectorRef.current.openSelector(product, quantity);
+	};
+	const id1 = 42;
 
 	return (
 		<div>
@@ -197,12 +197,12 @@ const handleAddToCart = (product: any) => {
 				</div>
 			)} */}
 
- <PharmacistSelector ref={pharmacistSelectorRef} />
+			<PharmacistSelector ref={pharmacistSelectorRef} />
 
 			<div
 				className="inner_sec_banner position-relative"
 				style={{
-					backgroundImage: `url('${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/listing-banner.jpg')`,
+					backgroundImage: `url("assets/images/listing-banner.jpg")`,
 				}}
 			>
 				{showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
@@ -289,117 +289,117 @@ const handleAddToCart = (product: any) => {
 									<button type="submit" className="btn filterClose d-xl-none" onClick={() => setShowFilter(false)}>X</button>
 									<div className="filterSroll px-3">
 										<div className="priceFilt_wrap mb__35">
-										<label className="filterLbl f-w-SB clr-black mb__10">Price Range (€)</label>
+											<label className="filterLbl f-w-SB clr-black mb__10">Price Range (€)</label>
 
-										<div className="range-slider-container">
+											<div className="range-slider-container">
 
-											<RangeSlider
-												className="my-slider"
-												min={1}
-												max={30}
-												value={filters.price}
-												onInput={(val) => setFilters((prev) => ({ ...prev, price: val }))}
-												step={1}
-											/>
-											<div className="range-labels">
-												<span>€ 0</span>
-												<span>€ 200</span>
+												<RangeSlider
+													className="my-slider"
+													min={1}
+													max={30}
+													value={filters.price}
+													onInput={(val) => setFilters((prev) => ({ ...prev, price: val }))}
+													step={1}
+												/>
+												<div className="range-labels">
+													<span>€ 0</span>
+													<span>€ 200</span>
+												</div>
 											</div>
 										</div>
-									</div>
 
-									<div className="priceFilt_wrap mb__35">
-										<label className="filterLbl f-w-SB clr-black mb__10">THC Content (%)</label>
+										<div className="priceFilt_wrap mb__35">
+											<label className="filterLbl f-w-SB clr-black mb__10">THC Content (%)</label>
 
-										<div className="range-slider-container">
+											<div className="range-slider-container">
 
-											<RangeSlider
-												className="my-slider"
-												min={1}
-												max={30}
-												value={filters.thc}
-												onInput={(val) => setFilters((prev) => ({ ...prev, thc: val }))}
-												step={1}
-											/>
+												<RangeSlider
+													className="my-slider"
+													min={1}
+													max={30}
+													value={filters.thc}
+													onInput={(val) => setFilters((prev) => ({ ...prev, thc: val }))}
+													step={1}
+												/>
+												<div className="range-labels">
+													<span>0%</span>
+													<span>25%</span>
+												</div>
+											</div>
+										</div>
+
+
+										<div className="priceFilt_wrap mb__35">
+											<label className="filterLbl f-w-SB clr-black mb__10"> CBD Content (%) </label>
+											<div className="">
+												<RangeSlider
+													className="my-slider"
+													min={1}
+													max={30}
+													value={filters.cbd}
+													onInput={(val) => setFilters((prev) => ({ ...prev, cbd: val }))}
+													step={1}
+												/>
+											</div>
 											<div className="range-labels">
 												<span>0%</span>
 												<span>25%</span>
 											</div>
 										</div>
-									</div>
-
-
-									<div className="priceFilt_wrap mb__35">
-										<label className="filterLbl f-w-SB clr-black mb__10"> CBD Content (%) </label>
-										<div className="">
-											<RangeSlider
-												className="my-slider"
-												min={1}
-												max={30}
-												value={filters.cbd}
-												onInput={(val) => setFilters((prev) => ({ ...prev, cbd: val }))}
-												step={1}
+										<div className="accordion" id="accordionExample">
+											<FilterAccordion
+												title="Complaints"
+												items={(filterData as any).complaints || []}
+												filterKey="complaints"
+												selectedItems={filters.complaints}
+												onChange={handleFilterChange}
 											/>
+
+											<FilterAccordion
+												title="Manufacturers"
+												items={(filterData as any).manufacturers || []}
+												filterKey="manufacturers"
+												selectedItems={filters.manufacturers}
+												onChange={handleFilterChange}
+											/>
+
+											<FilterAccordion
+												title="Genetics"
+												items={(filterData as any).genetics || []}
+												filterKey="genetics"
+												selectedItems={filters.genetics}
+												onChange={handleFilterChange}
+											/>
+
+											<FilterAccordion
+												title="Categories"
+												items={(filterData as any).categories || []}
+												filterKey="categories"
+												selectedItems={filters.categories}
+												onChange={handleFilterChange}
+											/>
+
+											<FilterAccordion
+												title="Effects"
+												items={(filterData as any).effects || []}
+
+												filterKey="effects"
+												selectedItems={filters.effects}
+												onChange={handleFilterChange}
+											/>
+
+
 										</div>
-										<div className="range-labels">
-											<span>0%</span>
-											<span>25%</span>
-										</div>
-									</div>
-									<div className="accordion" id="accordionExample">
-										<FilterAccordion
-											title="Complaints"
-											items={(filterData as any).complaints || []}
-											filterKey="complaints"
-											selectedItems={filters.complaints}
-											onChange={handleFilterChange}
-										/>
-
-										<FilterAccordion
-											title="Manufacturers"
-											items={(filterData as any).manufacturers || []}
-											filterKey="manufacturers"
-											selectedItems={filters.manufacturers}
-											onChange={handleFilterChange}
-										/>
-
-										<FilterAccordion
-											title="Genetics"
-											items={(filterData as any).genetics || []}
-											filterKey="genetics"
-											selectedItems={filters.genetics}
-											onChange={handleFilterChange}
-										/>
-
-										<FilterAccordion
-											title="Categories"
-											items={(filterData as any).categories || []}
-											filterKey="categories"
-											selectedItems={filters.categories}
-											onChange={handleFilterChange}
-										/>
-
-										<FilterAccordion
-											title="Effects"
-											items={(filterData as any).effects || []}
-
-											filterKey="effects"
-											selectedItems={filters.effects}
-											onChange={handleFilterChange}
-										/>
-
-
-									</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div className="col-md-12 col-xl-9">
 							{/* <div className="d-lg-flex justify-content-between mb__25"> */}
-								{/* <div className="productTop_name f-size-28 f-w-SB clr-black">
+							{/* <div className="productTop_name f-size-28 f-w-SB clr-black">
 									Inflammations
 								</div> */}
-								{/* <div className="showingResult_sec">
+							{/* <div className="showingResult_sec">
 									<ul className="list-inline mb-0">
 										<li className="list-inline-item">
 											<div className="filterby_name ">
@@ -437,38 +437,38 @@ const handleAddToCart = (product: any) => {
 
 													<div className="productImg mb__15">
 														<Link href={`/productdetails?slug=${product.slug}&id=${item.product_id}`} >
-														<img
-															src={`${product?.image}`}
-															className="w-100"
-															alt=""
+															<img
+																src={`${product?.image}`}
+																className="w-100"
+																alt=""
 															/>
-															</Link>
+														</Link>
 
 													</div>
 													<div className='flex-grow-1'>
-													<div className="productTitle f-size-18 f-w-M clr-black">
-														{product.name}
-													</div>
-													<div className="productSummary mb__15">
-														{product.subtitle}
-													</div>
-													<div className="productCont_list mb__15">
-														<ul className="list-unstyled mb-0">
-															<li className="list-block-item">
-																<div className="d-flex justify-content-between">
+														<div className="productTitle f-size-18 f-w-M clr-black">
+															{product.name}
+														</div>
+														<div className="productSummary mb__15">
+															{product.subtitle}
+														</div>
+														<div className="productCont_list mb__15">
+															<ul className="list-unstyled mb-0">
+																<li className="list-block-item">
+																	<div className="d-flex justify-content-between">
 
-																	<div className="prodLbl f-size-14"> THC/CBD: </div>
-																	<div className="prodTxt clr-black f-size-14"> {product.thc}% / {product.cbd}% </div>
-																</div>
-															</li>
-															<li className="list-block-item">
-																<div className="d-flex justify-content-between">
-																	<div className="prodLbl f-size-14"> Price </div>
-																	<div className="prodTxt clr-green f-size-20 f-w-B"> 	€{item.price} / {item.weight_unit} </div>
-																</div>
-															</li>
-														</ul>
-													</div>
+																		<div className="prodLbl f-size-14"> THC/CBD: </div>
+																		<div className="prodTxt clr-black f-size-14"> {product.thc}% / {product.cbd}% </div>
+																	</div>
+																</li>
+																<li className="list-block-item">
+																	<div className="d-flex justify-content-between">
+																		<div className="prodLbl f-size-14"> Price </div>
+																		<div className="prodTxt clr-green f-size-20 f-w-B"> 	€{item.price} / {item.weight_unit} </div>
+																	</div>
+																</li>
+															</ul>
+														</div>
 													</div>
 													<div className="productTag mb__10">
 														<ul className="list-inline mb-0">
@@ -504,11 +504,11 @@ const handleAddToCart = (product: any) => {
 																>
 																	<i className="cb-icon cb-cart"></i>
 																</Link> */}
-																  <button  	className="cartBtn clr-black" onClick={() => handleAddToCart(product)}>
+																<button className="cartBtn clr-black" onClick={() => handleAddToCart(product)}>
 
-																				<i className="cb-icon cb-cart"></i>
+																	<i className="cb-icon cb-cart"></i>
 
-																  </button>
+																</button>
 															</div>
 														</div>
 													</div>
@@ -520,54 +520,54 @@ const handleAddToCart = (product: any) => {
 
 
 							</div>
-						{pagination && totalPages > 1 && (
-                            <div >
-                                <ul className="cstPagination list-unstyled mb-0">
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                    Previous
-                                    </button>
-                                </li>
- 
-                                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                                    .filter(page => {
-                                    if (page === 1 || page === totalPages) return true;
- 
-                                    if (page >= currentPage - 1 && page <= currentPage + 1) return true;
- 
-                                    return false;
-                                    })
-                                    .map((page, index, arr) => {
-                                    const prevPage = arr[index - 1];
-                                    if (prevPage && page - prevPage > 1) {
-                                        return (
-                                        <React.Fragment key={page}>
-                                            <li className="page-item disabled">
-                                            <span className="page-link">...</span>
-                                            </li>
-                                            <li className={`page-item ${currentPage === page ? 'active' : ''}`}>
-                                            <button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
-                                            </li>
-                                        </React.Fragment>
-                                        );
-                                    }
-                                    return (
-                                        <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-                                        <button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
-                                        </li>
-                                    );
-                                    })
-                                }
- 
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                    Next
-                                    </button>
-                                </li>
-                                </ul>
-                            </div>
-                            )}
- 
+							{pagination && totalPages > 1 && (
+								<div >
+									<ul className="cstPagination list-unstyled mb-0">
+										<li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+											<button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+												Previous
+											</button>
+										</li>
+
+										{Array.from({ length: totalPages }, (_, i) => i + 1)
+											.filter(page => {
+												if (page === 1 || page === totalPages) return true;
+
+												if (page >= currentPage - 1 && page <= currentPage + 1) return true;
+
+												return false;
+											})
+											.map((page, index, arr) => {
+												const prevPage = arr[index - 1];
+												if (prevPage && page - prevPage > 1) {
+													return (
+														<React.Fragment key={page}>
+															<li className="page-item disabled">
+																<span className="page-link">...</span>
+															</li>
+															<li className={`page-item ${currentPage === page ? 'active' : ''}`}>
+																<button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
+															</li>
+														</React.Fragment>
+													);
+												}
+												return (
+													<li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+														<button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
+													</li>
+												);
+											})
+										}
+
+										<li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+											<button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+												Next
+											</button>
+										</li>
+									</ul>
+								</div>
+							)}
+
 
 
 						</div>

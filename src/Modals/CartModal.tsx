@@ -80,6 +80,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                 setCartItems([]);
                 setTotal(0);
                 onClose();
+                fetchCartData();
             } else {
                 toast.error(res?.message || "Failed to clear cart");
             }
@@ -150,7 +151,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                     {!cartItems || cartItems.length === 0 ? (
                             <div className="h-100 d-flex flex-column align-items-center justify-content-center">
                                 <div className="noCart py-4 text-center">
-                                    <div className="cartIcon mx-auto mb__15"> <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/empty-cart.png`} className="w-100" alt="" /></div>
+                                    <div className="cartIcon mx-auto mb__15"> <img src="assets/images/empty-cart.png"className="w-100" alt="" /></div>
                                     <div className=" f-size-24 f-w-SB clr-black mb__15">No products in the cart.</div>
                                     <Link href="/shop" onClick={onClose} className="btn cb_cmnBtn text-nowrap">Return To Shop</Link>
                                 </div>
@@ -166,7 +167,8 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                 alt={item.product_name}
                             /> */}
                             <div className="cartImg">
-                                 <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/product-img-1.png`} className="w-100" alt="" />
+                              
+                                 <img src="assets/images/product-img-1.png"className="w-100" alt="" />
                             </div>
                             <div className="itemDetails flex-grow-1">
                                 <p className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</p>
@@ -190,7 +192,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                             </div>
 
                            
-                            <button className="text-danger btn p-0 border-0 deleteBtn" onClick={() => handleDeleteItem(item.cart_item_id)}><img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/delete-icon.svg`} className="w-100" alt="" /></button>
+                            <button className="text-danger btn p-0 border-0 deleteBtn" onClick={() => handleDeleteItem(item.cart_item_id)}><img src="assets/images/delete-icon.svg"className="w-100" alt="" /></button>
                         </div>
                    ))
                 )}

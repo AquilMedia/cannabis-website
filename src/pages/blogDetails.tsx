@@ -47,7 +47,7 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                         <div className='col-lg-8'>
                             <div className='mb__40'>
                                 <div className="blogDe-Img rounded-4 overflow-hidden mb__20" data-aos="fade-up">
-                                <img src={prductDetails?.featured_image} className="w-100" alt="" onError={(e) => { (e.currentTarget as HTMLImageElement).src = `${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/blogImg.jpg` }} />
+                                <img src={prductDetails?.featured_image} className="w-100" alt="" onError={(e) => { (e.currentTarget as HTMLImageElement).src ="assets/images/blogImg.jpg" }} />
                                 </div>
                                 <div className="lats-p" data-aos="fade-up">
                                     <p>{prductDetails?.content}</p>

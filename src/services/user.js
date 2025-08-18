@@ -1,15 +1,10 @@
 import { callApi, callApiWithAuth, callPostApi, callPostFormData } from "./api";
-
-
-
 export const registerUser = async (userData) => {
   return await callApi('/api/user/register', 'POST', userData);
 };
-
 export const loginUser = async (credentials) => {
   return await callApi('/api/user/login', 'POST', credentials);
 };
-
 export const getHomepageData = async () => {
   return await callApiWithAuth('/api/public/homepage', 'GET');
 };
@@ -24,9 +19,7 @@ export const getAboutUspageData = async () => {
 };
 export const getProductsData = async (query) => {
   return await callApiWithAuth(`/api/public/products?${query}`, 'GET');
-
 };
-
 export const filtersData = async () => {
   return await callApiWithAuth('/api/public/filters', 'GET');
 };

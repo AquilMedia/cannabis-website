@@ -24,40 +24,54 @@ export const useAuth = () => {
   return context;
 };
 
+const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null);
   const [isMounted, setIsMounted] = useState(false);
 
-useEffect(() => {
-  const storedUser = localStorage.getItem('user');
-  if (storedUser && storedUser !== 'undefined' && storedUser !== 'null') {
-    const decryptedUser = decryptData(storedUser);
-    if (decryptedUser) {
-      setUser(decryptedUser);
-    } else {
-      localStorage.removeItem('user');
+  useEffect(() => {
+    const storedData = localStorage.getItem('user');
+    if (storedData && storedData !== 'undefined' && storedData !== 'null') {
+      const decryptedData = decryptData(storedData);
+
+      if (decryptedData) {
+        const { user: storedUser, timestamp } = decryptedData;
+        const now = Date.now();
+
+        // check expiry
+        if (now - timestamp < ONE_DAY_MS) {
+          setUser(storedUser);
+        } else {
+          localStorage.removeItem('user'); // expired
+        }
+      } else {
+        localStorage.removeItem('user');
+      }
     }
-  }
-  setIsMounted(true);
-}, []);
+    setIsMounted(true);
+  }, []);
 
+  const login = (userData: User) => {
+    if (!userData) {
+      console.warn("Tried to login with null/undefined user");
+      return;
+    }
 
-const login = (userData: User) => {
-  if (!userData) {
-    console.warn("Tried to login with null/undefined user");
-    return;
-  }
-  setUser(userData);
-  localStorage.setItem("user", encryptData(userData));
-};
+    setUser(userData);
 
+    const payload = {
+      user: userData,
+      timestamp: Date.now(),
+    };
+
+    localStorage.setItem("user", encryptData(payload));
+  };
 
   const logout = () => {
     setUser(null);
-    
     localStorage.removeItem('user');
   };
-
 
   if (!isMounted) return null;
 

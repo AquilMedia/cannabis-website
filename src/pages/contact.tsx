@@ -6,7 +6,7 @@ const Contact: React.FC = () => {
             <div
 				className="inner_sec_banner position-relative"
 				style={{
-					backgroundImage: `url('${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/listing-banner.jpg')`,
+					backgroundImage: `url("assets/images/listing-banner.jpg")`,
 				}}
 			>
 				<div className="container">

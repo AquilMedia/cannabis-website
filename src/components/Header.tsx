@@ -16,7 +16,7 @@ const { summary } = useCart();
                         <nav className="navbar navbar-expand-lg">
                             <div className="container-fluid">
                                 <Link className="navbar-brand" href="/">
-                                    <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/Digital-Clinic-Area_logo.png`} className="w-100" alt="" />
+                                    <img src="assets/images/Digital-Clinic-Area_logo.png" className="w-100" alt="" />
                                 </Link >
                                 <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                                     <div className="navMng-In mx-auto">
@@ -45,7 +45,7 @@ const { summary } = useCart();
                                             {/* <li className="list-inline-item">
                                                 <Link href="tel:+49123456789" className="d-flex gap-1 align-items-center">
                                                     <div className="call_icon">
-                                                        <img src={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/call-icon.svg`} className="w-100" alt="" />
+                                                        <img src="assets/images/call-icon.svg" className="w-100" alt="" />
                                                     </div>
                                                     <div className="call_txt primary-clr">
                                                         +49 123 456 789

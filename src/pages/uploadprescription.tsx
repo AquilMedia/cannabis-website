@@ -111,11 +111,11 @@ const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
             if (!res || !res.success) {
                 throw new Error("No patient info found");
             }
-//    if (res.pendingOrders === 1) {
+   if (res.pendingOrders === 1) {
            
-//             setShowPendingOrderModal(true); 
-//             return;
-//         }
+            setShowPendingOrderModal(true); 
+            return;
+        }
 console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}${res.user.legalDocument}`);
 setFormData((prev) => ({
   ...prev,

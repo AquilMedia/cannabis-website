@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <CartProvider>
      <Head>
       
-         <link rel="icon" href={`${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/favicon.ico`} />
+         <link rel="icon" href="assets/favicon.ico"/>
       </Head>
   <div>
     {hideLayout ? (
