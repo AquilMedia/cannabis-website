@@ -22,7 +22,7 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
         }, [id]);
 
     return (
-        <div className="contact-page">
+        <>
            <div className="secWrap bt-md tp-md section-bg">
                  <div className="container">
                     <div data-aos="fade-up" className='mb__15'>
@@ -31,8 +31,8 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
 
                     <div className="row justify-content-center g-0">
                         <div className='col-lg-8'>
-                            <div className="text-black f-size-38 f-w-B mb__20 line_H_1_2">{prductDetails?.title}</div>
-                             <div className="blogInfo flex-wrap d-flex column-gap-4 row-gap-3 mb__10">
+                            <div className="text-black f-size-38 f-w-B mb__20 line_H_1_2" data-aos="fade-up">{prductDetails?.title}</div>
+                             <div className="blogInfo flex-wrap d-flex column-gap-4 row-gap-3 mb__10" data-aos="fade-up">
                                 <div className="primary-clr f-size-14 d-flex align-items-center gap-2"><i className="cb-icon cb-user f-size-12"></i>By Dr. Sarah Weber</div>
                                 <div className="primary-clr f-size-14 d-flex align-items-center gap-2"><i className="cb-icon cb-calendar f-size-12"></i>Published {prductDetails?.published_at.split("T")[0]}</div>
                                 <div className="primary-clr f-size-14 d-flex align-items-center gap-2"><i className="cb-icon cb-clock"></i>Last updated {prductDetails?.updated_at.split("T")[0]}</div>
@@ -46,17 +46,17 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                     <div className="row justify-content-center g-0">
                         <div className='col-lg-8'>
                             <div className='mb__40'>
-                                <div className="blogDe-Img rounded-4 overflow-hidden mb__20">
+                                <div className="blogDe-Img rounded-4 overflow-hidden mb__20" data-aos="fade-up">
                                 <img src={prductDetails?.featured_image} className="w-100" alt="" onError={(e) => { (e.currentTarget as HTMLImageElement).src = `${process.env.NEXT_PUBLIC_ASSET_PREFIX}/assets/images/blogImg.jpg` }} />
                                 </div>
-                                <div className="lats-p">
+                                <div className="lats-p" data-aos="fade-up">
                                     <p>{prductDetails?.content}</p>
                                 </div>
                             </div>
 
                            
                             <div>
-                                <div className=" f-size-34 f-w-B clr-black mb__20">Recent Blog</div>
+                                <div className=" f-size-34 f-w-B clr-black mb__20" data-aos="fade-up">Recent Blog</div>
                                 <div className="row row-gap-4">
                                     {prductDetails?.recentBlogs?.map((item: any, index: number) => {
                                         return (
@@ -84,7 +84,7 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                     </div>
                  </div>
             </div>
-        </div>
+        </>
     );
 };
 

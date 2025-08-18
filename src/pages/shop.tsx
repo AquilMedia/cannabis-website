@@ -23,6 +23,7 @@ const Shop: React.FC = () => {
 		effects: string[];
 	};
 
+	const [showFilter, setShowFilter] = useState(false);
 
 
 	const [filters, setFilters] = useState({
@@ -216,7 +217,7 @@ const Shop: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<div className="secWrap pb-5">
+			<div className="secWrap pb-4 pb-lg-5">
 				<div className="container">
 					<div className="row">
 						<div className="col-lg-12">
@@ -224,7 +225,7 @@ const Shop: React.FC = () => {
 								<ul className="list-inline d-flex justify-content-between mb-0">
 
 									{/* "All Products" static link */}
-									<li className={`list-inline-item ${filters.categories.length === 0 ? 'active' : ''}`}>
+									<li className={`list-inline-item m-0 flex-grow-1 text-center ${filters.categories.length === 0 ? 'active' : ''}`}>
 										<Link
 											href="#"
 											className="filter-link"
@@ -242,7 +243,7 @@ const Shop: React.FC = () => {
 									{((filterData as any)?.categories || []).map((cat: any) => (
 										<li
 											key={cat.id}
-											className={`list-inline-item ${filters.categories.includes(cat.id) ? 'active' : ''
+											className={`list-inline-item m-0 flex-grow-1 text-center ${filters.categories.includes(cat.id) ? 'active' : ''
 												}`}
 										>
 											<Link
@@ -279,120 +280,121 @@ const Shop: React.FC = () => {
 			</div>
 			<div className="secWrap pt-0">
 				<div className="container">
+					<button className="btn filterBtn mb__30 d-xl-none" onClick={() => setShowFilter(true)}> <i className="cb-icon cb-filter-btn"></i> Filters </button>
 					<div className="row">
-						<div className="col-lg-3">
-							<div className="filterBtn mb__30">
-								<i className="cb-icon cb-filter-btn"></i> Filters
-							</div>
+						<div className="col-lg-12 col-xl-3">
+							<div className={`filterWrp ${showFilter ? "show" : ""}`}>
+								<div className={`filterBx px-2`}>
+									<button type="submit" className="btn filterClose d-xl-none" onClick={() => setShowFilter(false)}>X</button>
+									<div className="filterSroll px-3">
+										<div className="priceFilt_wrap mb__35">
+										<label className="filterLbl f-w-SB clr-black mb__10">Price Range (€)</label>
 
+										<div className="range-slider-container">
 
-							<div className="filterBx">
-								<div className="priceFilt_wrap mb__35">
-									<label className="filterLbl f-w-SB clr-black mb__10">Price Range (€)</label>
-
-									<div className="range-slider-container">
-
-										<RangeSlider
-											className="my-slider"
-											min={1}
-											max={30}
-											value={filters.price}
-											onInput={(val) => setFilters((prev) => ({ ...prev, price: val }))}
-											step={1}
-										/>
-										<div className="range-labels">
-											<span>€ 0</span>
-											<span>€ 200</span>
+											<RangeSlider
+												className="my-slider"
+												min={1}
+												max={30}
+												value={filters.price}
+												onInput={(val) => setFilters((prev) => ({ ...prev, price: val }))}
+												step={1}
+											/>
+											<div className="range-labels">
+												<span>€ 0</span>
+												<span>€ 200</span>
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<div className="priceFilt_wrap mb__35">
-									<label className="filterLbl f-w-SB clr-black mb__10">THC Content (%)</label>
+									<div className="priceFilt_wrap mb__35">
+										<label className="filterLbl f-w-SB clr-black mb__10">THC Content (%)</label>
 
-									<div className="range-slider-container">
+										<div className="range-slider-container">
 
-										<RangeSlider
-											className="my-slider"
-											min={1}
-											max={30}
-											value={filters.thc}
-											onInput={(val) => setFilters((prev) => ({ ...prev, thc: val }))}
-											step={1}
-										/>
+											<RangeSlider
+												className="my-slider"
+												min={1}
+												max={30}
+												value={filters.thc}
+												onInput={(val) => setFilters((prev) => ({ ...prev, thc: val }))}
+												step={1}
+											/>
+											<div className="range-labels">
+												<span>0%</span>
+												<span>25%</span>
+											</div>
+										</div>
+									</div>
+
+
+									<div className="priceFilt_wrap mb__35">
+										<label className="filterLbl f-w-SB clr-black mb__10"> CBD Content (%) </label>
+										<div className="">
+											<RangeSlider
+												className="my-slider"
+												min={1}
+												max={30}
+												value={filters.cbd}
+												onInput={(val) => setFilters((prev) => ({ ...prev, cbd: val }))}
+												step={1}
+											/>
+										</div>
 										<div className="range-labels">
 											<span>0%</span>
 											<span>25%</span>
 										</div>
 									</div>
-								</div>
-
-
-								<div className="priceFilt_wrap mb__35">
-									<label className="filterLbl f-w-SB clr-black mb__10"> CBD Content (%) </label>
-									<div className="">
-										<RangeSlider
-											className="my-slider"
-											min={1}
-											max={30}
-											value={filters.cbd}
-											onInput={(val) => setFilters((prev) => ({ ...prev, cbd: val }))}
-											step={1}
+									<div className="accordion" id="accordionExample">
+										<FilterAccordion
+											title="Complaints"
+											items={(filterData as any).complaints || []}
+											filterKey="complaints"
+											selectedItems={filters.complaints}
+											onChange={handleFilterChange}
 										/>
+
+										<FilterAccordion
+											title="Manufacturers"
+											items={(filterData as any).manufacturers || []}
+											filterKey="manufacturers"
+											selectedItems={filters.manufacturers}
+											onChange={handleFilterChange}
+										/>
+
+										<FilterAccordion
+											title="Genetics"
+											items={(filterData as any).genetics || []}
+											filterKey="genetics"
+											selectedItems={filters.genetics}
+											onChange={handleFilterChange}
+										/>
+
+										<FilterAccordion
+											title="Categories"
+											items={(filterData as any).categories || []}
+											filterKey="categories"
+											selectedItems={filters.categories}
+											onChange={handleFilterChange}
+										/>
+
+										<FilterAccordion
+											title="Effects"
+											items={(filterData as any).effects || []}
+
+											filterKey="effects"
+											selectedItems={filters.effects}
+											onChange={handleFilterChange}
+										/>
+
+
 									</div>
-									<div className="range-labels">
-										<span>0%</span>
-										<span>25%</span>
 									</div>
-								</div>
-								<div className="accordion" id="accordionExample">
-									<FilterAccordion
-										title="Complaints"
-										items={(filterData as any).complaints || []}
-										filterKey="complaints"
-										selectedItems={filters.complaints}
-										onChange={handleFilterChange}
-									/>
-
-									<FilterAccordion
-										title="Manufacturers"
-										items={(filterData as any).manufacturers || []}
-										filterKey="manufacturers"
-										selectedItems={filters.manufacturers}
-										onChange={handleFilterChange}
-									/>
-
-									<FilterAccordion
-										title="Genetics"
-										items={(filterData as any).genetics || []}
-										filterKey="genetics"
-										selectedItems={filters.genetics}
-										onChange={handleFilterChange}
-									/>
-
-									<FilterAccordion
-										title="Categories"
-										items={(filterData as any).categories || []}
-										filterKey="categories"
-										selectedItems={filters.categories}
-										onChange={handleFilterChange}
-									/>
-
-									<FilterAccordion
-										title="Effects"
-										items={(filterData as any).effects || []}
-
-										filterKey="effects"
-										selectedItems={filters.effects}
-										onChange={handleFilterChange}
-									/>
-
-
 								</div>
 							</div>
 						</div>
-						<div className="col-lg-9">
-							<div className="d-lg-flex justify-content-between mb__25">
+						<div className="col-md-12 col-xl-9">
+							{/* <div className="d-lg-flex justify-content-between mb__25"> */}
 								{/* <div className="productTop_name f-size-28 f-w-SB clr-black">
 									Inflammations
 								</div> */}
@@ -416,7 +418,7 @@ const Shop: React.FC = () => {
 										</li>
 									</ul>
 								</div> */}
-							</div>
+							{/* </div> */}
 							<div className="row row-gap-4">
 								{products.length === 0 ? (
 									<div className="col-12 text-center">
@@ -426,7 +428,7 @@ const Shop: React.FC = () => {
 									products.map((item: any) => {
 										const product = item.product;
 										return (
-											<div className="col-lg-4">
+											<div className="col-sm-6 col-lg-4">
 												<div className="productBx trasn_2 d-flex flex-column position-relative h-100" >
 													<div className="productLbl">{product.genetic?.title || 'N/A'}</div>
 
