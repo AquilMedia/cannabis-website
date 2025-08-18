@@ -25,7 +25,6 @@ const Shop: React.FC = () => {
 
 	const [showFilter, setShowFilter] = useState(false);
 
-
 	const [filters, setFilters] = useState({
 		complaints: [] as string[],
 		manufacturers: [] as number[],
