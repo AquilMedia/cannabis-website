@@ -16,7 +16,7 @@ const Header: React.FC = () => {
     const logoutSubmit = () => {
         logout();
         fetchCartData();
-        window.location.reload();
+        // window.location.reload();
     };
 
 
@@ -79,16 +79,16 @@ const Header: React.FC = () => {
                                                     {user ? (
                                                         <>
                                                             <li className='mb__5 d-grid'><span className='clr-green f-w-SB text-truncate'>Hello, <span>{user.name}</span></span></li>
-                                                            <li className="d-inline-flex w-100">
-                                                                <Link href="/dashboard" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Dashboard </Link >
+                                                            <li className="d-inline-flex w-100 mb__10">
+                                                                <Link href="/dashboard" className="btn cb_cmnBtn btn-o px-4 w-100"> Dashboard </Link >
                                                             </li>
-                                                            <li className="d-inline-flex w-100"> <Link href={''} onClick={logoutSubmit} className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Logout </Link >
+                                                            <li className="d-inline-flex w-100"> <Link href={''} onClick={logoutSubmit} className="btn cb_cmnBtn px-4 w-100"> Logout </Link >
                                                             </li>
                                                         </>
                                                     ) : (
                                                         <>
                                                             <li className="d-inline-flex w-100">
-                                                                <Link href="/login" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Login </Link >
+                                                                <Link href="/login" className="btn cb_cmnBtn px-4 w-100"> Login </Link >
                                                             </li>
                                                         </>
                                                     )}
