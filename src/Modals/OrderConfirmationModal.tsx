@@ -65,7 +65,7 @@ const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({ orderId
           <button
             className="btn border-0 w-100"
             style={{ backgroundColor: "#EDEDED" }}
-            onClick={() => router.push("/shop")}
+            onClick={() => router.push("/dashboard")}
           >
             Back to shopping
           </button>
