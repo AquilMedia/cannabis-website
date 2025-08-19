@@ -8,7 +8,7 @@ import type { AppProps } from 'next/app';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'aos/dist/aos.css';
@@ -21,46 +21,58 @@ import { CartProvider } from '@/context/CartContext';
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap.bundle.min.js')
-      .then(() => {})
       .catch((err) => console.error('Bootstrap JS load failed', err));
   }, []);
 
-  const router = useRouter();
-  const noLayoutRoutes = [''];
-  const hideLayout = noLayoutRoutes.includes(router.pathname);
-
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
+    AOS.init({ duration: 800, once: true });
   }, []);
 
   return (
-  <AuthProvider >
-    <CartProvider>
-     <Head>
-      
-         <link rel="icon" href="assets/favicon.ico"/>
-      </Head>
-  <div>
-    {hideLayout ? (
-      <Component {...pageProps} />
-    ) : (
-      <div className="body-wrapper">
-        <Header />
-        <main className="main-content">
-          <Component {...pageProps} />
-        </main>
-        <Footer />
-      </div>
-    )}
-    <ToastContainer position="top-right" autoClose={3000} />
-  </div>
-  </CartProvider>
-</AuthProvider>
-
+    <AuthProvider>
+      <CartProvider>
+        <Head>
+          <link rel="icon" href="assets/favicon.ico" />
+        </Head>
+        <AppContent Component={Component} pageProps={pageProps} />
+        <ToastContainer position="top-right" autoClose={3000} />
+      </CartProvider>
+    </AuthProvider>
   );
 }
+
+type AppContentProps = {
+  Component: AppProps["Component"];
+  pageProps: AppProps["pageProps"];
+};
+
+function AppContent({ Component, pageProps }: AppContentProps) {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const noLayoutRoutes = [''];
+  const hideLayout = noLayoutRoutes.includes(router.pathname);
+  const protectedRoutes = ["/dashboard", "/onlineprescription", "/uploadprescription","/consultation"];
+
+  useEffect(() => {
+    if (protectedRoutes.includes(router.pathname) && !user) {
+      router.replace("/");
+    }
+  }, [router.pathname, user]);
+
+  return hideLayout ? (
+    <Component {...pageProps} />
+  ) : (
+    <div className="body-wrapper">
+      <Header />
+      <main className="main-content">
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+
 
 export default MyApp;

@@ -59,6 +59,15 @@ export const getProductsDetails = async (id) => {
  export const getPatientinfo = async ( token) => {
   return await callApiWithAuth(`/api/user/getPatientInfo`, token, 'GET');
 };
+ export const getOrderDetails = async ( token) => {
+  return await callApiWithAuth(`/api/user/recentOrders`, token, 'GET');
+};
  export const getMedicalQuestions = async ( token) => {
   return await callApiWithAuth(`/api/user/medicalQuestions`, token, 'GET');
+};
+export const updatePatientinfo = async (data, token) => {
+  return await callPostApi(`/api/user/userUpdate`, token, 'POST', data);
+};
+export const updatepassword = async (data, token) => {
+  return await callPostApi(`/api/user/resetPassword`, token, 'POST', data);
 };

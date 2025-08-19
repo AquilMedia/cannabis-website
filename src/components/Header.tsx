@@ -3,11 +3,24 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import CartModal from '@/Modals/CartModal';
 import { useCart } from '@/context/CartContext';
+import { useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
     const { user, logout } = useAuth();
+    const router = useRouter();
     const [showCartModal, setShowCartModal] = useState(false);
-const { summary } = useCart();
+
+    const { summary } = useCart();
+    const { fetchCartData } = useCart();
+
+    const logoutSubmit = () => {
+        logout();
+        fetchCartData();
+        window.location.reload();
+    };
+
+
+
     return (
         <>
             <header className="header">
@@ -41,8 +54,8 @@ const { summary } = useCart();
                                     </div>
                                 </div>
                                 <div className="head_right_sec d-flex gap-2 gap-md-3">
-                                        <ul className="list-inline mb-0 headTopicon">
-                                            {/* <li className="list-inline-item">
+                                    <ul className="list-inline mb-0 headTopicon">
+                                        {/* <li className="list-inline-item">
                                                 <Link href="tel:+49123456789" className="d-flex gap-1 align-items-center">
                                                     <div className="call_icon">
                                                         <img src="assets/images/call-icon.svg" className="w-100" alt="" />
@@ -53,51 +66,60 @@ const { summary } = useCart();
                                                 </Link >
                                             </li> */}
 
-                                            <li>
-                                                <Link href="tel:+49123456789" className='headIcon'><i className="cb-icon cb-phone"></i></Link>
-                                            </li>
-                                            <li>
-                                                <div className="dropdown userDropdown">
-                                                    <a  className='headIcon' href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i className="cb-icon cb-user"></i>
-                                                    </a>
+                                        <li>
+                                            <Link href="tel:+49123456789" className='headIcon'><i className="cb-icon cb-phone"></i></Link>
+                                        </li>
+                                        <li>
+                                            <div className="dropdown userDropdown">
+                                                <a className='headIcon' href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i className="cb-icon cb-user"></i>
+                                                </a>
 
-                                                    <ul className="dropdown-menu dropdown-menu-end">
-                                                        {user ? (
-                                                            <>
-                                                                <li className='mb__5 d-grid'><span className='clr-green f-w-SB text-truncate'>Hello, <span>{user.name}</span></span></li>
-                                                                <li className="d-inline-flex w-100"> <Link href={''} onClick={logout} className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Logout </Link >
-                                                                </li>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <li className="d-inline-flex w-100">
-                                                                    <Link href="/login" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Login </Link >
-                                                                </li>
-                                                            </>
-                                                        )}
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                         <div>
-                                            <button className="cartButtonTop" onClick={() => setShowCartModal(true)}>
-                                                <i className="cb-icon cb-cart"></i>
-                                                <span className="proNoBadge d-md-none">{summary.total_items}</span>
-                                                {summary && (
-                                                <span className="cartBadge d-none d-md-inline-block  ms-2">
-                                                        {summary.total_items} | €
-                                                        {Number(summary.total_cart_price || 0).toFixed(2)}
-                                                </span>
-                                                )}
-                                            </button>
-                                            {showCartModal && <CartModal onClose={() => setShowCartModal(false)} />}
-                                        </div>
+                                                <ul className="dropdown-menu dropdown-menu-end">
+                                                    {user ? (
+                                                        <>
+                                                            <li className='mb__5 d-grid'><span className='clr-green f-w-SB text-truncate'>Hello, <span>{user.name}</span></span></li>
+                                                            <li className="d-inline-flex w-100">
+                                                                <Link href="/dashboard" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Dashboard </Link >
+                                                            </li>
+                                                            <li className="d-inline-flex w-100"> <Link href={''} onClick={logoutSubmit} className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Logout </Link >
+                                                            </li>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <li className="d-inline-flex w-100">
+                                                                <Link href="/login" className="login_btn f-size-18 f-w-M line_H_1 w-100 text-center"> Login </Link >
+                                                            </li>
+                                                        </>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <button className="cartButtonTop"    onClick={user ? () => setShowCartModal(true) : undefined}>
+                                            <i className="cb-icon cb-cart"></i>
+                                            <span className="proNoBadge d-md-none">{summary.total_items}</span>
+                                            {summary && (
+                                                <>
+                                                    {user ? (
+                                                        <span className="cartBadge d-none d-md-inline-block ms-2">
+                                                            {summary.total_items} | €{Number(summary.total_cart_price || 0).toFixed(2)}
+                                                        </span>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                </>
+                                            )}
 
-                                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                            <span className="navbar-toggler-icon"></span>
                                         </button>
+                                        {showCartModal && <CartModal onClose={() => setShowCartModal(false)} />}
                                     </div>
+
+                                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span className="navbar-toggler-icon"></span>
+                                    </button>
+                                </div>
                             </div>
                         </nav>
                     </div>

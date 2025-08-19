@@ -339,7 +339,7 @@ legalDocUrl:"",
     };
     const handleModalClose = () => {
         setShowOrderModal(false);
-        router.push("/shop");
+        router.push("/dashboard");
     };
 
     return (
@@ -465,7 +465,7 @@ legalDocUrl:"",
                                             </div>
                                             <div className="col-sm-6">
                                                 <div className="form-group">
-                                                    <input type="number" required name="phone" value={formData.patientInfo.phone} className="form-control cst-form-f" placeholder="Enter phone Number"></input>
+                                                    <input  type="tel" required name="phone" value={formData.patientInfo.phone} className="form-control cst-form-f" placeholder="Enter phone Number"></input>
                                                 </div>
                                             </div>
                                             <div className="col-sm-6">

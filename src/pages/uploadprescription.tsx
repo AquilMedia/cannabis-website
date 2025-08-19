@@ -317,7 +317,7 @@ setFormData((prev) => ({
     };
     const handleModalClose = () => {
         setShowOrderModal(false);
-        router.push("/shop");
+        router.push("/dashboard");
     };
     return (
         <div className="secWrap tp-md cb_innerPg_wrp">
@@ -474,7 +474,7 @@ setFormData((prev) => ({
                                             </div>
                                             <div className="col-sm-6">
                                                 <div className="form-group">
-                                                    <input type="number" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
+                                                    <input  type="tel" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
                                                 </div>
                                             </div>
                                             <div className="col-sm-6">

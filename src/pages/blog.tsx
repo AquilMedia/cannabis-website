@@ -35,7 +35,7 @@ const fetchProductsDetails = async () => {
 			<div
 				className="inner_sec_banner position-relative"
 				style={{
-					backgroundImage: "assets/images/listing-banner.jpg",
+					backgroundImage: `url("assets/images/listing-banner.jpg")`,
 				}}
 			>
 				{/* {showLogin && <LoginModal onClose={() => setShowLogin(false)} />} */}
