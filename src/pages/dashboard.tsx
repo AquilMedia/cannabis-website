@@ -23,6 +23,15 @@ const Dashboard: React.FC = () => {
     const togglePassword = (field: keyof typeof showPassword) => {
         setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
     };
+    const [error, setError] = useState<{ 
+            fname?: string; 
+            lname?: string; 
+            dob?: string; 
+            email?: string; 
+            phone?: string; 
+            password?: string; 
+            confirmPassword?: string; 
+        }>({});
 
     const [profile, setProfile] = useState({
         fname: '',
@@ -77,7 +86,7 @@ const Dashboard: React.FC = () => {
             );
         }
     };
-                console.log('Patient Info:', profile);
+                // console.log('Patient Info:', profile);
     useEffect(() => {
         if (user?.token) {
             fetchPatientInfo();
@@ -101,8 +110,60 @@ const Dashboard: React.FC = () => {
         }
     };
 
+      const validateField = (name: string, value: string) => {
+        let message = "";
+
+        if (name === "fname") {
+            if (!value.trim()) message = "First name is required";
+            else if (!/^[A-Za-z]+$/.test(value.trim())) message = "Invalid name";
+        }
+
+        if (name === "lname") {
+            if (!value.trim()) message = "Last name is required";
+            else if (!/^[A-Za-z]+$/.test(value.trim())) message = "Invalid name";
+        }
+        if (name === "dob") {
+        if (!value.trim()) {
+            message = "Date of birth is required";
+        } else {
+            const dob = new Date(value);
+            if (dob.toString() === "Invalid Date") {
+            message = "Please enter a valid date";
+            } else {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (dob > today) {
+                message = "Date of birth cannot be in the future";
+            }
+            }
+        }
+        }
+
+        if (name === "phone") {
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(value)) message = "Enter a valid 10-digit phone number";
+        }
+
+        setError((prev) => ({ ...prev, [name]: message }));
+
+        return message === "";
+};
+
+    const validateForm = () => {
+        const validations = [
+        validateField('fname', profile.fname),
+        validateField('lname', profile.lname),
+        validateField('dob', profile.dob),
+        validateField('phone', profile.phone),
+        ];
+        return validations.every((isValid) => isValid);
+    };
+
+
     const handleUpdateProfile = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validateForm()) return;
         const data = {
             name: `${profile.fname} ${profile.lname}`,
             phone: profile.phone,
@@ -182,8 +243,12 @@ const Dashboard: React.FC = () => {
                                                         id="fname"
                                                         className="form-control cst-form-f"
                                                         value={profile.fname}
-                                                        onChange={(e) => setProfile({ ...profile, fname: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setProfile({ ...profile, fname: e.target.value });
+                                                            validateField("fname", e.target.value);
+                                                        }}
                                                     />
+                                                    {error.fname && <span className='errorMsg'>{error.fname}</span>}
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -194,8 +259,12 @@ const Dashboard: React.FC = () => {
                                                         id="lname"
                                                         className="form-control cst-form-f"
                                                         value={profile.lname}
-                                                        onChange={(e) => setProfile({ ...profile, lname: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setProfile({ ...profile, lname: e.target.value });
+                                                            validateField("lname", e.target.value);
+                                                        }}
                                                     />
+                                                    {error.lname && <span className='errorMsg'>{error.lname}</span>}
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -206,8 +275,12 @@ const Dashboard: React.FC = () => {
                                                         id="dob"
                                                         className="form-control cst-form-f"
                                                         value={profile.dob}
-                                                        onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setProfile({ ...profile, dob: e.target.value });
+                                                             validateField("dob", e.target.value);
+                                                        }}
                                                     />
+                                                    {error.dob && <span className='errorMsg'>{error.dob}</span>}
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -230,9 +303,13 @@ const Dashboard: React.FC = () => {
                                                         id="phone"
                                                         className="form-control cst-form-f"
                                                         value={profile.phone || ""}
-                                                        onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setProfile({ ...profile, phone: e.target.value });
+                                                             validateField("phone", e.target.value);
+                                                        }}
                                                         placeholder="+49 1512 3456789"
                                                     />
+                                                    {error.phone && <span className='errorMsg'>{error.phone}</span>}
                                                 </div>
                                             </div>
                                         </div>
