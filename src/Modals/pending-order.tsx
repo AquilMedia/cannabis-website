@@ -8,7 +8,7 @@ const PendingOrderPage = () => {
   const handleClose = () => {
     setShowPendingOrderModal(false);
 
-       router.push("/shop");
+       router.push("/dashboard");
   }
   return (
     <div>

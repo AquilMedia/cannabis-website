@@ -4,7 +4,7 @@ import { getCartList, getPatientinfo, uploadPrescription } from "@/services/user
 import { toast } from "react-toastify";
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
 import { useRouter } from "next/navigation";
-
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 import OrderConfirmationModal from "@/Modals/OrderConfirmationModal";
 import { useCart } from "@/context/CartContext";
@@ -16,6 +16,7 @@ const geocodingClient = mbxGeocoding({
 const Uploadprescription: React.FC = () => {
     const { user } = useAuth();
     const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     interface PatientInfo {
         firstName: string;
@@ -33,7 +34,7 @@ const Uploadprescription: React.FC = () => {
 
 
     interface FormDataType {
-        
+
         prescriptionImg: File | null;
         legalDocUrl: any;
         legalDocImg: File | null;
@@ -45,7 +46,7 @@ const Uploadprescription: React.FC = () => {
         prescriptionImg: null,
         legalDocImg: null,
         deliveryMethod: "",
-    legalDocUrl:"",
+        legalDocUrl: "",
         patientInfo: {
             firstName: "",
             lastName: "",
@@ -66,11 +67,13 @@ const Uploadprescription: React.FC = () => {
     const totalSteps = 5;
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
+    const [totalGrams, setTotalGrams] = useState(0);
+
     const [showOrderModal, setShowOrderModal] = useState(false);
     const [orderId, setOrderId] = useState("");
 
     const { fetchCartData } = useCart();
-const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
+    const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
 
     const [prescriptionImgName, setprescriptionImgName] = useState("No file chosen");
     const [legalDocImgName, setlegalDocImgName] = useState("Upload your ID document");
@@ -94,6 +97,8 @@ const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
             if (data?.success) {
                 setCartItems(data.cartItems || []);
                 setTotal(data.summary?.total_cart_price || 0);
+                setTotalGrams(data.summary?.total_cart_grams || 0);
+
                 console.log('data.cartItems', data.cartItems);
 
             } else {
@@ -111,33 +116,33 @@ const [showPendingOrderModal, setShowPendingOrderModal] = useState(false);
             if (!res || !res.success) {
                 throw new Error("No patient info found");
             }
-   if (res.pendingOrders === 1) {
-           
-            setShowPendingOrderModal(true); 
-            return;
-        }
-console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}${res.user.legalDocument}`);
-setFormData((prev) => ({
-  ...prev,
-  legalDocUrl: res.user.legalDocument
-    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${res.user.legalDocument}`
-    : "",
-  patientInfo: {
-    ...prev.patientInfo,
-    firstName: res.user.firstName || "",
-    lastName: res.user.lastName || "",
-    email: res.user.email || "",
-    mobile: res.user.phone || "",
-    dob: res.user.dob ? res.user.dob.replace(/[{}]/g, "") : "",
+            //    if (res.pendingOrders === 1) {
 
-    addressline1: res.address?.address_line1 || "",
-    city: res.address?.city || "",
-    postalCode: res.address?.zip || "",
-    country: res.address?.country || "",
-    latitude: res.address?.latitude ? Number(res.address.latitude) : undefined,
-    longitude: res.address?.longitude ? Number(res.address.longitude) : undefined,
-  }
-}));
+            //             setShowPendingOrderModal(true); 
+            //             return;
+            //         }
+            console.log(`${API_BASE_URL}${res.user.legalDocumentUrl}`);
+            setFormData((prev) => ({
+                ...prev,
+                legalDocUrl: res.user.legalDocument
+                    ? `${API_BASE_URL}${res.user.legalDocumentUrl}`
+                    : "",
+                patientInfo: {
+                    ...prev.patientInfo,
+                    firstName: res.user.firstName || "",
+                    lastName: res.user.lastName || "",
+                    email: res.user.email || "",
+                    mobile: res.user.phone || "",
+                    dob: res.user.dob ? res.user.dob.replace(/[{}]/g, "") : "",
+
+                    addressline1: res.address?.address_line1 || "",
+                    city: res.address?.city || "",
+                    postalCode: res.address?.zip || "",
+                    country: res.address?.country || "",
+                    latitude: res.address?.latitude ? Number(res.address.latitude) : undefined,
+                    longitude: res.address?.longitude ? Number(res.address.longitude) : undefined,
+                }
+            }));
 
         } catch (error) {
             console.error("Error starting new order:", error);
@@ -236,7 +241,8 @@ setFormData((prev) => ({
                 .forwardGeocode({
                     query,
                     autocomplete: true,
-                    limit: 5
+                    limit: 5,
+                    countries: ["de"],
                 })
                 .send();
 
@@ -301,13 +307,14 @@ setFormData((prev) => ({
     };
 
     const handleContinueWithDocument = () => {
-        if (!formData.legalDocImg) {
+        if (!formData.legalDocImg && !formData.legalDocUrl) {
             toast.error("Please upload a valid government-issued ID before continuing.");
             return;
         }
 
         goNext();
     };
+
     const handleNextStep1 = () => {
         if (!formData.prescriptionImg) {
             toast.error("Please upload a prescription before continuing.");
@@ -327,12 +334,12 @@ setFormData((prev) => ({
                     onClose={handleModalClose}
                 />
             )}
-{showPendingOrderModal && (
- <PendingOrderPage
-                    
-                   
+            {showPendingOrderModal && (
+                <PendingOrderPage
+
+
                 />
-)}
+            )}
 
             <div className="container">
                 {cartItems.length > 0 && (
@@ -389,6 +396,7 @@ setFormData((prev) => ({
                                             <input
                                                 className="d-none"
                                                 type="file"
+                                                 accept=".jpg,.jpeg,.png"
                                                 id="uploadPrescription"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const file = e.target.files && e.target.files[0];
@@ -474,7 +482,7 @@ setFormData((prev) => ({
                                             </div>
                                             <div className="col-sm-6">
                                                 <div className="form-group">
-                                                    <input  type="tel" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
+                                                    <input type="tel" required name="mobile" value={formData.patientInfo.mobile} className="form-control cst-form-f" placeholder="Enter Mobile Number"></input>
                                                 </div>
                                             </div>
                                             <div className="col-sm-6">
@@ -485,87 +493,107 @@ setFormData((prev) => ({
                                         </div>
                                     </div>
                                     <div className="mb-3">
-                                        <h5 className="secondary-clr f-size-14 f-w-M mb-2">Address Information</h5>
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <h5 className="secondary-clr f-size-14 f-w-M mb-0">Address Information</h5>
 
-                                        {/* Search Address */}
-                                        <div className="form-group position-relative">
-                                            <input
-                                                type="text"
-                                                required
-                                                name="addressline1"
-                                                value={formData.patientInfo.addressline1}
-                                                onChange={handleSearch}
-                                                className="form-control cst-form-f"
-                                                placeholder="Search Address"
-                                            />
-
-                                            {suggestions.length > 0 && (
-                                                <ul className="list-group position-absolute w-100">
-                                                    {suggestions.map((s, index) => (
-                                                        <li
-                                                            key={index}
-                                                            className="list-group-item list-group-item-action"
-                                                            onClick={() => selectSuggestion(s)}
-                                                        >
-                                                            {s.place_name}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
+                                            <button
+                                                type="button"
+                                                className="btn cb_cmnBtn px-4 ms-auto"
+                                                onClick={() => setIsEditing((prev) => !prev)}
+                                            >
+                                                {isEditing ? "Save" : formData?.patientInfo?.addressline1 ? "Edit" : "Add"}
+                                            </button>
                                         </div>
 
-                                        {/* City, Postal Code, Country */}
-                                        <div className="row mt-2">
-                                            <div className="col-sm-6 col-md-4">
-                                                <input
-                                                    type="text"
-                                                    name="city"
-                                                    required
-                                                    value={formData.patientInfo.city}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            patientInfo: { ...prev.patientInfo, city: e.target.value },
-                                                        }))
-                                                    }
-                                                    className="form-control cst-form-f"
-                                                    placeholder="City"
-                                                />
-                                            </div>
-                                            <div className="col-sm-6 col-md-4">
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    name="postalCode"
-                                                    value={formData.patientInfo.postalCode}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            patientInfo: { ...prev.patientInfo, postalCode: e.target.value },
-                                                        }))
-                                                    }
-                                                    className="form-control cst-form-f"
-                                                    placeholder="Postal Code"
-                                                />
-                                            </div>
-                                            <div className="col-sm-6 col-md-4">
-                                                <input
-                                                    required
-                                                    type="text"
-                                                    name="country"
-                                                    value={formData.patientInfo.country}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            patientInfo: { ...prev.patientInfo, country: e.target.value },
-                                                        }))
-                                                    }
-                                                    className="form-control cst-form-f"
-                                                    placeholder="Country"
-                                                />
-                                            </div>
-                                        </div>
+                                        {/* Only show form if we already have an address OR user clicked Add/Edit */}
+                                        {(formData?.patientInfo?.addressline1 || isEditing) && (
+                                            <>
+                                                {/* Search Address */}
+                                                <div className="form-group position-relative">
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        name="addressline1"
+                                                        value={formData.patientInfo.addressline1}
+                                                        onChange={handleSearch}
+                                                        className="form-control cst-form-f"
+                                                        placeholder="Search Address"
+                                                        readOnly={!isEditing}
+                                                    />
+
+                                                    {isEditing && suggestions.length > 0 && (
+                                                        <ul className="list-group position-absolute w-100">
+                                                            {suggestions.map((s: any, index: number) => (
+                                                                <li
+                                                                    key={index}
+                                                                    className="list-group-item list-group-item-action"
+                                                                    onClick={() => selectSuggestion(s)}
+                                                                >
+                                                                    {s.place_name}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
+
+                                                {/* City, Postal Code, Country */}
+                                                <div className="row mt-2">
+                                                    <div className="col-sm-6 col-md-4">
+                                                        <input
+                                                            type="text"
+                                                            name="city"
+                                                            required
+                                                            value={formData.patientInfo.city}
+                                                            onChange={(e) =>
+                                                                setFormData((prev: any) => ({
+                                                                    ...prev,
+                                                                    patientInfo: { ...prev.patientInfo, city: e.target.value },
+                                                                }))
+                                                            }
+                                                            className="form-control cst-form-f"
+                                                            placeholder="City"
+                                                            readOnly={!isEditing}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm-6 col-md-4">
+                                                        <input
+                                                            type="text"
+                                                            required
+                                                            name="postalCode"
+                                                            value={formData.patientInfo.postalCode}
+                                                            onChange={(e) =>
+                                                                setFormData((prev: any) => ({
+                                                                    ...prev,
+                                                                    patientInfo: { ...prev.patientInfo, postalCode: e.target.value },
+                                                                }))
+                                                            }
+                                                            className="form-control cst-form-f"
+                                                            placeholder="Postal Code"
+                                                            readOnly={!isEditing}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm-6 col-md-4">
+                                                        <input
+                                                            required
+                                                            type="text"
+                                                            name="country"
+                                                            value={formData.patientInfo.country}
+                                                            onChange={(e) =>
+                                                                setFormData((prev: any) => ({
+                                                                    ...prev,
+                                                                    patientInfo: { ...prev.patientInfo, country: e.target.value },
+                                                                }))
+                                                            }
+                                                            className="form-control cst-form-f"
+                                                            placeholder="Country"
+                                                            readOnly={!isEditing}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
+
 
 
                                 </div>
@@ -588,75 +616,81 @@ setFormData((prev) => ({
                                     <div className="f-size-12">Accepted documents: Passport, Driver's License, National ID Card</div>
                                 </div>
 
-<div className="form-group">
-  <div className="fieldWrap_upload">
-    <input
-      className="d-none"
-      type="file"
-      id="uploadIdentification"
-      accept=".jpg,.jpeg,.png,.pdf"
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0] ?? null;
-        setFormData((prev) => ({
-          ...prev,
-          legalDocImg: file,
-        }));
-        setlegalDocImgName(file ? file.name : "Upload your ID document");
-      }}
-    />
-    <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
-      <span className="btn chooseBtn">Choose File</span>
-      <span className="min-w-0">
-        <span className="fileName">{legalDocImgName}</span>
-      </span>
-    </label>
-  </div>
-</div>
+                                <div className="form-group">
+                                    <div className="fieldWrap_upload">
+                                        <input
+                                            className="d-none"
+                                            type="file"
+                                            id="uploadIdentification"
+                                            accept=".jpg,.jpeg,.png"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                const file = e.target.files?.[0] ?? null;
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    legalDocImg: file,
+                                                }));
+                                                setlegalDocImgName(file ? file.name : "Upload your ID document");
+                                            }}
+                                        />
+                                        <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
+                                            <span className="btn chooseBtn">Choose File</span>
+                                            <span className="min-w-0">
+                                                <span className="fileName">{legalDocImgName}</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
 
-{/* Preview Section */}
-{(formData.legalDocImg || formData.legalDocUrl) && (
-  <div className="mt-3">
-    {formData.legalDocImg ? (
-      formData.legalDocImg.type.includes("image") ? (
-        <img
-          src={URL.createObjectURL(formData.legalDocImg)}
-          alt="Uploaded Document"
-          style={{
-            maxWidth: "200px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-          }}
-        />
-      ) : formData.legalDocImg.type === "application/pdf" ? (
-        <iframe
-          src={URL.createObjectURL(formData.legalDocImg)}
-          title="PDF Preview"
-          width="100%"
-          height="300px"
-          style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-        />
-      ) : (
-        <p className="text-muted">
-          File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
-        </p>
-      )
-    ) : (
-      <img
-        src={formData.legalDocUrl}
-        alt="Legal Document"
-        style={{
-          maxWidth: "200px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
-    )}
-  </div>
-)}
+                                {/* Preview Section */}
+                                {(formData.legalDocImg || formData.legalDocUrl) && (
+                                    <div className="mt-3">
+                                        {formData.legalDocImg ? (
+                                            formData.legalDocImg.type.includes("image") ? (
+                                                <img
+                                                    src={
+                                                        formData.legalDocImg instanceof File
+                                                            ? URL.createObjectURL(formData.legalDocUrl)
+                                                            : `${API_BASE_URL}/${formData.legalDocUrl}`
+                                                    }
+                                                    alt="Uploaded Document"
+                                                    style={{
+                                                        maxWidth: "100%",
+                                                        maxHeight: "200px",
+                                                        border: "1px solid #ccc",
+                                                        borderRadius: "4px",
+                                                    }}
+                                                />
+                                            ) : formData.legalDocImg.type === "application/pdf" ? (
+                                                <iframe
+                                                    src={URL.createObjectURL(formData.legalDocImg)}
+                                                    title="PDF Preview"
+                                                    
+                                                    width="100%"
+                                                    height="300px"
+                                                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                                                />
+                                            ) : (
+                                                <p className="text-muted">
+                                                    File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
+                                                </p>
+                                            )
+                                        ) : (
+                                            <img
+                                                src={formData.legalDocUrl}
+                                                alt="Legal Document"
+                                                style={{
+                                                    maxWidth: "200px",
+                                                    border: "1px solid #ccc",
+                                                    borderRadius: "5px",
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                )}
 
 
 
-                                <div className="cb_cardStyle_1 spc-sm cardBg">
+                                <div className="cb_cardStyle_1 spc-sm cardBg mt-4">
                                     <div className="d-flex gap-2">
                                         <div className="iconSpc_tp">
                                             <i className="cb-icon cb-file text-black f-size-20"></i>
@@ -677,7 +711,7 @@ setFormData((prev) => ({
                                 </div> */}
                             </div>
                             <div className="mt-4 d-flex justify-content-between gap-2">
-                                <button className="btn cb_cmnBtn btn-o px-4"onClick={goPrev}>Previous</button>
+                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
                                 <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleContinueWithDocument}>  Continue with Document</button>
                             </div>
                         </div>
@@ -820,43 +854,52 @@ setFormData((prev) => ({
                                     <div>Review your order details before placing</div>
                                 </div>
                                 <div className="cb_cardStyle_1 spc-sm">
-                                    <div className="cb_cardStyle_1 spc-sm">
-                                        <div className="text-black line_H_1_3 mb-4">
-                                            <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information
+                                    <div >
+                                        <div className="d-flex justify-content-between align-items-center mb-0">
+                                            <div className="text-black line_H_1_3">
+                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information
+                                            </div>
+                                            <div className="cb_cstLabel_3">Prescription Required</div>
                                         </div>
 
-                                        {/* Pharmacy Info - from first item */}
-                                        {cartItems.length > 0 && (
-                                            <div className="mb-3">
-                                                <b>Pharmacy:</b> {cartItems[0].pharmacist_name} <br />
-                                                <small>{cartItems[0].pharmacist_address}</small>
-                                            </div>
-                                        )}
-
+                                       
                                         {/* Products List */}
                                         <div className="row row-gap-2 mb-3">
                                             {cartItems.map((item) => (
                                                 <div className="col-md-12" key={item.cart_item_id}>
-                                                    <div className="border rounded p-2 mb-2">
-                                                        <span className="text-black">{item.product_name}</span> <br />
-                                                        <small>Medical Cannabis Product</small> <br />
-                                                        <small className="text-muted">
-                                                            {item.weight} {item.weight_unit} — €{Number(item.inventory_price).toFixed(2)}
-                                                        </small>
+                                                    <div className="cartItem">
+                                                        <div className="cartImg">
+                                                            <img
+                                                                className="w-100"
+                                                                src={item.product_image?.startsWith("http")
+                                                                    ? item.product_image
+                                                                    : `${API_BASE_URL}${item.product_image}`}
+                                                                alt={item.product_name}
+                                                            />
+                                                           
+                                                        </div>
+                                                        <div className="itemDetails flex-grow-1">
+                                                        <div className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</div>
+                                                        <div className="productSummary mb__15">New Test Product</div>
+                                                        </div>
+                                                        <div className="f-size-14 f-w-SB mb__5 clr-green"> €{item.inventory_price} - {item.quantity * item.weight}/{item.weight_unit} </div>
+                                                    </div>
+                                                    
+                                                    <div className="d-flex justify-content-between mt-3">
+                                                        <div>
+                                                            {cartItems.length > 0 && (
+                                                                <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
+                                                                    <li><span className="text-black">Pharmacy: </span>{cartItems[0].pharmacist_name}</li>
+                                                                    <li><span className="text-black">Addrress: </span>{cartItems[0].pharmacist_address}</li>
+                                                                </ul>
+                                                            )}
+                                                        </div>
+                                                        <div className="text-black f-w-SB f-size-20">Total: €{Number(total || 0).toFixed(2)} - {totalGrams} g/ml</div>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
-
-
-
-                                        <div className="text-end">
-                                            <span className="cb_cstLabel_3">Prescription Required</span> <br />
-                                            <span className="fw-bold">
-                                                Total: €{Number(total || 0).toFixed(2)}
-                                            </span>
-
-                                        </div>
+                                    
                                     </div>
 
 
@@ -888,8 +931,13 @@ setFormData((prev) => ({
                                             </li>
                                             <li>
                                                 <span className="text-black">Legal Document: </span>
-                                                {formData.legalDocImg ? formData.legalDocImg.name : "Not uploaded"}
+                                                {formData.legalDocImg
+                                                    ? formData.legalDocImg.name
+                                                    : formData.legalDocUrl
+                                                        ? "Already uploaded"
+                                                        : "Not uploaded"}
                                             </li>
+
 
                                         </ul>
                                     </div>

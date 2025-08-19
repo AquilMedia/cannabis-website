@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
- 
+ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 interface CartModalProps {
     onClose: () => void;
 }
@@ -34,7 +35,19 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
             setLoading(false);
         }
     };
- 
+ const handleCheckoutClick = () => {
+  const totalWeight = cartItems.reduce(
+    (total, item) => total + Number(item.weight) * item.quantity,
+    0
+  );
+
+  if (totalWeight > 100) {
+    toast.error("Maximum 100g/ml allowed in checkout!");
+    return;
+  }
+
+  handleCheckout(); 
+};
     useEffect(() => {
         if (!user?.token) return;
         fetchCart();
@@ -167,8 +180,14 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                 alt={item.product_name}
                             /> */}
                             <div className="cartImg">
-                              
-                                 <img src="assets/images/product-img-1.png"className="w-100" alt="" />
+                               <img
+                               className="w-100"
+                                src={item.product_image?.startsWith("http")
+                                    ? item.product_image
+                                    : `${API_BASE_URL}${item.product_image}`}
+                                alt={item.product_name}
+                            />
+                                 {/* <img src="assets/images/product-img-1.png"className="w-100" alt="" /> */}
                             </div>
                             <div className="itemDetails flex-grow-1">
                                 <p className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</p>
@@ -223,7 +242,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                         <span className="text-black f-w-SB line_H_1 d-inline-block"><span>Total: €{Number(total || 0).toFixed(2)}</span></span>
                         <button className="btn p-0 text-danger" onClick={handleClearCart}>Clear cart</button>
                     </div>
-                    <button className="btn cb_cmnBtn text-nowrap w-100" onClick={handleCheckout}>Proceed to Checkout</button>
+                    <button className="btn cb_cmnBtn text-nowrap w-100" onClick={handleCheckoutClick}>Proceed to Checkout</button>
                 </div>
             </div>
         </div>
