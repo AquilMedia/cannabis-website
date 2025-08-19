@@ -116,11 +116,11 @@ const Uploadprescription: React.FC = () => {
             if (!res || !res.success) {
                 throw new Error("No patient info found");
             }
-            //    if (res.pendingOrders === 1) {
+               if (res.pendingOrders === 1) {
 
-            //             setShowPendingOrderModal(true); 
-            //             return;
-            //         }
+                        setShowPendingOrderModal(true); 
+                        return;
+                    }
             console.log(`${API_BASE_URL}${res.user.legalDocumentUrl}`);
             setFormData((prev) => ({
                 ...prev,
@@ -642,51 +642,42 @@ const Uploadprescription: React.FC = () => {
                                 </div>
 
                                 {/* Preview Section */}
-                                {(formData.legalDocImg || formData.legalDocUrl) && (
-                                    <div className="mt-3">
-                                        {formData.legalDocImg ? (
-                                            formData.legalDocImg.type.includes("image") ? (
-                                                <img
-                                                    src={
-                                                        formData.legalDocImg instanceof File
-                                                            ? URL.createObjectURL(formData.legalDocUrl)
-                                                            : `${API_BASE_URL}/${formData.legalDocUrl}`
-                                                    }
-                                                    alt="Uploaded Document"
-                                                    style={{
-                                                        maxWidth: "100%",
-                                                        maxHeight: "200px",
-                                                        border: "1px solid #ccc",
-                                                        borderRadius: "4px",
-                                                    }}
-                                                />
-                                            ) : formData.legalDocImg.type === "application/pdf" ? (
-                                                <iframe
-                                                    src={URL.createObjectURL(formData.legalDocImg)}
-                                                    title="PDF Preview"
-                                                    
-                                                    width="100%"
-                                                    height="300px"
-                                                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                                                />
-                                            ) : (
-                                                <p className="text-muted">
-                                                    File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
-                                                </p>
-                                            )
-                                        ) : (
-                                            <img
-                                                src={formData.legalDocUrl}
-                                                alt="Legal Document"
-                                                style={{
-                                                    maxWidth: "200px",
-                                                    border: "1px solid #ccc",
-                                                    borderRadius: "5px",
-                                                }}
-                                            />
-                                        )}
-                                    </div>
-                                )}
+                           {(formData.legalDocImg || formData.legalDocUrl) && (
+  <div className="mt-3 flex gap-4">
+    {/* Show already uploaded image from API */}
+    {formData.legalDocUrl && (
+      <div>
+        <p className="text-sm text-gray-600 mb-1">Already Uploaded</p>
+        <img
+          src={`${formData.legalDocUrl}`}
+          alt="Legal Document"
+          style={{
+            maxWidth: "200px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        />
+      </div>
+    )}
+
+    {/* Show newly uploaded image */}
+    {formData.legalDocImg && (
+      <div>
+        <p className="text-sm text-gray-600 mb-1">New Upload</p>
+        <img
+          src={URL.createObjectURL(formData.legalDocImg)}
+          alt="Uploaded Document"
+          style={{
+            maxWidth: "200px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        />
+      </div>
+    )}
+  </div>
+)}
+
 
 
 

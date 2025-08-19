@@ -63,11 +63,11 @@ const Onlineprescription: React.FC = () => {
                 throw new Error("No patient info found");
             }
 
-            // if (res.pendingOrders === 1) {
+            if (res.pendingOrders === 1) {
 
-            //     setShowPendingOrderModal(true);
-            //     return;
-            // }
+                setShowPendingOrderModal(true);
+                return;
+            }
             setFormData((prev) => ({
                 ...prev,
                 legalDocUrl: res.user.legalDocument
@@ -237,14 +237,14 @@ const Onlineprescription: React.FC = () => {
             console.error("Mapbox search error:", err);
         }
     };
-const handleContinueWithDocument = () => {
-    if (!formData.legalDocImg && !formData.legalDocUrl) {
-        toast.error("Please upload a valid government-issued ID before continuing.");
-        return;
-    }
+    const handleContinueWithDocument = () => {
+        if (!formData.legalDocImg && !formData.legalDocUrl) {
+            toast.error("Please upload a valid government-issued ID before continuing.");
+            return;
+        }
 
-    goNext();
-};
+        goNext();
+    };
     const selectSuggestion = (suggestion: MapboxFeature) => {
         let city = "";
         let state = "";
@@ -594,118 +594,108 @@ const handleContinueWithDocument = () => {
                             </form>
                         </div>
                     )}
-                           {step === 3 && (
-                                       <div className={`tab-pane fade ${step === 3 ? "show active" : ""}`} id="tab_step_3">
-                                           <div className="cb_cardStyle_1 cb_prescriptn_card">
-                                               <div className="mb-4 pb-lg-2">
-                                                   <div className="text-black f-size-20 line_H_1_2">Legal Document Upload</div>
-                                                   <div>Please upload a valid government-issued ID</div>
-                                               </div>
-                                               <div className="mb-3">
-                                                   <h5 className="secondary-clr f-size-14 f-w-M mb-0">Identification Document</h5>
-                                                   <div className="f-size-12">Accepted documents: Passport, Driver's License, National ID Card</div>
-                                               </div>
-               
-                                               <div className="form-group">
-                                                   <div className="fieldWrap_upload">
-                                                       <input
-                                                           className="d-none"
-                                                           type="file"
-                                                           id="uploadIdentification"
-                                                           accept=".jpg,.jpeg,.png"
-                                                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                               const file = e.target.files?.[0] ?? null;
-                                                               setFormData((prev) => ({
-                                                                   ...prev,
-                                                                   legalDocImg: file,
-                                                               }));
-                                                               setlegalDocImgName(file ? file.name : "Upload your ID document");
-                                                           }}
-                                                       />
-                                                       <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
-                                                           <span className="btn chooseBtn">Choose File</span>
-                                                           <span className="min-w-0">
-                                                               <span className="fileName">{legalDocImgName}</span>
-                                                           </span>
-                                                       </label>
-                                                   </div>
-                                               </div>
-               
-                                               {/* Preview Section */}
-                                               {(formData.legalDocImg || formData.legalDocUrl) && (
-                                                   <div className="mt-3">
-                                                       {formData.legalDocImg ? (
-                                                           formData.legalDocImg.type.includes("image") ? (
-                                                               <img
-                                                                   src={
-                                                                       formData.legalDocImg instanceof File
-                                                                           ? URL.createObjectURL(formData.legalDocUrl)
-                                                                           : `${API_BASE_URL}/${formData.legalDocUrl}`
-                                                                   }
-                                                                   alt="Uploaded Document"
-                                                                   style={{
-                                                                       maxWidth: "100%",
-                                                                       maxHeight: "200px",
-                                                                       border: "1px solid #ccc",
-                                                                       borderRadius: "4px",
-                                                                   }}
-                                                               />
-                                                           ) : formData.legalDocImg.type === "application/pdf" ? (
-                                                               <iframe
-                                                                   src={URL.createObjectURL(formData.legalDocImg)}
-                                                                   title="PDF Preview"
-                                                                   
-                                                                   width="100%"
-                                                                   height="300px"
-                                                                   style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                                                               />
-                                                           ) : (
-                                                               <p className="text-muted">
-                                                                   File uploaded: {formData.legalDocImg?.name || "No file uploaded"}
-                                                               </p>
-                                                           )
-                                                       ) : (
-                                                           <img
-                                                               src={formData.legalDocUrl}
-                                                               alt="Legal Document"
-                                                               style={{
-                                                                   maxWidth: "200px",
-                                                                   border: "1px solid #ccc",
-                                                                   borderRadius: "5px",
-                                                               }}
-                                                           />
-                                                       )}
-                                                   </div>
-                                               )}
-               
-               
-               
-                                               <div className="cb_cardStyle_1 spc-sm cardBg mt-4">
-                                                   <div className="d-flex gap-2">
-                                                       <div className="iconSpc_tp">
-                                                           <i className="cb-icon cb-file text-black f-size-20"></i>
-                                                       </div>
-                                                       <div className="flex-grow-1">
-                                                           <div className="text-black mb-1">Document Requirements:</div>
-                                                           <ul className="mb-0">
-                                                               <li className="mb-1">Document must be clear and legible</li>
-                                                               <li className="mb-1">All corners of the document must be visible</li>
-                                                               <li className="mb-1">Document must be current and not expired</li>
-                                                               <li className="mb-1">Name on document must match patient information</li>
-                                                           </ul>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                               {/* <div className="text-center mt-4">
+                    {step === 3 && (
+                        <div className={`tab-pane fade ${step === 3 ? "show active" : ""}`} id="tab_step_3">
+                            <div className="cb_cardStyle_1 cb_prescriptn_card">
+                                <div className="mb-4 pb-lg-2">
+                                    <div className="text-black f-size-20 line_H_1_2">Legal Document Upload</div>
+                                    <div>Please upload a valid government-issued ID</div>
+                                </div>
+                                <div className="mb-3">
+                                    <h5 className="secondary-clr f-size-14 f-w-M mb-0">Identification Document</h5>
+                                    <div className="f-size-12">Accepted documents: Passport, Driver's License, National ID Card</div>
+                                </div>
+
+                                <div className="form-group">
+                                    <div className="fieldWrap_upload">
+                                        <input
+                                            className="d-none"
+                                            type="file"
+                                            id="uploadIdentification"
+                                            accept=".jpg,.jpeg,.png"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                const file = e.target.files?.[0] ?? null;
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    legalDocImg: file,
+                                                }));
+                                                setlegalDocImgName(file ? file.name : "Upload your ID document");
+                                            }}
+                                        />
+                                        <label className="cb_uploadField_wrap" htmlFor="uploadIdentification">
+                                            <span className="btn chooseBtn">Choose File</span>
+                                            <span className="min-w-0">
+                                                <span className="fileName">{legalDocImgName}</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Preview Section */}
+                                {(formData.legalDocImg || formData.legalDocUrl) && (
+                                    <div className="mt-3 flex gap-4">
+                                        {/* Show already uploaded image from API */}
+                                        {formData.legalDocUrl && (
+                                            <div>
+                                                <p className="text-sm text-gray-600 mb-1">Already Uploaded</p>
+                                                <img
+                                                    src={`${formData.legalDocUrl}`}
+                                                    alt="Legal Document"
+                                                    style={{
+                                                        maxWidth: "200px",
+                                                        border: "1px solid #ccc",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {/* Show newly uploaded image */}
+                                        {formData.legalDocImg && (
+                                            <div>
+                                                <p className="text-sm text-gray-600 mb-1">New Upload</p>
+                                                <img
+                                                    src={URL.createObjectURL(formData.legalDocImg)}
+                                                    alt="Uploaded Document"
+                                                    style={{
+                                                        maxWidth: "200px",
+                                                        border: "1px solid #ccc",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+
+
+                                <div className="cb_cardStyle_1 spc-sm cardBg mt-4">
+                                    <div className="d-flex gap-2">
+                                        <div className="iconSpc_tp">
+                                            <i className="cb-icon cb-file text-black f-size-20"></i>
+                                        </div>
+                                        <div className="flex-grow-1">
+                                            <div className="text-black mb-1">Document Requirements:</div>
+                                            <ul className="mb-0">
+                                                <li className="mb-1">Document must be clear and legible</li>
+                                                <li className="mb-1">All corners of the document must be visible</li>
+                                                <li className="mb-1">Document must be current and not expired</li>
+                                                <li className="mb-1">Name on document must match patient information</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* <div className="text-center mt-4">
                                                    <button className="btn cb_cmnBtn px-4">Continue with Document</button>
                                                </div> */}
-                                           </div>
-                                           <div className="mt-4 d-flex justify-content-between gap-2">
-                                               <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
-                                               <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleContinueWithDocument}>  Continue with Document</button>
-                                           </div>
-                                       </div>
-                                   )}
+                            </div>
+                            <div className="mt-4 d-flex justify-content-between gap-2">
+                                <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
+                                <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleContinueWithDocument}>  Continue with Document</button>
+                            </div>
+                        </div>
+                    )}
                     {step === 4 && (
                         <div className={`tab-pane fade ${step === 4 ? "show active" : ""}`} id="tab_step_4">
                             <div className="cb_cardStyle_1 cb_prescriptn_card">
@@ -884,7 +874,7 @@ const handleContinueWithDocument = () => {
                                     <div className="text-black f-size-20 line_H_1_2">Order Summary</div>
                                     <div>Review your order details before placing</div>
                                 </div>
-                                   <div className="cb_cardStyle_1 spc-sm">
+                                <div className="cb_cardStyle_1 spc-sm">
                                     <div >
                                         <div className="d-flex justify-content-between align-items-center mb-0">
                                             <div className="text-black line_H_1_3">
@@ -893,7 +883,7 @@ const handleContinueWithDocument = () => {
                                             <div className="cb_cstLabel_3">Prescription Required</div>
                                         </div>
 
-                                       
+
                                         {/* Products List */}
                                         <div className="row row-gap-2 mb-3">
                                             {cartItems.map((item) => (
@@ -907,15 +897,15 @@ const handleContinueWithDocument = () => {
                                                                     : `${API_BASE_URL}${item.product_image}`}
                                                                 alt={item.product_name}
                                                             />
-                                                           
+
                                                         </div>
                                                         <div className="itemDetails flex-grow-1">
-                                                        <div className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</div>
-                                                        <div className="productSummary mb__15">New Test Product</div>
+                                                            <div className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</div>
+                                                            <div className="productSummary mb__15">New Test Product</div>
                                                         </div>
                                                         <div className="f-size-14 f-w-SB mb__5 clr-green"> €{item.inventory_price} - {item.quantity * item.weight}/{item.weight_unit} </div>
                                                     </div>
-                                                    
+
                                                     <div className="d-flex justify-content-between mt-3">
                                                         <div>
                                                             {cartItems.length > 0 && (
@@ -930,7 +920,7 @@ const handleContinueWithDocument = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                    
+
                                     </div>
 
 
@@ -1001,14 +991,14 @@ const handleContinueWithDocument = () => {
                                             {/* <li><span className="text-black">Prescription : </span>   {formData.prescriptionImg ? formData.prescriptionImg.name : "Not uploaded"}
 
                                             </li> */}
-                                          <li>
-  <span className="text-black">Legal Document: </span>
-  {formData.legalDocImg
-    ? formData.legalDocImg.name
-    : formData.legalDocUrl
-    ? "Already uploaded"
-    : "Not uploaded"}
-</li>
+                                            <li>
+                                                <span className="text-black">Legal Document: </span>
+                                                {formData.legalDocImg
+                                                    ? formData.legalDocImg.name
+                                                    : formData.legalDocUrl
+                                                        ? "Already uploaded"
+                                                        : "Not uploaded"}
+                                            </li>
 
 
                                         </ul>
