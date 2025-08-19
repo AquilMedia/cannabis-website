@@ -1,16 +1,56 @@
+import { useAuth } from '@/context/AuthContext';
+import { getPatientinfo } from '@/services/user';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Dashboard: React.FC = () => {
+    const { user } = useAuth();
     const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
     confirm: false,
-  });
+    });
+        const togglePassword = (field: keyof typeof showPassword) => {
+        setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+    };
 
-  const togglePassword = (field: keyof typeof showPassword) => {
-    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+    const [profile, setProfile] = useState({
+        fname: '',
+        lname: '',
+        dob: '',
+        email: '',
+        phone: '',
+    });
+
+
+ const fetchPatientInfo = async () => {
+    try {
+      const response = await getPatientinfo(user?.token);
+      const data = response.user || {};
+      setProfile({
+        fname: data.firstName || '',
+        lname: data.lastName || '',
+        dob: data.dob ? data.dob.split('T')[0] : '',
+        email: data.email || '',
+        phone: data.phone || '',
+      });
+
+      console.log('Patient Info:', data);
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message || error.message || 'Failed to load patient info'
+      );
+    }
   };
+
+  useEffect(() => {
+    if (user?.token) {
+      fetchPatientInfo();
+    }
+  }, [user]);
+
+
     return (
         <>
         <div className="secWrap tp-md bt-md">
@@ -40,33 +80,63 @@ const Dashboard: React.FC = () => {
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label htmlFor="fname">First Name</label>
-                                                <input type="text" id="fname" className="form-control form-control cst-form-f" value={'Akshay'} />
+                                                <input 
+                                                    type="text" 
+                                                    id="fname" 
+                                                    className="form-control cst-form-f" 
+                                                    value={profile.fname} 
+                                                    onChange={(e) => setProfile({ ...profile, fname: e.target.value })}
+                                                />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                              <div className="form-group">
                                                 <label htmlFor="lname">Last Name</label>
-                                                <input type="text" id="lname" className="form-control form-control cst-form-f" value={'Bhujbal'} />
+                                                <input 
+                                                    type="text" 
+                                                    id="lname" 
+                                                    className="form-control cst-form-f" 
+                                                    value={profile.lname} 
+                                                    onChange={(e) => setProfile({ ...profile, lname: e.target.value })}
+                                                />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <div className="form-group">
                                                     <label htmlFor="dob">Date of Birth</label>
-                                                    <input type="date" id="dob" className="form-control cst-form-f" required value={'08/02/2025'} />
+                                                    <input 
+                                                        type="date" 
+                                                        id="dob" 
+                                                        className="form-control cst-form-f" 
+                                                        value={profile.dob} 
+                                                        onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
+                                                        />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label htmlFor="email">Email</label>
-                                                <input type="email" id="email" className="form-control form-control cst-form-f" value={'akshay.b@aquilmedia.in'} />
+                                                <input 
+                                                    type="email" 
+                                                    id="email" 
+                                                    className="form-control cst-form-f" 
+                                                    value={profile.email} 
+                                                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                                                    />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label htmlFor="phone">Phone Number</label>
-                                                <input type="number" id="phone" className="form-control form-control cst-form-f" value={'99559595559'} />
+                                                <input 
+                                                    type="number" 
+                                                    id="phone" 
+                                                    className="form-control cst-form-f" 
+                                                    value={profile.phone} 
+                                                    onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                                                    />
                                             </div>
                                         </div>
                                     </div>
@@ -412,3 +482,4 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
