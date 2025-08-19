@@ -29,8 +29,9 @@ const Dashboard: React.FC = () => {
             dob?: string; 
             email?: string; 
             phone?: string; 
-            password?: string; 
-            confirmPassword?: string; 
+            newPassword?: string; 
+  confirmPassword?: string;
+  passwords?: { newPassword?: string; confirmPassword?: string };
         }>({});
 
     const [profile, setProfile] = useState({
@@ -180,9 +181,42 @@ const Dashboard: React.FC = () => {
             toast.error(error.message || "Something went wrong");
         }
     };
+
+    const changePasswordvalidation = (name: string, value: string) => {
+    let message = "";
+
+    if (name === "newPassword") {
+        if (value.length < 6) message = "Password must be at least 6 characters";
+    }
+
+    if (name === "confirmPassword") {
+        if (value !== passwords.newPassword) message = "Passwords do not match";
+    }
+
+    // set error correctly under field name
+    setError((prev) => ({
+        ...prev,
+        passwords: {
+            ...prev.passwords,
+            [name]: message,
+        },
+    }));
+
+    return message === "";
+};
+
+  const changePassworForm = () => {
+    const validations = [
+        changePasswordvalidation("newPassword", passwords.newPassword),
+        changePasswordvalidation("confirmPassword", passwords.confirmPassword),
+    ];
+    return validations.every((isValid) => isValid);
+};
+
+
     const changePassword = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        if (!changePassworForm()) return;
         if (passwords.newPassword !== passwords.confirmPassword) {
             toast.error("New password and confirm password do not match");
             return;
@@ -202,7 +236,8 @@ const Dashboard: React.FC = () => {
             }
 
             toast.success("Password changed successfully!");
-            setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" }); // clear form
+            setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+            setError((prev) => ({ ...prev, passwords: {} }));
         } catch (error: any) {
             toast.error(error.message || "Something went wrong");
         }
@@ -338,7 +373,10 @@ const Dashboard: React.FC = () => {
                                                             id="currentPassword"
                                                             className="form-control cst-form-f"
                                                             value={passwords.currentPassword}
-                                                            onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setPasswords({ ...passwords, currentPassword: e.target.value });
+                                                                changePasswordvalidation("password", e.target.value);
+                                                            }}
                                                         />
                                                         <button
                                                             type="button"
@@ -360,7 +398,10 @@ const Dashboard: React.FC = () => {
                                                             id="newPassword"
                                                             className="form-control cst-form-f"
                                                             value={passwords.newPassword}
-                                                            onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setPasswords({ ...passwords, newPassword: e.target.value })
+                                                               changePasswordvalidation("newPassword", e.target.value);
+                                                            }}
                                                         />
                                                         <button
                                                             type="button"
@@ -370,6 +411,7 @@ const Dashboard: React.FC = () => {
                                                             <i className={`cb-icon ${showPassword.new ? "cb-show" : "cb-hide"}`} />
                                                         </button>
                                                     </div>
+                                                    {error.passwords?.newPassword && <span className='errorMsg'>{error.passwords.newPassword}</span>}
                                                 </div>
                                             </div>
 
@@ -382,7 +424,10 @@ const Dashboard: React.FC = () => {
                                                             id="confirmPassword"
                                                             className="form-control cst-form-f"
                                                             value={passwords.confirmPassword}
-                                                            onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setPasswords({ ...passwords, confirmPassword: e.target.value })
+                                                                changePasswordvalidation("confirmPassword", e.target.value);
+                                                            }}
                                                         />
                                                         <button
                                                             type="button"
@@ -392,6 +437,7 @@ const Dashboard: React.FC = () => {
                                                             <i className={`cb-icon ${showPassword.confirm ? "cb-show" : "cb-hide"}`} />
                                                         </button>
                                                     </div>
+                                                    {error.passwords?.confirmPassword && <span className='errorMsg'>{error.passwords.confirmPassword}</span>}
                                                 </div>
                                             </div>
                                         </div>

@@ -10,9 +10,44 @@ const LoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<{ 
+      email?: string;
+      password?: string; 
+  }>({});
+   const [showPassword, setShowPassword] = useState({
+    password: false,
+    });
+        const togglePassword = (field: keyof typeof showPassword) => {
+        setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+    };
+
+   const validateField = (name: string, value: string) => {
+     let message = "";
+      if (name === "email") {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) message = "Enter a valid email address";
+      }
+
+      if (name === "password") {
+          if (value.length < 6) message = "Password must be at least 6 characters";
+      }
+
+      setError((prev) => ({ ...prev, [name]: message }));
+
+      return message === "";
+  }
+
+   const validateForm = () => {
+        const validations = [
+        validateField('email', email),
+        validateField('password', password),
+        ];
+        return validations.every((isValid) => isValid);
+    };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setLoading(true);
 
     try {
@@ -38,37 +73,67 @@ const LoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         justifyContent: 'center',
         zIndex: 9999
       }}
+      className='row g-0'
     >
-      <div className="login-page" style={{ position: 'relative' }}>
-        <h1>Login</h1>
+      <div className="cb_cardStyle_1 bg-white col-4" style={{ position: 'relative' }}>
+        <h1 className='f-w-M text-center f-size-24 mb-4 pb-1 text-black'>Login</h1>
         <form onSubmit={handleLogin}>
           <div className="form-group">
             <label htmlFor="modal-email">Email:</label>
             <input
               type="email"
               id="modal-email"
-              className="form-control"
-              required
+              className="form-control form-control cst-form-f"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateField("email", e.target.value);
+              }}
             />
+            {error.email && <span className='errorMsg'>{error.email}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="modal-password">Password:</label>
+            <div className="icon_field">
             <input
-              type="password"
+              type={showPassword.password ? "text" : "password"}
               id="modal-password"
-              className="form-control"
-              required
+              className="form-control form-control cst-form-f"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                validateField("password", e.target.value);
+              }}
             />
+            <button
+                type="button"
+                className="btn p-0 border-0 fieldIcon"
+                onClick={() => togglePassword("password")}
+            >
+                <i
+                className={`cb-icon ${
+                    showPassword.password ? "cb-show" : "cb-hide"
+                }`}
+                ></i>
+            </button>
+            </div>
+            {error.password && <span className='errorMsg'>{error.password}</span>}
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+          <button type="submit" className="btn cb_cmnBtn w-100" disabled={loading}>
+             {loading ? (
+                <>
+                  <div className="spinner-border spinner-border-sm text-light me-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </>
+              ) : (
+                "Login"
+              )}
           </button>
         </form>
-        <Link href="/register">Don't have an account? Register</Link>
+
+        <div className='mt-2 text-center text-black'>Don't have an account?<Link href="/register" className='clr-green text-decoration-underline'> Register</Link></div>
+
         <button
           onClick={onClose}
           style={{
@@ -77,75 +142,12 @@ const LoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             right: 8,
             background: 'transparent',
             border: 'none',
-            fontSize: 20,
+            fontSize: 25,
             cursor: 'pointer'
           }}
         >
           ×
         </button>
-        <style jsx>{`
-          .login-page {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-          }
-          .login-page h1 {
-            text-align: center;
-            margin-bottom: 24px;
-            font-size: 28px;
-            font-weight: 600;
-            color: #333;
-          }
-          .form-group {
-            margin-bottom: 16px;
-          }
-          .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #444;
-          }
-          .form-control {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-            transition: border-color 0.2s;
-          }
-          .form-control:focus {
-            border-color: #318138;
-          }
-          .btn-primary {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            background-color: #318138;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s;
-          }
-          .btn-primary:hover {
-            background-color: #245a29ff;
-          }
-          a {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            color: #318138;
-            text-decoration: none;
-          }
-          a:hover {
-            text-decoration: underline;
-          }
-        `}</style>
       </div>
     </div>
   );
