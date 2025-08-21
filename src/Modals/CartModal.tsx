@@ -186,6 +186,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                     ? item.product_image
                                     : `${API_BASE_URL}${item.product_image}`}
                                 alt={item.product_name}
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/dummy-product.jpg"}}
                             />
                                  {/* <img src="assets/images/product-img-1.png"className="w-100" alt="" /> */}
                             </div>

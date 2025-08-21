@@ -38,151 +38,101 @@ const About: React.FC = () => {
         return <p className="errorMsg">No About Us data available at the moment.</p>;
 
     return (
-        <main className="aboutContainer" aria-label="About Us content">
-            <header className="stickyHeader">
-                <h1>{aboutData.title}</h1>
-            </header>
-            <section className="contentWrapper">
-                <aside className="titlePanel" aria-hidden="true">
-                    <h2>Who We Are</h2>
-                    <p className="metaDesc">{aboutData.meta_description}</p>
-                </aside>
-                <article className="aboutContent" dangerouslySetInnerHTML={{ __html: aboutData.content }} />
-            </section>
+      <>
+        <div className="secWrap section-bg">
+          <div className="container">
+            <div className="row align-items-center row-gap-4">
+               <div className="col-lg-6 order-lg-1">
+                <div className="abImg rounded-4 overflow-hidden">
+                  <img src="assets/images/ab-img.jpg" className="w-100" alt="" />
+                </div>
+              </div>
+              <div className="col-lg-6 order-lg-0">
+                <div className="mb__25">
+                  <div className="text-black f-size-38 f-w-B line_H_1 mb__15"> About Digital Clinic </div>
+                  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos facere qui fugiat dolor voluptas alias dignissimos earum eum, id quo eveniet totam. Esse enim officiis iste temporibus perferendis aperiam nemo.</p>
+                </div>
+                <ul className="list-unstyled abTagWrp flex-wrap">
+                  <li><i className="cb-icon cb-user"></i> 10,000+ Patients</li>
+                  <li><i className="cb-icon cb-certificate"></i> Licensed Clinic</li>
+                  <li><i className="cb-icon cb-clock"></i> 24/7 Support</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <style jsx>{`
-        :root {
-          --primary-color: #007b55;
-          --secondary-color: #3a3a3a;
-          --bg-color: #f9f9f9;
-          --shadow-color: rgba(0, 0, 0, 0.1);
-          --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        <div className="secWrap">
+          <div className="container">
+              <div className="row g-0 justify-content-center">
+                <div className="col-md-10">
+                  <div className="text-center">
+                    <div className=" f-size-34 f-w-B clr-black">Our Mission</div>
+                    <div className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi provident ea libero dolorum asperiores sed inventore voluptatibus unde excepturi impedit eum et cumque perspiciatis saepe a modi consectetur explicabo itaque repellat, optio nostrum doloremque aperiam! Commodi fugiat iusto quam iste iure exercitationem, vitae atque architecto odio porro similique, nisi consequuntur?</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
 
-        /* Container & Layout */
-        .aboutContainer {
-          max-width: 960px;
-          margin: 60px auto;
-          padding: 0 20px;
-          font-family: var(--font-family);
-          background: var(--bg-color);
-          border-radius: 12px;
-          box-shadow: 0 10px 25px var(--shadow-color);
-          animation: fadeIn 0.8s ease forwards;
-        }
+        <div className="secWrap section-bg">
+          <div className="container">
+              <div className="row justify-content-center">
+              <div className="col-lg-8">
+                <div className="section-title text-center mb__30">
+                  <div className="title f-size-34 f-w-B clr-black" data-aos="fade-up" data-aos-delay="300">Our Services</div>
+                  <div className="subtitle" data-aos="fade-up" data-aos-delay="400">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non molestiae eum cupiditate amet ab quae inventore explicabo tempore, vitae maxime. </div>
+                </div>
+              </div>
+            </div>
 
-        /* Sticky header with title */
-        .stickyHeader {
-          position: sticky;
-          top: 0;
-          background: white;
-          padding: 12px 20px;
-          border-bottom: 2px solid var(--primary-color);
-          z-index: 10;
-          box-shadow: 0 2px 8px var(--shadow-color);
-        }
-        .stickyHeader h1 {
-          margin: 0;
-          color: var(--primary-color);
-          font-size: 2.4rem;
-          font-weight: 700;
-          text-align: center;
-        }
+        
 
-        /* Content area with two columns on desktop */
-        .contentWrapper {
-          display: flex;
-          gap: 30px;
-          padding: 30px 0;
-        }
-        .titlePanel {
-          flex: 1;
-          border-right: 2px solid var(--primary-color);
-          padding-right: 20px;
-          color: var(--primary-color);
-        }
-        .titlePanel h2 {
-          font-size: 1.8rem;
-          margin-bottom: 8px;
-          font-weight: 600;
-        }
-        .metaDesc {
-          font-size: 1rem;
-          font-style: italic;
-          color: #444;
-          line-height: 1.4;
-        }
-        .aboutContent {
-          flex: 2;
-          font-size: 1.1rem;
-          line-height: 1.6;
-          color: var(--secondary-color);
-          white-space: pre-wrap;
-        }
+            <div className="row justify-content-center row-gap-4">
+              <div className="col-sm-6 col-lg-4">
+                <div className="aboutBx h-100" data-aos="fade-up" data-aos-delay="300">
+                  <div className="aboutIcon d-flex align-items-center justify-content-center mx-auto mb__15">
+                   <span className="cb-icon cb-circle-tick"></span>
+                  </div>
+                  <div className="about-title text-center f-size-18 f-w-M clr-black mb__10">
+                    Online Prescription Creation
+                  </div>
+                  <div className="about-summary text-center">
+                    Complete medical questionnaire and get approved prescriptions from licensed doctors
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 col-lg-4">
+                <div className="aboutBx h-100" data-aos="fade-up" data-aos-delay="300">
+                  <div className="aboutIcon d-flex align-items-center justify-content-center mx-auto mb__15">
+                    <span className="cb-icon cb-security"></span>
+                  </div>
+                  <div className="about-title text-center f-size-18 f-w-M clr-black mb__10">
+                    Prescription Upload
+                  </div>
+                  <div className="about-summary text-center">
+                    Upload your existing prescription and order medical cannabis products
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 col-lg-4">
+                <div className="aboutBx h-100" data-aos="fade-up" data-aos-delay="300">
+                  <div className="aboutIcon d-flex align-items-center justify-content-center mx-auto mb__15">
+                    <span className="cb-icon cb-heart"></span>
+                  </div>
+                  <div className="about-title text-center f-size-18 f-w-M clr-black mb__10">
+                    Doctor Consultation
+                  </div>
+                  <div className="about-summary text-center">
+                    Direct consultation with certified medical cannabis specialists
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        /* Loading spinner */
-        .spinnerWrapper {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 50vh;
-        }
-        .spinner {
-          border: 5px solid #eee;
-          border-top: 5px solid var(--primary-color);
-          border-radius: 50%;
-          width: 48px;
-          height: 48px;
-          animation: spin 1s linear infinite;
-        }
-
-        /* Error message */
-        .errorMsg {
-          text-align: center;
-          color: #cc0000;
-          font-weight: 600;
-          margin-top: 60px;
-          font-size: 1.2rem;
-        }
-
-        /* Animations */
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .contentWrapper {
-            flex-direction: column;
-          }
-          .titlePanel {
-            border-right: none;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 16px;
-            padding-right: 0;
-            margin-bottom: 20px;
-          }
-          .stickyHeader h1 {
-            font-size: 1.8rem;
-          }
-        }
-      `}</style>
-        </main>
+      </>
     );
 };
 

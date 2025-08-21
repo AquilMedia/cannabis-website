@@ -274,10 +274,10 @@ useEffect(() => {
                     Since March 2017, medical cannabis has been available on prescription in Germany. Patients with serious illnesses can receive cannabis flowers, extracts, or finished medicines containing cannabis when conventional therapies are not sufficient or cause severe side effects.
                   </div>
                   <div className="legelList_wrap">
-                    <ul className="list-inline mb-0">
-                      <li className="list-inline-item"> ⚖️ Fully Legal </li>
-                      <li className="list-inline-item"> 🏥 Doctor Prescribed </li>
-                      <li className="list-inline-item"> 🔒 Safe & Regulated </li>
+                    <ul className="list-inline mb-0 d-flex flex-wrap justify-content-center">
+                      <li className="list-inline-item secondary-clr f-w-M d-flex align-items-center gap-2"> <img src="assets/images/fully-legal.png" alt="" /> <span>Fully Legal</span> </li>
+                      <li className="list-inline-item secondary-clr f-w-M d-flex align-items-center gap-2"> <img src="assets/images/doctor-prescribed.png" alt="" /> <span>Doctor Prescribed</span> </li>
+                      <li className="list-inline-item secondary-clr f-w-M d-flex align-items-center gap-2"> <img src="assets/images/safe-regulated.png" alt="" /> <span>Safe & Regulated</span> </li>
                     </ul>
                   </div>
                 </div>

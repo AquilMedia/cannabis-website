@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
         country: ''
     });
 
-
+    console.log(user?.token)
     const fetchPatientInfo = async () => {
         try {
             const response = await getPatientinfo(user?.token);

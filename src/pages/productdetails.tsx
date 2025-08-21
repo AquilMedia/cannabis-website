@@ -116,7 +116,7 @@ const Productdetails: React.FC = () => {
                     <div className="row row-gap-4">
                         <div className="col-lg-6">
                             <div className="cb_prodDtl_img overflow-hidden" data-aos="fade-up">
-                                <img src={`${prductDetails?.image}`} className="w-100" alt="" />
+                                <img src={`${prductDetails?.image}`} className="w-100" alt="" onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/dummy-product.jpg"}} />
                             </div>
                         </div>
                         <div className="col-lg-6">

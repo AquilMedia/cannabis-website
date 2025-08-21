@@ -441,10 +441,16 @@ const Shop: React.FC = () => {
 																src={`${product?.image}`}
 																className="w-100"
 																alt=""
+																onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/dummy-product.jpg"}}
 															/>
 														</Link>
 
 													</div>
+
+													{/* <div className="blogImg"><img src={item.featured_image} className="w-100" alt=""  
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/blogImg.jpg"}}
+                  />
+                  </div> */}
 													<div className='flex-grow-1'>
 														<div className="productTitle f-size-18 f-w-M clr-black">
 															{product.name}
