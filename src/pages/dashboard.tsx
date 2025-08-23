@@ -1,9 +1,10 @@
 import { useAuth } from '@/context/AuthContext';
 import { getOrderDetails, getPatientinfo, updatepassword, updatePatientinfo } from '@/services/user';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Dashboard: React.FC = () => {
+
     const { user } = useAuth();
     const [orders, setOrders] = useState<any[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -456,49 +457,60 @@ const Dashboard: React.FC = () => {
                                     </div>
                                     {orders.length > 0 ? (
                                         orders.map((order) => (
-                                            <div className="cb_cardStyle_1 spc-sm mt-4" key={order.order_id} >
+                                            <div className="cb_cardStyle_1 spc-sm mt-4" key={order.id}>
                                                 <div className="mb-4 d-flex gap-3 flex-column flex-md-row align-items-start justify-content-between">
                                                     <div className="d-flex gap-3 align-items-start">
                                                         <div>
-                                                            <div className="text-black line_H_1_3 f-w-SB mb__5">   Order #{order.order_id}</div>
-                                                            <div className="line_H_1_3">     {new Date(order.created_at).toLocaleDateString()}</div>
+                                                            <div className="text-black line_H_1_3 f-w-SB mb__5">
+                                                                Order ID : {order.id}
+                                                            </div>
+                                                            <div className="line_H_1_3">
+                                                                {new Date(order.created_at).toLocaleDateString()}
+                                                            </div>
                                                         </div>
-                                                        <span
-                                                            className={`cb_cstLabel_3 ${order.status === "completed"
-                                                                ? ""
-                                                                : order.status === "pending"
-                                                                    ? "lab-orange"
-                                                                    : order.status === "failed"
-                                                                        ? "lab-red"
-                                                                        : ""
-                                                                }`}
-                                                        >
-                                                            {order.status}
-                                                        </span>
+
+                                                        <div className="d-flex gap-3 align-items-start">
+
+                                                            <span className={`cb_cstLabel_3 ${(order.status)}`}>
+                                                                Order Status: {order.status}
+                                                            </span>
+
+                                                            <span className={`cb_cstLabel_3 ${(order.payment_status)}`}>
+                                                                Payment Status: {order.payment_status}
+                                                            </span>
+                                                        </div>
                                                     </div>
+
                                                     <div className="d-flex gap-3 align-items-start">
-                                                        <div className='text-md-end text-start'>
-                                                            <div className="text-black line_H_1_3 f-w-SB mb__5">  €{order.total_amount}</div>
-                                                            <div className="line_H_1_3"> Prescription</div>
+                                                        <div className="text-md-end text-start">
+                                                            <div className="text-black line_H_1_3 f-w-SB mb__5">
+                                                                €{order.total_amount}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className='d-flex justify-content-between align-items-end flex-wrap row-gap-3'>
+
+                                                <div className="d-flex justify-content-between align-items-end flex-wrap row-gap-3">
+
                                                     <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                                         <li>
-                                                            <span className="text-black">Product: </span>
-                                                            {order.product_name} {order.weight}
-                                                            {order.weight_unit}
+                                                            <span className="text-black">Delivery: </span>
+                                                            <span className="primary-clr">
+                                                                {order.delivery_method === "homeDelivery"
+                                                                    ? "Home Delivery"
+                                                                    : "Pharmacy Pickup"}
+
+                                                            </span>
                                                         </li>
                                                         <li>
-                                                            <span className="text-black">Pharmacy: </span>
-                                                            {order.pharmacy_name}
-                                                        </li>
-                                                        <li>
-                                                            <span className="text-black">Quantity: </span>
-                                                            {order.quantity}
+                                                            <span className="primary-clr">
+                                                                Address :   {order.delivery_method === "homeDelivery"
+                                                                    ? order.shippingAddress?.address_line1 || "N/A"
+                                                                    : order.pharmacist?.address || "N/A"}
+                                                            </span>
                                                         </li>
                                                     </ul>
+
 
                                                     <button
                                                         className="btn cb_cmnBtn btn-o px-sm-4 mob-w100 flex-grow-1 flex-md-grow-0"
@@ -508,13 +520,13 @@ const Dashboard: React.FC = () => {
                                                     >
                                                         <span className="cb-icon cb-show"></span> View Details
                                                     </button>
-
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
                                         <div className="mt-4">No orders found</div>
                                     )}
+
 
                                 </div>
                             </div>
@@ -654,18 +666,9 @@ const Dashboard: React.FC = () => {
                                         <div className="d-flex gap-2 align-items-center">
                                             <div className="d-flex gap-3 flex-grow-1 align-items-center mb__5">
                                                 <h5 className="text-black f-size-20 f-w-M line_H_1_3 mb-0">
-                                                    Order Details - {selectedOrder.order_id.slice(0, 8).toUpperCase()}
+                                                    Order Details - {selectedOrder.id}
                                                 </h5>
-                                                <span
-                                                    className={`cb_cstLabel_3 ${selectedOrder.status === "completed"
-                                                        ? ""
-                                                        : selectedOrder.status === "pending"
-                                                            ? "lab-orange"
-                                                            : selectedOrder.status === "failed"
-                                                                ? "lab-red"
-                                                                : ""
-                                                        }`}
-                                                >
+                                                <span className="cb_cstLabel_3 lab-orange">
                                                     {selectedOrder.status}
                                                 </span>
                                             </div>
@@ -682,21 +685,22 @@ const Dashboard: React.FC = () => {
                                     </div>
                                 </div>
 
+
                                 <div className="modal-body">
+
                                     <div className="sepLine mb-3 pb-3">
                                         <div className="row row-gap-3">
                                             <div className="col-md-12">
                                                 <div className="d-flex justify-content-between align-items-center mb-0">
                                                     <div className="text-black line_H_1_3">
-                                                        <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Order Information
+                                                        <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
+                                                        Order Information
                                                     </div>
                                                 </div>
                                                 <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                                     <li>
                                                         <span className="text-black">Order ID: </span>{" "}
-                                                        <span className="primary-clr">
-                                                            {selectedOrder.order_id}
-                                                        </span>
+                                                        <span className="primary-clr">{selectedOrder.id}</span>
                                                     </li>
                                                     <li>
                                                         <span className="text-black">Date: </span>{" "}
@@ -704,88 +708,121 @@ const Dashboard: React.FC = () => {
                                                             {new Date(selectedOrder.created_at).toLocaleDateString()}
                                                         </span>
                                                     </li>
-
-
                                                 </ul>
-
-
                                             </div>
-
-
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div className="mb-3">
                                         <div className="text-black line_H_1_3 f-w-SB mb__5">
                                             Delivery Information
                                         </div>
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                             <li>
-                                                <span className="text-black">Delivery: </span>{" "}
-                                                {selectedOrder.delivery_method === "homeDelivery" ? (
-                                                    <span className="primary-clr">
-                                                        {selectedOrder.user_address || "N/A"}
-                                                    </span>
-                                                ) : (
-                                                    <span className="primary-clr">
-                                                        {selectedOrder.pharmacy_address || "N/A"}
-                                                    </span>
-                                                )}
-                                            </li>
-
-                                            <li>
-                                                <span className="text-black">Payment Status: </span>{" "}
-                                                <span className="primary-clr">{selectedOrder.payment_status}</span>
-                                            </li>
-                                            <li>
-                                                <span className="text-black">Delivery: </span>{" "}
+                                                <span className="text-black">Delivery Method: </span>{" "}
                                                 <span className="primary-clr">
                                                     {selectedOrder.delivery_method === "homeDelivery"
                                                         ? "Home Delivery"
                                                         : "Pharmacy Pickup"}
                                                 </span>
                                             </li>
-
+                                            <li>
+                                                <span className="text-black">Address: </span>{" "}
+                                                <span className="primary-clr">
+                                                    {selectedOrder.delivery_method === "homeDelivery"
+                                                        ? selectedOrder.shippingAddress?.address_line1 ||
+                                                        "N/A"
+                                                        : selectedOrder.pharmacist?.address || "N/A"}
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className="text-black">Payment Status: </span>{" "}
+                                                <span className="primary-clr">{selectedOrder.payment_status}</span>
+                                            </li>
                                         </ul>
                                     </div>
+
                                     <div>
                                         <div className="d-flex justify-content-between align-items-center mb-0">
                                             <div className="text-black line_H_1_3">
-                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information
+                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
+                                                Product Information
                                             </div>
-
                                         </div>
 
                                         <div className="row row-gap-2 mb-3">
-
-                                            {[1].map((item) => (
-                                                <div className="col-md-10" key={item}>
-                                                    <div className="cartItem">
+                                            {selectedOrder.items.map((item: {
+                                                quantity: ReactNode; id: React.Key | null | undefined; product: { image: any; name: any; thc: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; cbd: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }; product_name: any; price: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; weight: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; weight_unit: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
+                                            }) => (
+                                                <div className="col-md-12" key={item.id}>
+                                                    <div className="cartItem d-flex gap-3">
                                                         <div className="cartImg">
                                                             <img
                                                                 className="w-100"
-                                                                src="assets/images/dummy-product.jpg"
-                                                                alt="Dummy Product"
+                                                                src={item.product?.image || "assets/images/dummy-product.jpg"}
+                                                                alt={item.product?.name || "Product"}
                                                             />
                                                         </div>
                                                         <div className="itemDetails flex-grow-1">
-                                                            <div className="f-size-18 f-w-SB clr-black mb__5">Sample Product {item}</div>
-                                                            <div className="productSummary mb__15">This is a sample product description.</div>
+                                                            <div className="f-size-18 f-w-SB clr-black mb__5">
+                                                                {item.product?.name || item.product_name}
+                                                            </div>
+                                                            <div className="productSummary mb__15">
+                                                                THC: {item.product?.thc}% | CBD: {item.product?.cbd}%
+                                                            </div>
+                                                            <div className="f-size-14 f-w-SB mb__5 clr-green">
+                                                                €{item.price} - {item.weight} {item.weight_unit}
+                                                            </div>
+                                                            <div className="f-size-14 f-w-SB mb__5 clr-green">
+                                                                Quantity:{item.quantity}
+                                                            </div>
                                                         </div>
-                                                        <div className="f-size-14 f-w-SB mb__5 clr-green"> €50 - 5/grams </div>
-                                                    </div>
-
-                                                    <div className="d-flex justify-content-between mt-3">
-                                                        <div>
-                                                            <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
-                                                                <li><span className="text-black">Pharmacy: </span>{selectedOrder.pharmacy_name}</li>
-                                                                <li><span className="text-black">Address: </span> {selectedOrder.pharmacy_address || "N/A"}</li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="text-black f-w-SB f-size-20">Total:   €{selectedOrder.total_amount} - 10 g/ml</div>
                                                     </div>
                                                 </div>
                                             ))}
+
+                                            <div className="d-flex justify-content-between mt-3">
+                                                <div>
+                                                    <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
+                                                        <li>
+                                                            <span className="text-black">Pharmacy: </span>
+                                                            {selectedOrder.pharmacist?.store_name || "N/A"}
+                                                        </li>
+                                                        <li>
+                                                            <span className="text-black">Address: </span>
+                                                            {selectedOrder.pharmacist?.address || "N/A"}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div className="text-black f-w-SB f-size-20">
+                                                    Total: €{selectedOrder.total_amount} -
+                                                    {(() => {
+                                                        let totalWeight = 0;
+
+                                                        selectedOrder.items?.forEach(
+                                                            (item: { weight: string; weight_unit: string; quantity: number }) => {
+                                                                const weight = parseFloat(item.weight) || 0;
+                                                                const qty = item.quantity || 0;
+
+                                                                if (item.weight_unit === "g" || item.weight_unit === "ml") {
+                                                                    totalWeight += weight * qty;
+                                                                }
+                                                            }
+                                                        );
+
+                                                        return totalWeight > 0 ? `${totalWeight} g/ml` : "";
+                                                    })()} -
+                                                    {selectedOrder.items?.reduce(
+                                                        (sum: number, item: { quantity: number }) => sum + (item.quantity || 0),
+                                                        0
+                                                    )} Q
+                                                </div>
+
+
+
+
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -794,6 +831,7 @@ const Dashboard: React.FC = () => {
                             <div className="p-4">Loading order details...</div>
                         )}
                     </div>
+
                 </div>
             </div>
 
