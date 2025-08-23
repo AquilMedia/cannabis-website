@@ -136,13 +136,41 @@ input[type=number] {-moz-appearance: textfield;}
 .green-bg{background-color: var(--clr-green);}
 .opacity-5{opacity: .5}
 .opacity-8{opacity: .8}
-#preloader{position:fixed;top:0;background-color:#fff;left:0;right:0;bottom:0;z-index:9999999}
-#status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
-.tp-loader  {top:50%; left:50%;z-index:10000;position:absolute;}
-.tp-loader.spinner {width: 2.5rem;height: 2.5rem;padding:0.625rem;background:url(/assets/images/ajax-loader.gif) no-repeat center center;
-background-color: #fff;box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);-webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);  
-margin-top: -0.938rem;margin-left: -0.938rem;-webkit-animation: tp-rotateplane 1.2s infinite ease-in-out;
-animation: tp-rotateplane 1.2s infinite ease-in-out;border-radius: 0.5rem;}
+.preloader{position:fixed;top:0;background-color:rgba(255, 255, 255, 0.9);left:0;right:0;bottom:0;z-index:9999999}
+.loaderCentered{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.loader {
+    width: 64px;
+    height: 64px;
+    position: relative;
+    background-image:
+        linear-gradient(#1D3024 16px, transparent 0) ,
+        linear-gradient(#45A14D 16px, transparent 0) ,
+        linear-gradient(#45A14D 16px, transparent 0) ,
+        linear-gradient(#1D3024 16px, transparent 0);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: left top , left bottom , right top , right bottom;
+    animation: rotate 1s linear infinite;
+    }
+    @keyframes rotate {
+    0% {
+        width: 64px;
+        height: 64px;
+        transform: rotate(0deg)
+    }
+    50% {
+        width: 30px;
+        height: 30px;
+        transform: rotate(180deg)
+    }
+    100% {
+        width: 64px;
+        height: 64px;
+        transform: rotate(360deg)
+    }
+}
+
+
 .header {position: fixed;width: 100%;top: 0;padding: 0.938rem 0;background: #FFF;border-bottom: solid 1px #DCE5DC;z-index: 99;}
 .header nav {padding: 0;}
 .header .navbar-brand {padding: 0;margin: 0;display: block;max-width: 9.375rem;width: 100%;}
@@ -692,28 +720,4 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
   color: #00b894;
 }
 
-
-
-.loader-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px; 
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #ddd;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 10px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+    

@@ -2,10 +2,13 @@ import React from "react";
 
 const Loader: React.FC = () => {
   return (
-    <div className="loader-wrapper">
-      <div className="spinner"></div>
-      <p>Loading...</p>
+  <>
+    <div className="preloader">
+      <div className="loaderCentered">
+          <span className="loader d-block"></span>
+      </div>
     </div>
+  </>
   );
 };
 
