@@ -110,7 +110,7 @@ export async function callPostFormData(endpoint, token = null, method = 'POST', 
   };
 
   if (data instanceof FormData) {
-    options.body = data; // send FormData directly
+    options.body = data;
   } else if (data) {
     headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(data);

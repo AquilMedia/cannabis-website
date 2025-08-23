@@ -100,7 +100,10 @@ const Uploadprescription: React.FC = () => {
                 setTotalGrams(data.summary?.total_cart_grams || 0);
 
                 console.log('data.cartItems', data.cartItems);
-
+                if (!data.cartItems || data.cartItems.length === 0) {
+                    toast.info("Your cart is empty. Please add products.");
+                    router.push("/shop");
+                }
             } else {
                 toast.error(data?.message || "Failed to load cart items");
             }
@@ -116,11 +119,11 @@ const Uploadprescription: React.FC = () => {
             if (!res || !res.success) {
                 throw new Error("No patient info found");
             }
-               if (res.pendingOrders === 1) {
+            if (res.pendingOrders === 1) {
 
-                        setShowPendingOrderModal(true); 
-                        return;
-                    }
+                setShowPendingOrderModal(true);
+                return;
+            }
             console.log(`${API_BASE_URL}${res.user.legalDocumentUrl}`);
             setFormData((prev) => ({
                 ...prev,
@@ -278,8 +281,6 @@ const Uploadprescription: React.FC = () => {
                 longitude: suggestion.center[0],
             },
         }));
-
-        // Clear suggestions dropdown
         setSuggestions([]);
     };
 
@@ -396,7 +397,7 @@ const Uploadprescription: React.FC = () => {
                                             <input
                                                 className="d-none"
                                                 type="file"
-                                                 accept=".jpg,.jpeg,.png"
+                                                accept=".jpg,.jpeg,.png"
                                                 id="uploadPrescription"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const file = e.target.files && e.target.files[0];
@@ -416,8 +417,6 @@ const Uploadprescription: React.FC = () => {
                                                 </span>
                                             </label>
                                         </div>
-
-                                        {/* Show uploaded document preview */}
                                         {formData.prescriptionImg && (
                                             <div className="mt-3">
                                                 {formData.prescriptionImg.type.startsWith("image/") ? (
@@ -505,10 +504,10 @@ const Uploadprescription: React.FC = () => {
                                             </button>
                                         </div>
 
-                                        {/* Only show form if we already have an address OR user clicked Add/Edit */}
+
                                         {(formData?.patientInfo?.addressline1 || isEditing) && (
                                             <>
-                                                {/* Search Address */}
+
                                                 <div className="form-group position-relative">
                                                     <input
                                                         type="text"
@@ -536,7 +535,7 @@ const Uploadprescription: React.FC = () => {
                                                     )}
                                                 </div>
 
-                                                {/* City, Postal Code, Country */}
+
                                                 <div className="row mt-2">
                                                     <div className="col-sm-6 col-md-4">
                                                         <input
@@ -641,42 +640,42 @@ const Uploadprescription: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Preview Section */}
-                           {(formData.legalDocImg || formData.legalDocUrl) && (
-  <div className="mt-3 flex gap-4">
-    {/* Show already uploaded image from API */}
-    {formData.legalDocUrl && (
-      <div>
-        <p className="text-sm text-gray-600 mb-1">Already Uploaded</p>
-        <img
-          src={`${formData.legalDocUrl}`}
-          alt="Legal Document"
-          style={{
-            maxWidth: "200px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-          }}
-        />
-      </div>
-    )}
 
-    {/* Show newly uploaded image */}
-    {formData.legalDocImg && (
-      <div>
-        <p className="text-sm text-gray-600 mb-1">New Upload</p>
-        <img
-          src={URL.createObjectURL(formData.legalDocImg)}
-          alt="Uploaded Document"
-          style={{
-            maxWidth: "200px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-          }}
-        />
-      </div>
-    )}
-  </div>
-)}
+                                {(formData.legalDocImg || formData.legalDocUrl) && (
+                                    <div className="mt-3 flex gap-4">
+
+                                        {formData.legalDocUrl && (
+                                            <div>
+                                                <p className="text-sm text-gray-600 mb-1">Already Uploaded</p>
+                                                <img
+                                                    src={`${formData.legalDocUrl}`}
+                                                    alt="Legal Document"
+                                                    style={{
+                                                        maxWidth: "200px",
+                                                        border: "1px solid #ccc",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+
+                                     
+                                        {formData.legalDocImg && (
+                                            <div>
+                                                <p className="text-sm text-gray-600 mb-1">New Upload</p>
+                                                <img
+                                                    src={URL.createObjectURL(formData.legalDocImg)}
+                                                    alt="Uploaded Document"
+                                                    style={{
+                                                        maxWidth: "200px",
+                                                        border: "1px solid #ccc",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
 
 
@@ -852,9 +851,6 @@ const Uploadprescription: React.FC = () => {
                                             </div>
                                             <div className="cb_cstLabel_3">Prescription Required</div>
                                         </div>
-
-                                       
-                                        {/* Products List */}
                                         <div className="row row-gap-2 mb-3">
                                             {cartItems.map((item) => (
                                                 <div className="col-md-12" key={item.cart_item_id}>
@@ -867,15 +863,15 @@ const Uploadprescription: React.FC = () => {
                                                                     : `${API_BASE_URL}${item.product_image}`}
                                                                 alt={item.product_name}
                                                             />
-                                                           
+
                                                         </div>
                                                         <div className="itemDetails flex-grow-1">
-                                                        <div className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</div>
-                                                        <div className="productSummary mb__15">New Test Product</div>
+                                                            <div className="f-size-18 f-w-SB clr-black mb__5">{item.product_name}</div>
+                                                            <div className="productSummary mb__15">New Test Product</div>
                                                         </div>
                                                         <div className="f-size-14 f-w-SB mb__5 clr-green"> €{item.inventory_price} - {item.quantity * item.weight}/{item.weight_unit} </div>
                                                     </div>
-                                                    
+
                                                     <div className="d-flex justify-content-between mt-3">
                                                         <div>
                                                             {cartItems.length > 0 && (
@@ -890,7 +886,7 @@ const Uploadprescription: React.FC = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                    
+
                                     </div>
 
 

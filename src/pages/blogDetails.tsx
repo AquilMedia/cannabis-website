@@ -1,3 +1,4 @@
+import Loader from '@/components/Loader';
 import { getBlogDetails } from '@/services/user';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,15 +7,21 @@ import { toast } from 'react-toastify';
 
 const Blogdetails: React.FC = () => {
 const { id } = useRouter().query;
+	const [loading, setLoading] = useState(false);
+
 const [prductDetails, setPrductDetails] = useState<any>(null);
     const fetchProductsDetails = async () => {
+          setLoading(true);
+
             try {
                 const response = await getBlogDetails(id);
                 console.log(response.data);
                 setPrductDetails(response.data || [])
             } catch (error: any) {
                 toast.error(error.message || 'Failed to load products');
-            }
+            }finally {
+            setLoading(false); 
+        }
         };
     
         useEffect(() => {
@@ -22,6 +29,10 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
         }, [id]);
 
     return (
+        	<>
+		 {loading ? (
+<Loader/>
+    ) : (
         <>
            <div className="secWrap bt-md tp-md section-bg">
                  <div className="container">
@@ -85,6 +96,8 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                  </div>
             </div>
         </>
+    )}
+    </>
     );
 };
 

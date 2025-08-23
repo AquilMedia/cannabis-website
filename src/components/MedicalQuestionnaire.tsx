@@ -147,7 +147,7 @@ export default function MedicalQuestionnaire({
 
                 );
             }
-            // Textarea fallback
+      
             return (
                 <textarea
                     className="form-control resize-none"

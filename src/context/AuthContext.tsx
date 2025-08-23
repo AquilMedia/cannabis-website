@@ -24,7 +24,7 @@ export const useAuth = () => {
   return context;
 };
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null);
@@ -39,11 +39,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { user: storedUser, timestamp } = decryptedData;
         const now = Date.now();
 
-        // check expiry
         if (now - timestamp < ONE_DAY_MS) {
           setUser(storedUser);
         } else {
-          localStorage.removeItem('user'); // expired
+          localStorage.removeItem('user');
         }
       } else {
         localStorage.removeItem('user');

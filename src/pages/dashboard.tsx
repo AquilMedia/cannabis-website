@@ -1,7 +1,5 @@
 import { useAuth } from '@/context/AuthContext';
 import { getOrderDetails, getPatientinfo, updatepassword, updatePatientinfo } from '@/services/user';
-import Link from 'next/link';
-import { log } from 'node:console';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -23,16 +21,16 @@ const Dashboard: React.FC = () => {
     const togglePassword = (field: keyof typeof showPassword) => {
         setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
     };
-    const [error, setError] = useState<{ 
-            fname?: string; 
-            lname?: string; 
-            dob?: string; 
-            email?: string; 
-            phone?: string; 
-            newPassword?: string; 
-  confirmPassword?: string;
-  passwords?: { newPassword?: string; confirmPassword?: string };
-        }>({});
+    const [error, setError] = useState<{
+        fname?: string;
+        lname?: string;
+        dob?: string;
+        email?: string;
+        phone?: string;
+        newPassword?: string;
+        confirmPassword?: string;
+        passwords?: { newPassword?: string; confirmPassword?: string };
+    }>({});
 
     const [profile, setProfile] = useState({
         fname: '',
@@ -87,7 +85,7 @@ const Dashboard: React.FC = () => {
             );
         }
     };
-                // console.log('Patient Info:', profile);
+
     useEffect(() => {
         if (user?.token) {
             fetchPatientInfo();
@@ -105,13 +103,13 @@ const Dashboard: React.FC = () => {
             });
 
             toast.success("Address updated successfully!");
-            fetchPatientInfo(); // refresh after update
+            fetchPatientInfo(); 
         } catch (error: any) {
             toast.error(error.message || "Failed to update address");
         }
     };
 
-      const validateField = (name: string, value: string) => {
+    const validateField = (name: string, value: string) => {
         let message = "";
 
         if (name === "fname") {
@@ -124,39 +122,40 @@ const Dashboard: React.FC = () => {
             else if (!/^[A-Za-z]+$/.test(value.trim())) message = "Invalid name";
         }
         if (name === "dob") {
-        if (!value.trim()) {
-            message = "Date of birth is required";
-        } else {
-            const dob = new Date(value);
-            if (dob.toString() === "Invalid Date") {
-            message = "Please enter a valid date";
+            if (!value.trim()) {
+                message = "Date of birth is required";
             } else {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+                const dob = new Date(value);
+                if (dob.toString() === "Invalid Date") {
+                    message = "Please enter a valid date";
+                } else {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
 
-            if (dob > today) {
-                message = "Date of birth cannot be in the future";
+                    if (dob > today) {
+                        message = "Date of birth cannot be in the future";
+                    }
+                }
             }
-            }
-        }
         }
 
         if (name === "phone") {
-            const phoneRegex = /^[0-9]{10}$/;
-            if (!phoneRegex.test(value)) message = "Enter a valid 10-digit phone number";
+            const phoneRegex = /^(\+49)?[0-9]{5,15}$/;
+            if (!phoneRegex.test(value)) message = "Enter a valid German phone number";
         }
+
 
         setError((prev) => ({ ...prev, [name]: message }));
 
         return message === "";
-};
+    };
 
     const validateForm = () => {
         const validations = [
-        validateField('fname', profile.fname),
-        validateField('lname', profile.lname),
-        validateField('dob', profile.dob),
-        validateField('phone', profile.phone),
+            validateField('fname', profile.fname),
+            validateField('lname', profile.lname),
+            validateField('dob', profile.dob),
+            validateField('phone', profile.phone),
         ];
         return validations.every((isValid) => isValid);
     };
@@ -183,35 +182,34 @@ const Dashboard: React.FC = () => {
     };
 
     const changePasswordvalidation = (name: string, value: string) => {
-    let message = "";
+        let message = "";
 
-    if (name === "newPassword") {
-        if (value.length < 6) message = "Password must be at least 6 characters";
-    }
+        if (name === "newPassword") {
+            if (value.length < 6) message = "Password must be at least 6 characters";
+        }
 
-    if (name === "confirmPassword") {
-        if (value !== passwords.newPassword) message = "Passwords do not match";
-    }
+        if (name === "confirmPassword") {
+            if (value !== passwords.newPassword) message = "Passwords do not match";
+        }
 
-    // set error correctly under field name
-    setError((prev) => ({
-        ...prev,
-        passwords: {
-            ...prev.passwords,
-            [name]: message,
-        },
-    }));
+        setError((prev) => ({
+            ...prev,
+            passwords: {
+                ...prev.passwords,
+                [name]: message,
+            },
+        }));
 
-    return message === "";
-};
+        return message === "";
+    };
 
-  const changePassworForm = () => {
-    const validations = [
-        changePasswordvalidation("newPassword", passwords.newPassword),
-        changePasswordvalidation("confirmPassword", passwords.confirmPassword),
-    ];
-    return validations.every((isValid) => isValid);
-};
+    const changePassworForm = () => {
+        const validations = [
+            changePasswordvalidation("newPassword", passwords.newPassword),
+            changePasswordvalidation("confirmPassword", passwords.confirmPassword),
+        ];
+        return validations.every((isValid) => isValid);
+    };
 
 
     const changePassword = async (e: React.FormEvent) => {
@@ -226,7 +224,6 @@ const Dashboard: React.FC = () => {
             password: passwords.currentPassword,
             newPassword: passwords.newPassword,
         };
-        // console.log(user?.token);
 
         try {
             const response = await updatepassword(payload, user?.token,);
@@ -312,7 +309,7 @@ const Dashboard: React.FC = () => {
                                                         value={profile.dob}
                                                         onChange={(e) => {
                                                             setProfile({ ...profile, dob: e.target.value });
-                                                             validateField("dob", e.target.value);
+                                                            validateField("dob", e.target.value);
                                                         }}
                                                     />
                                                     {error.dob && <span className='errorMsg'>{error.dob}</span>}
@@ -326,7 +323,7 @@ const Dashboard: React.FC = () => {
                                                         id="email"
                                                         className="form-control cst-form-f"
                                                         value={profile.email}
-                                                        disabled // email usually not editable
+                                                        disabled
                                                     />
                                                 </div>
                                             </div>
@@ -340,7 +337,7 @@ const Dashboard: React.FC = () => {
                                                         value={profile.phone || ""}
                                                         onChange={(e) => {
                                                             setProfile({ ...profile, phone: e.target.value });
-                                                             validateField("phone", e.target.value);
+                                                            validateField("phone", e.target.value);
                                                         }}
                                                         placeholder="+49 1512 3456789"
                                                     />
@@ -400,7 +397,7 @@ const Dashboard: React.FC = () => {
                                                             value={passwords.newPassword}
                                                             onChange={(e) => {
                                                                 setPasswords({ ...passwords, newPassword: e.target.value })
-                                                               changePasswordvalidation("newPassword", e.target.value);
+                                                                changePasswordvalidation("newPassword", e.target.value);
                                                             }}
                                                         />
                                                         <button
@@ -645,7 +642,7 @@ const Dashboard: React.FC = () => {
             </div>
 
 
-            {/* Modal */}
+
             <div className="modal fade cb_cstModal" id="orderHistory">
                 <div className="modal-dialog modal-lg modal-dialog-centered">
                     <div className="modal-content">
@@ -728,6 +725,8 @@ const Dashboard: React.FC = () => {
                                                             {selectedOrder.product_name} {selectedOrder.weight}
                                                             {selectedOrder.weight_unit}
                                                         </span>
+
+
                                                     </li>
                                                     <li>
                                                         <span className="text-black">Pharmacy: </span>{" "}
@@ -777,7 +776,7 @@ const Dashboard: React.FC = () => {
             </div>
 
 
-            {/* Modal 2*/}
+           
             {/* <div className="modal fade cb_cstModal " id="invoices">
                 <div className="modal-dialog modal-lg modal-dialog-centered">
                     <div className="modal-content">

@@ -167,22 +167,19 @@ const PrescriptionWizardModal: React.FC<{ onClose: () => void }> = ({ onClose })
     const idInputRef = useRef<HTMLInputElement>(null);
     let steps: StepData[] = [];
     if (answers[0] === true) {
-        // Only prescription image and summary
         steps = [
-            allSteps[0], // prescription question
-            allSteps[1], // upload prescription
-            allSteps[allSteps.length - 1] // summary
+            allSteps[0], 
+            allSteps[1], 
+            allSteps[allSteps.length - 1]
         ];
     } else if (answers[0] === false) {
-        // All steps except prescription upload
         steps = [
-            allSteps[0], // prescription question
-            allSteps[2], // prescription info
-            ...allSteps.slice(3, allSteps.length - 1), // all 8 steps + identity upload
-            allSteps[allSteps.length - 1] // summary
+            allSteps[0], 
+            allSteps[2], 
+            ...allSteps.slice(3, allSteps.length - 1), 
+            allSteps[allSteps.length - 1] 
         ];
     } else {
-        // Initial state, only show first question
         steps = [allSteps[0]];
     }
 
@@ -209,10 +206,9 @@ const PrescriptionWizardModal: React.FC<{ onClose: () => void }> = ({ onClose })
     };
 
     const handleNext = () => {
-        // If user selects "No" on "Select a symptom..." step, close modal
         if (
-            answers[0] === false && // user is in "no prescription" flow
-            step === 3 && // "Select a symptom..." step index in this flow
+            answers[0] === false && 
+            step === 3 && 
             answers[step] === "No"
         ) {
             onClose();
@@ -225,7 +221,6 @@ const PrescriptionWizardModal: React.FC<{ onClose: () => void }> = ({ onClose })
         setStep(step - 1);
     };
 
-    // Summary step
     if (current.type === 'summary') {
       
     }

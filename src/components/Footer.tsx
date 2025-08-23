@@ -1,7 +1,13 @@
+import { useAuth } from '@/context/AuthContext';
+import { useFilters } from '@/hooks/useFilters';
+import { filtersData } from '@/services/user';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Footer: React.FC = () => {
+  const { user } = useAuth();
+ const { filterData } = useFilters(user);
   return (
     <div>
       <div className="secWrap home_sec_six green-bg">
@@ -72,7 +78,7 @@ const Footer: React.FC = () => {
             <div className="col-lg-4">
               <div className="footer-widget" data-aos="fade-up" data-aos-delay="300">
                 <div className="footerLogo mb__15">
-                  <img  src="assets/images/footer-logo.png" className="footer-logo" alt="" />
+                  <img src="assets/images/footer-logo.png" className="footer-logo" alt="" />
                 </div>
                 <div className="footerTxt_summary text-white opacity-8 line_H_1_3 mb__25">
                   Germany's leading digital clinic for medical cannabis. Professional, legal, and secure access to quality cannabis products with 24/7 medical support.
@@ -84,7 +90,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="tel:+4917640587385" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src="assets/images/cont-icon-1.svg"className="w-100" alt="" />
+                            <img src="assets/images/cont-icon-1.svg" className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             +49 176 40 58 73 85
@@ -94,7 +100,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="mailto:xyz@deinarztundapotheker.de" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src="assets/images/cont-icon-2.svg"  className="w-100" alt="" />
+                            <img src="assets/images/cont-icon-2.svg" className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             xyz@deinarztundapotheker.de
@@ -104,7 +110,7 @@ const Footer: React.FC = () => {
                       <li className="list-block-item mb__10">
                         <Link href="#" className="d-flex align-items-center gap-2">
                           <div className="contIcon">
-                            <img  src="assets/images/cont-icon-3.svg"className="w-100" alt="" />
+                            <img src="assets/images/cont-icon-3.svg" className="w-100" alt="" />
                           </div>
                           <div className="contTxt text-white opacity-8">
                             Berlin, Germany
@@ -116,7 +122,7 @@ const Footer: React.FC = () => {
                   <div className="socialWrap">
                     <ul className="list-inline mb-0">
                       <li className="list-inline-item">
-                        <Link href="" className="social-icon" target="_blank"> <img  src="assets/images/social-icon-1.svg" className="w-100" alt="" /> </Link>
+                        <Link href="" className="social-icon" target="_blank"> <img src="assets/images/social-icon-1.svg" className="w-100" alt="" /> </Link>
                       </li>
                       <li className="list-inline-item">
                         <Link href="" className="social-icon" target="_blank"> <img src="assets/images/social-icon-2.svg" className="w-100" alt="" /> </Link>
@@ -140,13 +146,18 @@ const Footer: React.FC = () => {
                       <div className="footerTitle text-white mb__10"> Product Categories </div>
                       <div className="footer_linksWrap">
                         <ul className="list-unstyled">
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Medical Cannabis Flowers </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Cannabis Oils & Tinctures </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> CBD Gummies & Edibles </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Cannabis Drops </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Vape Cartridges </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8">Topical Products </Link></li>
+                          {((filterData as any)?.categories || []).map((cat: any) => (
+                            <li key={cat.id} className="footer-item mb__5">
+                              <Link
+                                href="/shop"
+                                className="footer-link text-white opacity-8"
+                              >
+                                {cat.title}
+                              </Link>
+                            </li>
+                          ))}
                         </ul>
+
                       </div>
                     </div>
                   </div>
@@ -156,7 +167,7 @@ const Footer: React.FC = () => {
                       <div className="footer_linksWrap">
                         <ul className="list-unstyled">
                           <li className="footer-item mb__5"> <Link href="/about" className="footer-link text-white opacity-8"> About Us </Link></li>
-                          <li className="footer-item mb__5"> <Link href="/howItWorks" className="footer-link text-white opacity-8"> How It Works </Link></li>
+                          <li className="footer-item mb__5"> <Link href="/Imprint" className="footer-link text-white opacity-8"> Imprint </Link></li>
                           <li className="footer-item mb__5"> <Link href="/consultation" className="footer-link text-white opacity-8"> Consultation </Link></li>
                           <li className="footer-item mb__5"> <Link href="/faq" className="footer-link text-white opacity-8"> FAQs </Link></li>
                           <li className="footer-item mb__5"> <Link href="/blog" className="footer-link text-white opacity-8"> Blog </Link></li>
@@ -172,8 +183,8 @@ const Footer: React.FC = () => {
                         <ul className="list-unstyled">
                           <li className="footer-item mb__5"> <Link href="/termsConditions" className="footer-link text-white opacity-8"> Terms & Conditions </Link></li>
                           <li className="footer-item mb__5"> <Link href="/privacyPolicy" className="footer-link text-white opacity-8"> Privacy Policy </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8">Legal Notice </Link></li>
-                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Cookie Policy </Link></li>
+                          {/* <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8">Legal Notice </Link></li>
+                          <li className="footer-item mb__5"> <Link href="" className="footer-link text-white opacity-8"> Cookie Policy </Link></li> */}
                         </ul>
                       </div>
                     </div>
@@ -189,7 +200,7 @@ const Footer: React.FC = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="copyrightTxt text-center opacity-8 text-white" >
-              {/* <div className="copyrightTxt text-center opacity-8 text-white" data-aos="fade-up" data-aos-delay="300"> */}
+                {/* <div className="copyrightTxt text-center opacity-8 text-white" data-aos="fade-up" data-aos-delay="300"> */}
 
                 © 2025 Digital Clinic. All rights reserved. | Licensed Medical Cannabis Provider in Germany
               </div>

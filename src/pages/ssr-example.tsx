@@ -16,7 +16,6 @@ const SSRExample: React.FC<SSRExampleProps> = ({ randomNumber }) => {
 };
 
 export const getServerSideProps = async () => {
-    // This code runs on the server at request time
     const randomNumber = Math.floor(Math.random() * 1000);
 
     return {

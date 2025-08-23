@@ -12,7 +12,6 @@ const PendingOrderPage = () => {
   }
   return (
     <div>
-      {/* Other page content if needed */}
 
       {showPendingOrderModal && (
         <div
@@ -23,7 +22,7 @@ const PendingOrderPage = () => {
             className="cartModalContent"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+         
             <div className="cartModalHeader">
               <h2 className="f-size-24 f-w-SB clr-black mb-0">Pending Order</h2>
               <button
@@ -34,7 +33,6 @@ const PendingOrderPage = () => {
               </button>
             </div>
 
-            {/* Body */}
             <div
               className="cartItems d-flex flex-column align-items-center justify-content-center text-center"
               style={{ minHeight: "200px" }}
@@ -42,7 +40,7 @@ const PendingOrderPage = () => {
               <div className="noCart py-4">
                 <div className="cartIcon mx-auto mb__15">
                   <img
-                    src="assets/images/alert-icon.png"
+                    src="assets/images/count-icon-2.svg"
                     className="w-100"
                     alt="Pending Order"
                   />
@@ -56,7 +54,6 @@ const PendingOrderPage = () => {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="cartModalFooter text-center">
               <button
                 className="btn cb_cmnBtn text-nowrap w-100"

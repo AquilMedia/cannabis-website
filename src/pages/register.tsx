@@ -64,10 +64,11 @@ const Register: React.FC = () => {
             if (!emailRegex.test(value)) message = "Enter a valid email address";
         }
 
-        if (name === "phone") {
-            const phoneRegex = /^[0-9]{10}$/;
-            if (!phoneRegex.test(value)) message = "Enter a valid 10-digit phone number";
+            if (name === "phone") {
+            const phoneRegex = /^(\+49)?[0-9]{5,15}$/;
+            if (!phoneRegex.test(value)) message = "Enter a valid German phone number";
         }
+
 
         if (name === "password") {
             if (value.length < 6) message = "Password must be at least 6 characters";

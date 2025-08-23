@@ -14,7 +14,7 @@ const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({ orderId
         className="cartModalContent orderConfirmationModal"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Success Icon */}
+
         <div className="orderIconWrapper">
           <div className="successIcon">
             <i className="cb-icon cb-check"></i>

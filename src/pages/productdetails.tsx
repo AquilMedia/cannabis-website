@@ -8,16 +8,6 @@ import { toast } from 'react-toastify';
 import PharmacistSelector from '@/components/PharmacistSelector';
 import LoginModal from '@/Modals/LoginModal';
 import { useAuth } from '@/context/AuthContext';
-// interface ProductData {
-//   name: string;
-//   subtitle: string;
-//   description: string;
-//   thc: number;
-//   cbd: number;
-//   count: number;
-//   genetic?: { title?: string };
-// }
-
 const Productdetails: React.FC = () => {
     const { user } = useAuth();
 
@@ -39,7 +29,6 @@ const Productdetails: React.FC = () => {
 
     const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedPharmacyId(event.target.value);
-        // You can also do something else here when selection changes
     };
 
     const testimonialCarousel = {
@@ -496,9 +485,6 @@ const Productdetails: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-
-            {/* Modal Select Pharmacy */}
 
             <div className="modal fade cb_cstModal" id="modal-pharmacy">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">

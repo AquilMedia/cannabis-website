@@ -4,11 +4,13 @@ import { useAuth } from '@/context/AuthContext';
 import CartModal from '@/Modals/CartModal';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from "next/navigation";
+import LoginModal from '@/Modals/LoginModal';
 
 const Header: React.FC = () => {
     const { user, logout } = useAuth();
     const router = useRouter();
     const [showCartModal, setShowCartModal] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
 
     const { summary } = useCart();
     const { fetchCartData } = useCart();
@@ -16,13 +18,11 @@ const Header: React.FC = () => {
     const logoutSubmit = () => {
         logout();
         fetchCartData();
-        // window.location.reload();
     };
-
-
 
     return (
         <>
+            {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
             <header className="header">
                 <div className="container">
                     <div className="row">
@@ -97,7 +97,13 @@ const Header: React.FC = () => {
                                         </li>
                                     </ul>
                                     <div>
-                                        <button className="cartButtonTop"    onClick={user ? () => setShowCartModal(true) : undefined}>
+                                        <button className="cartButtonTop" onClick={() => {
+                                            if (user) {
+                                                setShowCartModal(true);
+                                            } else {
+                                                setShowLogin(true);
+                                            }
+                                        }}>
                                             <i className="cb-icon cb-cart"></i>
                                             <span className="proNoBadge d-md-none">{summary.total_items}</span>
                                             {summary && (

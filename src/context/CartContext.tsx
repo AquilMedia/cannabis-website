@@ -1,4 +1,3 @@
-// context/CartContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { getCartList } from "@/services/user";
 import { useAuth } from "@/context/AuthContext";
@@ -34,8 +33,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       toast.error("Failed to load cart items");
     }
   };
-
-  // Fetch cart on user change or mount
   useEffect(() => {
     fetchCartData();
   }, [user?.token]);

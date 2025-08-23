@@ -10,7 +10,6 @@ const Login: React.FC = () => {
  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [error, setError] = useState('');
   const [error, setError] = useState<{ 
           email?: string;
           password?: string; 

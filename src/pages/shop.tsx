@@ -1,6 +1,8 @@
 import FilterAccordion from '@/components/FilterAccordion';
+import Loader from '@/components/Loader';
 import PharmacistSelector from '@/components/PharmacistSelector';
 import { useAuth } from '@/context/AuthContext';
+import { useFilters } from '@/hooks/useFilters';
 import LoginModal from '@/Modals/LoginModal';
 import { AddCart, filtersData, getPharmsistList, getProductsData } from '@/services/user';
 import Link from 'next/link';
@@ -10,8 +12,9 @@ import { toast } from 'react-toastify';
 
 const Shop: React.FC = () => {
 	const { user } = useAuth();
+	const { filterData } = useFilters(user);
+	const [loading, setLoading] = useState(false);
 	const [products, setProducts] = useState<any[]>([]);
-	const [filterData, setFillterData] = useState<any[]>([]);
 	const [showLogin, setShowLogin] = useState(false);
 	const [pagination, setPagination] = useState<any>(null);
 	const [currentPage, setCurrentPage] = useState<number>(1);
@@ -67,33 +70,21 @@ const Shop: React.FC = () => {
 
 	const fetchProducts = async () => {
 		try {
-
+			
 			const query = buildQueryParams();
 			const response = await getProductsData(query);
 			setProducts(response.data || []);
 			setPagination(response.pagination || null);
 		} catch (error: any) {
 			toast.error(error.message || 'Failed to load products');
+		} finally {
+			setLoading(false);
 		}
 	};
 
-	const getFiltersData = async () => {
-		try {
-			const response = await filtersData();
-			setFillterData(response.data || []);
-		} catch (error: any) {
-			toast.error(error.message || 'Failed to load filters');
-		}
-	};
 
 	useEffect(() => {
-
-		getFiltersData();
-
-	}, [user]);
-
-	useEffect(() => {
-
+		setLoading(true);
 		fetchProducts();
 
 	}, [filters, currentPage]);
@@ -129,7 +120,12 @@ const Shop: React.FC = () => {
 	const id1 = 42;
 
 	return (
+		<>
+		 {loading ? (
+<Loader/>
+    ) : (
 		<div>
+			
 			{/* {showPharmacistModal && (
 				<div className="modal fade show d-block cb_cstModal" tabIndex={-1} role="dialog" aria-modal="true" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
 					<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -225,7 +221,7 @@ const Shop: React.FC = () => {
 							<div className="topFilter mb__25">
 								<ul className="list-inline d-flex justify-content-between mb-0">
 
-									{/* "All Products" static link */}
+
 									<li className={`list-inline-item m-0 flex-grow-1 text-center ${filters.categories.length === 0 ? 'active' : ''}`}>
 										<Link
 											href="#"
@@ -240,7 +236,6 @@ const Shop: React.FC = () => {
 										</Link>
 									</li>
 
-									{/* Dynamic categories from API */}
 									{((filterData as any)?.categories || []).map((cat: any) => (
 										<li
 											key={cat.id}
@@ -259,7 +254,7 @@ const Shop: React.FC = () => {
 													setCurrentPage(1);
 												}}
 											>
-												{/* Optional: assign icons based on category name or slug */}
+
 												<i className="cb-icon cb-leaf"></i> {cat.title}
 											</Link>
 										</li>
@@ -441,7 +436,7 @@ const Shop: React.FC = () => {
 																src={`${product?.image}`}
 																className="w-100"
 																alt=""
-																onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/dummy-product.jpg"}}
+																onError={(e) => { (e.currentTarget as HTMLImageElement).src = "assets/images/dummy-product.jpg" }}
 															/>
 														</Link>
 
@@ -584,7 +579,12 @@ const Shop: React.FC = () => {
 
 			</div>
 
+		
+		
 		</div>
+
+		   )}
+		   </>
 	);
 };
 
