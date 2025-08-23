@@ -68,6 +68,9 @@ export const getProductsDetails = async (id) => {
 export const updatePatientinfo = async (data, token) => {
   return await callPostApi(`/api/user/userUpdate`, token, 'POST', data);
 };
+export const UpdateAddressinfo = async (data, token) => {
+  return await callPostApi(`/api/user/updateAddress`, token, 'POST', data);
+};
 export const updatepassword = async (data, token) => {
   return await callPostApi(`/api/user/resetPassword`, token, 'POST', data);
 };
