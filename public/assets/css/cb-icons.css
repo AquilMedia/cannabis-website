@@ -23,7 +23,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.cb-question-mark:before {
+  content: "\e92c";
+}
 .cb-hide:before {
   content: "\e926";
 }

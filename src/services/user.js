@@ -71,3 +71,12 @@ export const updatePatientinfo = async (data, token) => {
 export const updatepassword = async (data, token) => {
   return await callPostApi(`/api/user/resetPassword`, token, 'POST', data);
 };
+export const getImpressumData = async () => {
+  return await callApiWithAuth('/api/public/cms/impressum', 'GET');
+};
+export const getTermsData = async () => {
+  return await callApiWithAuth('/api/public/cms/terms-conditions', 'GET');
+};
+export const getPrivacyData = async () => {
+  return await callApiWithAuth('/api/public/cms/privacy', 'GET');
+};

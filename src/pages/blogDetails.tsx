@@ -60,7 +60,7 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                                 <div className="blogDe-Img rounded-4 overflow-hidden mb__20" data-aos="fade-up">
                                 <img src={prductDetails?.featured_image} className="w-100" alt="" onError={(e) => { (e.currentTarget as HTMLImageElement).src ="assets/images/blogImg.jpg" }} />
                                 </div>
-                                <div className="lats-p" data-aos="fade-up">
+                                <div className="last-p" data-aos="fade-up">
                                     <p>{prductDetails?.content}</p>
                                 </div>
                             </div>
