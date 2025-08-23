@@ -13,10 +13,9 @@ const BlogsPage: React.FC = () => {
       const response = await getBlogspageData();
       console.log(response);
       setBlogData(response.data || [])
+      setLoading(false);
     } catch (error: any) {
       toast.error(error.message || 'Failed to load products');
-    } finally {
-      setLoading(false);
     }
   };
 

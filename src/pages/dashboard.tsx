@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
             });
 
             toast.success("Address updated successfully!");
-            fetchPatientInfo(); 
+            fetchPatientInfo();
         } catch (error: any) {
             toast.error(error.message || "Failed to update address");
         }
@@ -648,6 +648,7 @@ const Dashboard: React.FC = () => {
                     <div className="modal-content">
                         {selectedOrder ? (
                             <>
+
                                 <div className="modal-header border-bottom-0 pb-1">
                                     <div className="flex-grow-1">
                                         <div className="d-flex gap-2 align-items-center">
@@ -684,9 +685,11 @@ const Dashboard: React.FC = () => {
                                 <div className="modal-body">
                                     <div className="sepLine mb-3 pb-3">
                                         <div className="row row-gap-3">
-                                            <div className="col-md-6">
-                                                <div className="text-black line_H_1_3 f-w-SB mb__5">
-                                                    Order Information
+                                            <div className="col-md-12">
+                                                <div className="d-flex justify-content-between align-items-center mb-0">
+                                                    <div className="text-black line_H_1_3">
+                                                        <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Order Information
+                                                    </div>
                                                 </div>
                                                 <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                                     <li>
@@ -701,47 +704,14 @@ const Dashboard: React.FC = () => {
                                                             {new Date(selectedOrder.created_at).toLocaleDateString()}
                                                         </span>
                                                     </li>
-                                                    <li>
-                                                        <span className="text-black">Type: </span>{" "}
-                                                        <span className="primary-clr">Prescription</span>
-                                                    </li>
-                                                    <li>
-                                                        <span className="text-black">Total: </span>{" "}
-                                                        <span className="primary-clr">
-                                                            €{selectedOrder.total_amount}
-                                                        </span>
-                                                    </li>
+
+
                                                 </ul>
+
+
                                             </div>
 
-                                            <div className="col-md-6">
-                                                <div className="text-black line_H_1_3 f-w-SB mb__5">
-                                                    Medical Information
-                                                </div>
-                                                <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
-                                                    <li>
-                                                        <span className="text-black">Product: </span>{" "}
-                                                        <span className="primary-clr">
-                                                            {selectedOrder.product_name} {selectedOrder.weight}
-                                                            {selectedOrder.weight_unit}
-                                                        </span>
 
-
-                                                    </li>
-                                                    <li>
-                                                        <span className="text-black">Pharmacy: </span>{" "}
-                                                        <span className="primary-clr">
-                                                            {selectedOrder.pharmacy_name}
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <span className="text-black">Quantity: </span>{" "}
-                                                        <span className="primary-clr">
-                                                            {selectedOrder.quantity}
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            </div>
                                         </div>
                                     </div>
 
@@ -751,20 +721,72 @@ const Dashboard: React.FC = () => {
                                         </div>
                                         <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
                                             <li>
-                                                <span className="text-black">Address: </span>{" "}
-                                                <span className="primary-clr">
-                                                    {selectedOrder.pharmacy_address || "N/A"}
-                                                </span>
+                                                <span className="text-black">Delivery: </span>{" "}
+                                                {selectedOrder.delivery_method === "homeDelivery" ? (
+                                                    <span className="primary-clr">
+                                                        {selectedOrder.user_address || "N/A"}
+                                                    </span>
+                                                ) : (
+                                                    <span className="primary-clr">
+                                                        {selectedOrder.pharmacy_address || "N/A"}
+                                                    </span>
+                                                )}
                                             </li>
+
                                             <li>
                                                 <span className="text-black">Payment Status: </span>{" "}
                                                 <span className="primary-clr">{selectedOrder.payment_status}</span>
                                             </li>
                                             <li>
                                                 <span className="text-black">Delivery: </span>{" "}
-                                                <span className="primary-clr">{selectedOrder.delivery_method}</span>
+                                                <span className="primary-clr">
+                                                    {selectedOrder.delivery_method === "homeDelivery"
+                                                        ? "Home Delivery"
+                                                        : "Pharmacy Pickup"}
+                                                </span>
                                             </li>
+
                                         </ul>
+                                    </div>
+                                    <div>
+                                        <div className="d-flex justify-content-between align-items-center mb-0">
+                                            <div className="text-black line_H_1_3">
+                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i> Product Information
+                                            </div>
+
+                                        </div>
+
+                                        <div className="row row-gap-2 mb-3">
+
+                                            {[1].map((item) => (
+                                                <div className="col-md-10" key={item}>
+                                                    <div className="cartItem">
+                                                        <div className="cartImg">
+                                                            <img
+                                                                className="w-100"
+                                                                src="assets/images/dummy-product.jpg"
+                                                                alt="Dummy Product"
+                                                            />
+                                                        </div>
+                                                        <div className="itemDetails flex-grow-1">
+                                                            <div className="f-size-18 f-w-SB clr-black mb__5">Sample Product {item}</div>
+                                                            <div className="productSummary mb__15">This is a sample product description.</div>
+                                                        </div>
+                                                        <div className="f-size-14 f-w-SB mb__5 clr-green"> €50 - 5/grams </div>
+                                                    </div>
+
+                                                    <div className="d-flex justify-content-between mt-3">
+                                                        <div>
+                                                            <ul className="list-unstyled m-0 d-flex flex-column row-gap-1">
+                                                                <li><span className="text-black">Pharmacy: </span>{selectedOrder.pharmacy_name}</li>
+                                                                <li><span className="text-black">Address: </span> {selectedOrder.pharmacy_address || "N/A"}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="text-black f-w-SB f-size-20">Total:   €{selectedOrder.total_amount} - 10 g/ml</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </>
@@ -776,7 +798,7 @@ const Dashboard: React.FC = () => {
             </div>
 
 
-           
+
             {/* <div className="modal fade cb_cstModal " id="invoices">
                 <div className="modal-dialog modal-lg modal-dialog-centered">
                     <div className="modal-content">

@@ -61,14 +61,14 @@ const Login: React.FC = () => {
     }
   };
  
-  if (user) {
-    return (
-      <div className="login-page">
-        <h1>You are already logged in as {user.name}</h1>
-        <Link href="/">Go to Home</Link>
-      </div>
-    );
-  }
+  // if (user) {
+  //   return (
+  //     <div className="login-page">
+  //       <h1>You are already logged in as {user.name}</h1>
+  //       <Link href="/">Go to Home</Link>
+  //     </div>
+  //   );
+  // }
  
   return (
   <div className='loginWrp'>

@@ -123,6 +123,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
     };
 
     return (
+
         <div className="cartModalOverlay" onClick={onClose}>
             <div className="cartModalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="cartModalHeader">

@@ -26,22 +26,28 @@ const FilterAccordion: React.FC<FilterAccordionProps> = ({
   const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects';
 
 const handleCheckboxChange = (value: number | string) => {
-  let newSelectedItems: (number | string)[];
+  let newSelectedItems: (number | string)[] = [...selectedItems];
 
   if (filterKey === 'categories') {
-    if (selectedItems.includes(value)) {
+    if (newSelectedItems.includes(value)) {
       newSelectedItems = [];
     } else {
       newSelectedItems = [value];
     }
   } else {
-    newSelectedItems = selectedItems.includes(value)
-      ? selectedItems.filter(item => item !== value)
-      : [...selectedItems, value];
+    if (newSelectedItems.includes(value)) {
+      newSelectedItems = newSelectedItems.filter(item => item !== value);
+    } else {
+      newSelectedItems = [...newSelectedItems, value];
+      if (newSelectedItems.length > 5) {
+        newSelectedItems.shift();
+      }
+    }
   }
 
   onChange(filterKey, newSelectedItems);
 };
+
 
 
   return (

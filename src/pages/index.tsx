@@ -24,11 +24,10 @@ const Home: React.FC = () => {
 
         const response = await getHomepageData();
         setData(response.data);
+        setLoading(false);
       } catch (err: any) {
         toast.error(err.message || 'Failed to load homepage');
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchHomepageData();

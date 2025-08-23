@@ -132,7 +132,7 @@ const LoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </button>
         </form>
 
-        <div className='mt-2 text-center text-black'>Don't have an account?<Link href="/register" className='clr-green text-decoration-underline'> Register</Link></div>
+        <div className='mt-2 text-center text-black'>Don't have an account?<Link href="/register"  onClick={onClose} className='clr-green text-decoration-underline'> Register</Link></div>
 
         <button
           onClick={onClose}

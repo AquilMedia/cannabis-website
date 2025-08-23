@@ -17,11 +17,10 @@ const [prductDetails, setPrductDetails] = useState<any>(null);
                 const response = await getBlogDetails(id);
                 console.log(response.data);
                 setPrductDetails(response.data || [])
+                setLoading(false);
             } catch (error: any) {
                 toast.error(error.message || 'Failed to load products');
-            }finally {
-            setLoading(false); 
-        }
+            }
         };
     
         useEffect(() => {

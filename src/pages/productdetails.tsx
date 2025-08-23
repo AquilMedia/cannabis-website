@@ -8,8 +8,10 @@ import { toast } from 'react-toastify';
 import PharmacistSelector from '@/components/PharmacistSelector';
 import LoginModal from '@/Modals/LoginModal';
 import { useAuth } from '@/context/AuthContext';
+import Loader from '@/components/Loader';
 const Productdetails: React.FC = () => {
     const { user } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     const pharmacistSelectorRef = useRef<any>(null);
     const handleAddToCart = (prductDetails: any, quantity: any) => {
@@ -78,10 +80,13 @@ const Productdetails: React.FC = () => {
 
 
     const fetchProductsDetails = async () => {
+        setLoading(true);
         try {
             const response = await getProductsDetails(id);
             console.log(response);
             setPrductDetails(response.data || [])
+        setLoading(false);
+
         } catch (error: any) {
             toast.error(error.message || 'Failed to load products');
         }
@@ -92,6 +97,10 @@ const Productdetails: React.FC = () => {
     }, [id]);
 
     return (
+          	<>
+		 {loading ? (
+<Loader/>
+    ) : (
         <div className="secWrap pt-3">
             <PharmacistSelector ref={pharmacistSelectorRef} />
             {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
@@ -557,6 +566,8 @@ const Productdetails: React.FC = () => {
                 Selected Pharmacy ID: {selectedPharmacyId ?? "None"}
             </div> */}
         </div>
+    )}
+    </>
     );
 };
 

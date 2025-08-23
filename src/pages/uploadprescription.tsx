@@ -455,7 +455,7 @@ const Uploadprescription: React.FC = () => {
 
                     {step === 2 && (
                         <div className={`tab-pane fade ${step === 2 ? "show active" : ""}`} id="tab_step_2">
-                            <form onSubmit={handleSavePatientInfo}>
+                           
                                 <div className="cb_cardStyle_1 cb_prescriptn_card">
                                     <div className="mb-4 pb-lg-2">
                                         <div className="text-black f-size-20 line_H_1_2">Patient Information</div>
@@ -598,9 +598,9 @@ const Uploadprescription: React.FC = () => {
                                 </div>
                                 <div className="mt-4 d-flex justify-content-between gap-2">
                                     <button className="btn cb_cmnBtn btn-o px-4" onClick={goPrev}>Previous</button>
-                                    <button className="btn cb_cmnBtn px-4 ms-auto" type="submit">Save Patient Information</button>
+                                    <button className="btn cb_cmnBtn px-4 ms-auto" onClick={handleSavePatientInfo}>Save Patient Information</button>
                                 </div>
-                            </form>
+                           
                         </div>
                     )}
                     {step === 3 && (
