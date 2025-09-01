@@ -122,7 +122,6 @@ const Contact: React.FC = () => {
             toast.error(err.response?.data?.message || "Failed to send message");
         }
     };
-
     return (
         <>
             {loading ? (

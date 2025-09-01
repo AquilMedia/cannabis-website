@@ -23,6 +23,7 @@ const Shop: React.FC = () => {
 
 	const [filters, setFilters] = useState({
 		complaints: [] as string[],
+		pharmacist: [] as string[],
 		manufacturers: [] as number[],
 		genetics: [] as number[],
 		categories: [] as number[],
@@ -48,9 +49,10 @@ const Shop: React.FC = () => {
 	};
 	const buildQueryParams = () => {
 		const params = new URLSearchParams();
-
 		if (filters.complaints.length)
 			params.append('complaints', filters.complaints.toString());
+		if (filters.pharmacist.length)
+			params.append('pharmacist', filters.pharmacist.toString());
 		if (filters.effects.length)
 			params.append('effects', filters.effects.join(','));
 		if (filters.manufacturers.length) {
@@ -58,8 +60,6 @@ const Shop: React.FC = () => {
 				params.append('manufacturer_id', id.toString());
 			});
 		}
-
-
 		if (filters.genetics.length) {
 			filters.genetics.forEach(id => params.append('genetic_id', id.toString()));
 		}
@@ -278,6 +278,13 @@ const Shop: React.FC = () => {
 													</div>
 												</div>
 												<div className="accordion" id="accordionExample">
+													<FilterAccordion
+														title="Pharmacist"
+														items={(filterData as any).pharmacist || []}
+														filterKey="pharmacist"
+														selectedItems={filters.pharmacist}
+														onChange={handleFilterChange}
+													/>
 													<FilterAccordion
 														title="Complaints"
 														items={(filterData as any).complaints || []}

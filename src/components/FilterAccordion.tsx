@@ -19,7 +19,7 @@ const FilterAccordion: React.FC<FilterAccordionProps> = ({
 }) => {
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll ? items : items.slice(0, 8);
-  const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects';
+  const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects' || filterKey === 'pharmacist';
   const handleCheckboxChange = (value: number | string) => {
     let newSelectedItems: (number | string)[] = [...selectedItems];
 
