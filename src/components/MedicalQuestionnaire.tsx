@@ -22,28 +22,20 @@ export default function MedicalQuestionnaire({
         () => [...questions].sort((a, b) => a.id - b.id),
         [questions]
     );
-
     const [responses, setResponses] = useState<Record<string, any>>({});
     const [currentIdx, setCurrentIdx] = useState(0);
-
     const q = sortedQuestions[currentIdx];
     const total = sortedQuestions.length;
-
     const handleChange = (qKey: string | number, value: any) => {
         setResponses((prev) => ({ ...prev, [qKey]: value }));
     };
-
     const evaluateCurrent = () => {
- 
         if (q.answers?.selected) {
             const selectedValues: string[] = Array.isArray(responses[q.id]) ? responses[q.id] : [];
             const answered = selectedValues.length > 0;
             const blockedAnswers = selectedValues.filter((v) => q.answers[v] === false);
-
             return { answered, blocked: blockedAnswers.length > 0, blockedAnswers };
         }
-
-  
         if (!q.answers) {
             const val = responses[q.id];
             return {
@@ -52,10 +44,7 @@ export default function MedicalQuestionnaire({
                 blockedAnswers: []
             };
         }
-
         const keys = Object.keys(q.answers);
-
-   
         if (q.id === 2) {
             const selected = responses[q.id];
             if (!selected) return { answered: false, blocked: false, blockedAnswers: [] };
@@ -66,15 +55,11 @@ export default function MedicalQuestionnaire({
                 blockedAnswers: isBlocked ? [selected] : []
             };
         }
-
-      
         if (keys.length > 2 && Object.values(q.answers).every((v) => typeof v === "boolean")) {
             const selected = Array.isArray(responses[q.id]) ? responses[q.id] : [];
             const blockedAnswers = selected.filter((v: string | number) => q.answers[v] === false);
             return { answered: selected.length > 0, blocked: blockedAnswers.length > 0, blockedAnswers };
         }
-
-
         if (keys.every((k) => typeof q.answers[k] === "boolean" || typeof q.answers[k] === "object")) {
             const selected = responses[q.id];
             if (!selected) return { answered: false, blocked: false, blockedAnswers: [] };
@@ -101,10 +86,7 @@ export default function MedicalQuestionnaire({
 
         return { answered: false, blocked: false, blockedAnswers: [] };
     };
-
-
     const { answered, blocked } = evaluateCurrent();
-
     const goPrev = () => setCurrentIdx((i) => Math.max(0, i - 1));
     const goNext = () => setCurrentIdx((i) => Math.min(total - 1, i + 1));
     const handleFinalSubmit = () => {
@@ -147,7 +129,7 @@ export default function MedicalQuestionnaire({
 
                 );
             }
-      
+
             return (
                 <textarea
                     className="form-control resize-none"
@@ -224,7 +206,7 @@ export default function MedicalQuestionnaire({
                 </label>
             ));
         }
- 
+
         if (keys.length > 2 && Object.values(answers).every((v) => typeof v === "boolean")) {
             const selected = Array.isArray(responses[qKey]) ? responses[qKey] : [];
             const toggle = (option: string) => {

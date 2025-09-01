@@ -417,6 +417,7 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
 .cb_cstLabel_3 {font-size: var(--f-size-14); color: var(--clr-green);background-color: rgba(69, 161, 77, 0.2);border-radius: 100px;padding: .25rem 1.125rem;display: inline-block;}
 .cb_cstLabel_3.lab-orange{background-color: rgba(193, 148, 0, 0.1); color: #c19400;}
 .cb_cstLabel_3.lab-red{background-color: rgba(239, 68, 68, 0.1); color: #EF4444;}
+.cb_cstLabel_PRE {font-size: var(--f-size-14); color: var(--clr-green);background-color: rgba(69, 161, 77, 0.2);border-radius: 100px;padding: .25rem 1.125rem;display: inline-block;}
 
 .cb_cstLabel_3 {
   font-size: var(--f-size-14);
@@ -424,7 +425,7 @@ body [data-aos=fade-up] { transform: translate3d(0,30px,0); }
   padding: .25rem 1.125rem;
   display: inline-block;
   font-weight: 500;
-  color: #fff; /* default white text */
+  color: #fff; 
 }
 
 /* ✅ Status Colors */

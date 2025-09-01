@@ -2,146 +2,136 @@ import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-toastify";
 import { AddCart, getPharmsistList, getClearCart } from "@/services/user";
 import { useAuth } from "@/context/AuthContext";
-import LoginModal from "@/Modals/LoginModal";
+import LoginModal from "@/components/Modals/LoginModal";
 import { useCart } from "@/context/CartContext";
 
 const PharmacistSelector = forwardRef((_, ref) => {
-    const { user,logout } = useAuth();
+    const { user, logout } = useAuth();
     const [pharmacists, setPharmacists] = useState<any[]>([]);
     const [updatedquantity, setSelectedQuantity] = useState<any[]>([]);
-
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const [selectedPharmacy, setSelectedPharmacy] = useState<any>(null);
     const [showLogin, setShowLogin] = useState(false);
-
     const [showPharmacyModal, setShowPharmacyModal] = useState(false);
     const [showConflictModal, setShowConflictModal] = useState(false);
     const [conflictPharmacyName, setConflictPharmacyName] = useState("");
-  const { fetchCartData } = useCart();
-const handlePharmacistSelect = async (pharmacist: any) => {
-    if (!pharmacist) {
-        toast.error("Please select a pharmacy first");
-        return;
-    }
+    const { fetchCartData } = useCart();
+    const handlePharmacistSelect = async (pharmacist: any) => {
+        if (!pharmacist) {
+            toast.error("Please select a pharmacy first");
+            return;
+        }
+        try {
+            const response = await getPharmsistList(selectedProduct.id, user?.token);
 
-try {
-    const response = await getPharmsistList(selectedProduct.id, user?.token);
+            if (response.cartData) {
+                const cartPharmacy = response.cartData?.pharmacist || null;
+                const pharmacyName = cartPharmacy?.store_name?.trim() || "";
 
-    if (response.cartData) {
-        const cartPharmacy = response.cartData?.pharmacist || null;
-        const pharmacyName = cartPharmacy?.store_name?.trim() || "";
+                if (!cartPharmacy || pharmacist.pharmacist_id === response.cartData?.pharmacist_id) {
+                    await AddCart(
+                        {
+                            product_id: selectedProduct.id,
+                            pharmacist_id: pharmacist.pharmacist_id,
+                            quantity: updatedquantity,
 
-        if (!cartPharmacy || pharmacist.pharmacist_id === response.cartData?.pharmacist_id) {
+                        },
+                        user?.token
+                    );
+                    toast.success("Added to cart successfully");
+                    setShowPharmacyModal(false);
+                    fetchCartData();
+                    return;
+                }
+
+                setConflictPharmacyName(pharmacyName || "this pharmacy");
+                setSelectedPharmacy(pharmacist);
+                setShowPharmacyModal(false);
+                setShowConflictModal(true);
+                fetchCartData();
+                return;
+            }
+
             await AddCart(
                 {
                     product_id: selectedProduct.id,
                     pharmacist_id: pharmacist.pharmacist_id,
                     quantity: updatedquantity,
-                    
                 },
                 user?.token
             );
             toast.success("Added to cart successfully");
             setShowPharmacyModal(false);
             fetchCartData();
-            return;  
+            return;
+        } catch {
+            // toast.error("Failed to add to cart 1");
         }
 
-        setConflictPharmacyName(pharmacyName || "this pharmacy");
-        setSelectedPharmacy(pharmacist);
-        setShowPharmacyModal(false);
-        setShowConflictModal(true);
-        fetchCartData();
-        return;
-    }
+    };
+    const openSelector = async (product: any, updatedquantity: any) => {
 
-    await AddCart(
-        {
-            product_id: selectedProduct.id,
-            pharmacist_id: pharmacist.pharmacist_id,
-          quantity: updatedquantity,
-        },
-        user?.token
-    );
-    toast.success("Added to cart successfully");
-    setShowPharmacyModal(false);
-    fetchCartData();
-    return;
-} catch {
-    // toast.error("Failed to add to cart 1");
-}
+        console.log('product', product);
+        console.log('updatedquantity', updatedquantity);
 
-};
 
-const openSelector = async (product: any, updatedquantity: any) => {
+        if (!user) {
+            setShowLogin(true);
+            toast.error("Please log in first");
+            return;
+        }
 
-    console.log('product',product);
-    console.log('updatedquantity',updatedquantity);
+        setSelectedProduct(product);
+        setSelectedQuantity(updatedquantity);
 
-    
-  if (!user) {
-    setShowLogin(true);
-    toast.error("Please log in first");
-    return;
-  }
+        try {
+            const response = await getPharmsistList(product.id, user.token);
+            console.log(response);
 
-  setSelectedProduct(product);
-  setSelectedQuantity(updatedquantity); 
+            if (response.status === 401 || response.status === 403) {
+                logout();
 
-  try {
-    const response = await getPharmsistList(product.id, user.token);
-    console.log(response);
-    
-if (response.status === 401 || response.status === 403) {
-  logout(); 
+                throw new Error("Invalid or expired token");
+            }
 
-  throw new Error("Invalid or expired token");
-}
+            if (response.success && Array.isArray(response.data)) {
+                setPharmacists(response.data);
+                if (response.data.length > 0) {
+                    setSelectedPharmacy(response.data[0]);
+                }
 
-    if (response.success && Array.isArray(response.data)) {
-      setPharmacists(response.data);
-      if (response.data.length > 0) {
-        setSelectedPharmacy(response.data[0]);
-      }
-
-      setShowPharmacyModal(true);
-    } else {
-      toast.error("Failed to fetch pharmacists");
-    }
-  } catch {
-    toast.error("Error fetching pharmacists");
-  }
-};
-
+                setShowPharmacyModal(true);
+            } else {
+                toast.error("Failed to fetch pharmacists");
+            }
+        } catch {
+            toast.error("Error fetching pharmacists");
+        }
+    };
     const handleConfirmNewOrder = async () => {
-    try {
-        await getClearCart(user?.token);
-        await AddCart(
-            {
-                product_id: selectedProduct.id,
-                pharmacist_id: selectedPharmacy.pharmacist_id,
-                quantity: updatedquantity,
-            },
-            user?.token
-        );
-        toast.success("Added to cart successfully");
-        setShowConflictModal(false);
-        fetchCartData();
-    } catch {
-        toast.error("Failed to start a new order");
-    }
-};
-
-
+        try {
+            await getClearCart(user?.token);
+            await AddCart(
+                {
+                    product_id: selectedProduct.id,
+                    pharmacist_id: selectedPharmacy.pharmacist_id,
+                    quantity: updatedquantity,
+                },
+                user?.token
+            );
+            toast.success("Added to cart successfully");
+            setShowConflictModal(false);
+            fetchCartData();
+        } catch {
+            toast.error("Failed to start a new order");
+        }
+    };
     useImperativeHandle(ref, () => ({
         openSelector,
     }));
-
     return (
         <>
             {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
-
- 
             {showConflictModal && (
                 <div
                     className="modal fade cb_cstModal show d-block"

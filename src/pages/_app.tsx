@@ -3,11 +3,9 @@ import '../../public/assets/css/cb-icons.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../../public/assets/css/stylesheet.css';
-
 import type { AppProps } from 'next/app';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -17,7 +15,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
 import { CartProvider } from '@/context/CartContext';
-
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap.bundle.min.js')
@@ -47,18 +44,20 @@ type AppContentProps = {
 };
 
 function AppContent({ Component, pageProps }: AppContentProps) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   const noLayoutRoutes = [''];
   const hideLayout = noLayoutRoutes.includes(router.pathname);
-  const protectedRoutes = ["/dashboard", "/onlineprescription", "/uploadprescription","/consultation"];
+  const protectedRoutes = ["/dashboard", "/onlineprescription", "/uploadprescription", "/consultation"];
 
   useEffect(() => {
+    if (loading) return;
+
     if (protectedRoutes.includes(router.pathname) && !user) {
       router.replace("/");
     }
-  }, [router.pathname, user]);
+  }, [router.pathname, user, loading]);
 
   return hideLayout ? (
     <Component {...pageProps} />

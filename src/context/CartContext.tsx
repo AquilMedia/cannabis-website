@@ -16,23 +16,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [summary, setSummary] = useState({ total_cart_price: 0, total_items: 0 });
 
-  const fetchCartData = async () => {
-    if (!user?.token) return;
-    try {
-      const data = await getCartList(user.token);
-      if (data?.success) {
-        setCartItems(data.cartItems || []);
+const fetchCartData = async () => {
+  if (!user?.token) return;
+  try {
+    const data = await getCartList(user.token);
+
+    if (data?.success) {
+      setCartItems(data.cartItems || []);
+      setSummary({
+        total_cart_price: data.summary?.total_cart_price || 0,
+        total_items: data.summary?.total_items || 0,
+      });
+    } else {
+      if (data?.error === "Please add product to the cart") {
+        setCartItems([]);
         setSummary({
-          total_cart_price: data.summary?.total_cart_price || 0,
-          total_items: data.summary?.total_items || 0,
+          total_cart_price: 0,
+          total_items: 0,
         });
-      } else {
-        // toast.error(data?.message || "Failed to load cart items");
       }
-    } catch (err) {
-      toast.error("Failed to load cart items");
+      // toast.error(data?.message || "Failed to load cart items");
     }
-  };
+  } catch (err) {
+    toast.error("Failed to load cart items");
+  }
+};
+
   useEffect(() => {
     fetchCartData();
   }, [user?.token]);

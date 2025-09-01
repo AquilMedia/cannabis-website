@@ -1,3 +1,4 @@
+import Loader from '@/components/common/Loader';
 import { decryptData, encryptData } from '@/utils/storageHelper';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
@@ -14,6 +15,7 @@ type AuthContextType = {
   user: User;
   login: (user: User) => void;
   logout: () => void;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,7 +30,7 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedData = localStorage.getItem('user');
@@ -48,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('user');
       }
     }
-    setIsMounted(true);
+    setLoading(false);
   }, []);
 
   const login = (userData: User) => {
@@ -72,11 +74,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('user');
   };
 
-  if (!isMounted) return null;
-
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {loading ? <div><Loader /></div> : children}
     </AuthContext.Provider>
   );
 };

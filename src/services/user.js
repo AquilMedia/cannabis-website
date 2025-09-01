@@ -2,6 +2,12 @@ import { callApi, callApiWithAuth, callPostApi, callPostFormData } from "./api";
 export const registerUser = async (userData) => {
   return await callApi('/api/user/register', 'POST', userData);
 };
+export const saveContactForm = async (userData) => {
+  return await callApi('/api/public/saveContactForm', 'POST', userData);
+};
+export const forgotPassword = async (userData) => {
+  return await callApi('/api/public/forgotPassword', 'POST', userData);
+};
 export const loginUser = async (credentials) => {
   return await callApi('/api/user/login', 'POST', credentials);
 };
@@ -68,6 +74,9 @@ export const getProductsDetails = async (id) => {
 export const updatePatientinfo = async (data, token) => {
   return await callPostApi(`/api/user/userUpdate`, token, 'POST', data);
 };
+export const updateresetPasswordFront = async (data, token) => {
+  return await callPostApi(`/api/user/resetPasswordFront`, token, 'POST', data);
+};
 export const UpdateAddressinfo = async (data, token) => {
   return await callPostApi(`/api/user/updateAddress`, token, 'POST', data);
 };
@@ -80,6 +89,18 @@ export const getImpressumData = async () => {
 export const getTermsData = async () => {
   return await callApiWithAuth('/api/public/cms/terms-conditions', 'GET');
 };
+export const getFaqData = async () => {
+  return await callApiWithAuth('/api/public/cms/faq', 'GET');
+};
+export const getAboutUsData = async () => {
+  return await callApiWithAuth('/api/public/cms/aboutus', 'GET');
+};
 export const getPrivacyData = async () => {
-  return await callApiWithAuth('/api/public/cms/privacy', 'GET');
+  return await callApiWithAuth('/api/public/cms/privacy-policy', 'GET');
+};
+export const getContactUsData = async () => {
+  return await callApiWithAuth('/api/public/cms/contact-us', 'GET');
+};
+export const createPayment = async (data, token) => {
+  return await callPostApi(`/api/user/createPayment`, token, 'POST', data);
 };

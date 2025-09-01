@@ -2,5 +2,12 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js"
+  "/": "pages/index.js",
+  "/shop": "pages/shop.js",
+  "/about": "pages/about.js",
+  "/blog": "pages/blog.js",
+  "/contact": "pages/contact.js",
+  "/consultation": "pages/consultation.js",
+  "/dashboard": "pages/dashboard.js",
+  "/onlineprescription": "pages/onlineprescription.js"
 }

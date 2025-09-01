@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-
 interface FilterItem {
   id: number;
   title: string;
 }
-
 interface FilterAccordionProps {
   title: string;
   items: FilterItem[];
@@ -12,7 +10,6 @@ interface FilterAccordionProps {
   selectedItems: (number | string)[];
   onChange: (filterKey: string, selectedIds: (number | string)[]) => void;
 }
-
 const FilterAccordion: React.FC<FilterAccordionProps> = ({
   title,
   items,
@@ -22,33 +19,29 @@ const FilterAccordion: React.FC<FilterAccordionProps> = ({
 }) => {
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll ? items : items.slice(0, 8);
-
   const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects';
+  const handleCheckboxChange = (value: number | string) => {
+    let newSelectedItems: (number | string)[] = [...selectedItems];
 
-const handleCheckboxChange = (value: number | string) => {
-  let newSelectedItems: (number | string)[] = [...selectedItems];
-
-  if (filterKey === 'categories') {
-    if (newSelectedItems.includes(value)) {
-      newSelectedItems = [];
+    if (filterKey === 'categories') {
+      if (newSelectedItems.includes(value)) {
+        newSelectedItems = [];
+      } else {
+        newSelectedItems = [value];
+      }
     } else {
-      newSelectedItems = [value];
-    }
-  } else {
-    if (newSelectedItems.includes(value)) {
-      newSelectedItems = newSelectedItems.filter(item => item !== value);
-    } else {
-      newSelectedItems = [...newSelectedItems, value];
-      if (newSelectedItems.length > 5) {
-        newSelectedItems.shift();
+      if (newSelectedItems.includes(value)) {
+        newSelectedItems = newSelectedItems.filter(item => item !== value);
+      } else {
+        newSelectedItems = [...newSelectedItems, value];
+        if (newSelectedItems.length > 5) {
+          newSelectedItems.shift();
+        }
       }
     }
-  }
 
-  onChange(filterKey, newSelectedItems);
-};
-
-
+    onChange(filterKey, newSelectedItems);
+  };
 
   return (
     <div className="accordion-item">
