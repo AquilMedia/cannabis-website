@@ -1,3 +1,4 @@
+import { log } from 'console';
 import React, { useState } from 'react';
 interface FilterItem {
   id: number;
@@ -19,15 +20,17 @@ const FilterAccordion: React.FC<FilterAccordionProps> = ({
 }) => {
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll ? items : items.slice(0, 8);
-  const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects' || filterKey === 'pharmacist';
+  const useTitleAsKey = filterKey === 'complaints' || filterKey === 'effects' ;
   const handleCheckboxChange = (value: number | string) => {
     let newSelectedItems: (number | string)[] = [...selectedItems];
 
-    if (filterKey === 'categories') {
+    if (filterKey === 'categories'  || filterKey === 'pharmacist') {
       if (newSelectedItems.includes(value)) {
+        console.log(`Deselecting ${value} from ${filterKey}`);
         newSelectedItems = [];
       } else {
         newSelectedItems = [value];
+        console.log(`Selecting ${value} for ${filterKey}`);
       }
     } else {
       if (newSelectedItems.includes(value)) {

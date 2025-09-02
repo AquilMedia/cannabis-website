@@ -23,7 +23,7 @@ const Shop: React.FC = () => {
 
 	const [filters, setFilters] = useState({
 		complaints: [] as string[],
-		pharmacist: [] as string[],
+		pharmacist:[] as number[],
 		manufacturers: [] as number[],
 		genetics: [] as number[],
 		categories: [] as number[],
@@ -51,15 +51,18 @@ const Shop: React.FC = () => {
 		const params = new URLSearchParams();
 		if (filters.complaints.length)
 			params.append('complaints', filters.complaints.toString());
-		if (filters.pharmacist.length)
-			params.append('pharmacist', filters.pharmacist.toString());
 		if (filters.effects.length)
 			params.append('effects', filters.effects.join(','));
+		
 		if (filters.manufacturers.length) {
 			filters.manufacturers.forEach(id => {
 				params.append('manufacturer_id', id.toString());
 			});
 		}
+		if (filters.pharmacist.length)
+			console.log(`Pharmacist IDs: ${filters.pharmacist.join(', ')}`);
+
+			params.append('pharmacist_id', filters.pharmacist.join(','));
 		if (filters.genetics.length) {
 			filters.genetics.forEach(id => params.append('genetic_id', id.toString()));
 		}
@@ -78,6 +81,8 @@ const Shop: React.FC = () => {
 		try {
 
 			const query = buildQueryParams();
+			console.log(`Fetching products with query: ${query}`);
+
 			const response = await getProductsData(query);
 			setProducts(response.data || []);
 			setPagination(response.pagination || null);
@@ -104,7 +109,7 @@ const Shop: React.FC = () => {
 		setFilters(prev => ({
 			...prev,
 			[key]:
-				key === 'manufacturers' || key === 'effects' || key === 'complaints'
+				key === 'manufacturers' || key === 'effects' || key === 'pharmacist'
 					? selectedIds.map(id => String(id))
 					: selectedIds.map(id => Number(id)),
 		}));
