@@ -1286,7 +1286,7 @@ const Onlineprescription: React.FC = () => {
                                     onClick={handleSubmit}
                                     disabled={loading}
                                 >
-                                    {loading ? "Processing..." : "Place Order"}
+                                    {loading ? "Processing..." : "Pay & Place Order "}
                                 </button>
 
                                 {loading && <Loader />}

@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { uploadPrescriptionDr } from "@/services/user";
 import OrderConfirmationModal from "@/components/Modals/OrderConfirmationModal";
 import Loader from "@/components/common/Loader";
+import OrderOnlineSuccessModal from "@/components/Modals/OrderOnlineSuccessModal";
 
 export default function PaymentHandler() {
   const router = useRouter();
@@ -84,7 +85,7 @@ export default function PaymentHandler() {
     <>
       {loading && <Loader />}
       {orderId && showOrderModal && (
-        <OrderConfirmationModal
+        <OrderOnlineSuccessModal
           orderId={orderId}
           onClose={handleModalClose}
         />

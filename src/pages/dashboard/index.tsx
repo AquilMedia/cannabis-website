@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
         new: false,
         confirm: false,
     });
-  
+
     const [error, setError] = useState<{
         fname?: string;
         lname?: string;
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
         confirmPassword?: string;
         passwords?: { newPassword?: string; confirmPassword?: string };
     }>({});
-     const [profile, setProfile] = useState({
+    const [profile, setProfile] = useState({
         fname: '',
         lname: '',
         dob: '',
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
         }
     }, [user]);
 
-     const togglePassword = (field: keyof typeof showPassword) => {
+    const togglePassword = (field: keyof typeof showPassword) => {
         setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
     };
     const getStatusClass = (status: string) => {
@@ -618,7 +618,7 @@ const Dashboard: React.FC = () => {
                                                             <span className="text-black">  Payment Status:  </span>
 
                                                             <span className={`cb_cstLabel_3 ${getPaymentStatusClass(order.payment_status)}`}>
-                                                                Payment Status: {order.payment_status}
+                                                                {order.payment_status}
                                                             </span>
                                                         </li>
                                                         <li>
@@ -855,12 +855,42 @@ const Dashboard: React.FC = () => {
                                             <li>
                                                 <span className="text-black">Payment Status: </span>{" "}
                                                 <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.payment_status)}`}>
-                                                    Payment Status: {selectedOrder.payment_status}
+                                                    {selectedOrder.payment_status}
                                                 </span>
                                             </li>
                                         </ul>
                                     </div>
+                                    <div className="sepLine mb-3 pb-3">
+                                        <div className="d-flex justify-content-between align-items-center mb-0">
+                                            <div className="text-black line_H_1_3 f-w-SB mb__5">
+                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
+                                                Prescription Status
+                                            </div>
+                                            <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
+                                            <li>
+                                                <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.payment_status)}`}>
+                                                    {selectedOrder.payment_status}
+                                                </span>
+                                            </li>
+                                            </ul>
+                                        </div>
 
+                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
+                                           
+                                            <li>
+                                                <span className="text-black">Prescription Payment Status</span>{" "}
+
+                                                <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.payment_status)}`}>
+                                                    {selectedOrder.payment_status}
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className="text-black">Notes :</span>{" "}
+
+                                                  <span className="text-black">Notes from dr here</span>{" "}    
+                                            </li>
+                                        </ul>
+                                    </div>
                                     <div className="sepLine mb-3 pb-3">
                                         <div className="d-flex justify-content-between align-items-center mb-0">
                                             <div className="text-black line_H_1_3 f-w-SB mb__5">
