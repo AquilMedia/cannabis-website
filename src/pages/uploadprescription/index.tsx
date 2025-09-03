@@ -811,13 +811,16 @@ const Uploadprescription: React.FC = () => {
                                                     <div className="col-12 mt-2">
                                                         <div className="text-black mb-1">Opening Hours</div>
                                                         <ul className="mb-0 f-size-14 list_align_L">
-                                                            {Object.entries(
-                                                                pharmacyData[0]?.shipping_settings.store_timming?.["Opening Hours"] || {}
-                                                            ).map(([day, time]: any) => (
-                                                                <li key={day}>
-                                                                    {day} – {time}
-                                                                </li>
-                                                            ))}
+                                                            <ul className="mb-0 f-size-14 list_align_L">
+                                                                {Object.entries(
+                                                                    pharmacyData?.[0]?.shipping_settings?.store_timming?.["Opening Hours"] || {}
+                                                                ).map(([day, time]: any) => (
+                                                                    <li key={day}>
+                                                                        {day} – {time}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -899,13 +902,16 @@ const Uploadprescription: React.FC = () => {
                                                     <div className="col-12 mt-2">
                                                         <div className="text-black mb-1">Opening Hours</div>
                                                         <ul className="mb-0 f-size-14 list_align_L">
-                                                            {Object.entries(
-                                                                pharmacyData[0]?.shipping_settings.store_timming?.["Opening Hours"] || {}
-                                                            ).map(([day, time]: any) => (
-                                                                <li key={day}>
-                                                                    {day} – {time}
-                                                                </li>
-                                                            ))}
+                                                            <ul className="mb-0 f-size-14 list_align_L">
+                                                                {Object.entries(
+                                                                    pharmacyData?.[0]?.shipping_settings?.store_timming?.["Opening Hours"] || {}
+                                                                ).map(([day, time]: any) => (
+                                                                    <li key={day}>
+                                                                        {day} – {time}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+
                                                         </ul>
                                                     </div>
                                                 </div>
