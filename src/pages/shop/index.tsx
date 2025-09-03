@@ -4,7 +4,7 @@ import PharmacistSelector from '@/components/PharmacistSelector';
 import { useAuth } from '@/context/AuthContext';
 import { useFilters } from '@/hooks/useFilters';
 import LoginModal from '@/components/Modals/LoginModal';
-import { AddCart, filtersData, getPharmsistList, getProductsData } from '@/services/user';
+import { AddCart, filtersData, getPharmsistList, getProductsData, getsearchData } from '@/services/user';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
@@ -20,10 +20,11 @@ const Shop: React.FC = () => {
 	const [pagination, setPagination] = useState<any>(null);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [showFilter, setShowFilter] = useState(false);
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const [filters, setFilters] = useState({
 		complaints: [] as string[],
-		pharmacist:[] as number[],
+		pharmacist: [] as number[],
 		manufacturers: [] as number[],
 		genetics: [] as number[],
 		categories: [] as number[],
@@ -47,13 +48,27 @@ const Shop: React.FC = () => {
 			toast.error(error.message || "Failed to load filters");
 		}
 	};
+	const handleSearch = async (query: string) => {
+		if (!query) return;
+
+		try {
+			const res = await getsearchData(query);
+			setProducts(res.data || []);
+			setCurrentPage(1);
+			setPagination(res.pagination || null);
+
+		} catch (err) {
+			console.error("Search error:", err);
+		}
+	};
+
 	const buildQueryParams = () => {
 		const params = new URLSearchParams();
 		if (filters.complaints.length)
 			params.append('complaints', filters.complaints.toString());
 		if (filters.effects.length)
 			params.append('effects', filters.effects.join(','));
-		
+
 		if (filters.manufacturers.length) {
 			filters.manufacturers.forEach(id => {
 				params.append('manufacturer_id', id.toString());
@@ -62,7 +77,7 @@ const Shop: React.FC = () => {
 		if (filters.pharmacist.length)
 			console.log(`Pharmacist IDs: ${filters.pharmacist.join(', ')}`);
 
-			params.append('pharmacist_id', filters.pharmacist.join(','));
+		params.append('pharmacist_id', filters.pharmacist.join(','));
 		if (filters.genetics.length) {
 			filters.genetics.forEach(id => params.append('genetic_id', id.toString()));
 		}
@@ -215,7 +230,10 @@ const Shop: React.FC = () => {
 							</div>
 						</div>
 					</div>
+
 					<div className="secWrap pt-0">
+
+
 						<div className="container">
 							<button className="btn filterBtn mb__30 d-xl-none" onClick={() => setShowFilter(true)}> <i className="cb-icon cb-filter-btn"></i> Filters </button>
 							<div className="row">
@@ -337,7 +355,54 @@ const Shop: React.FC = () => {
 										</div>
 									</div>
 								</div>
+
 								<div className="col-md-12 col-xl-9">
+									<div className="row align-items-center mb__25">
+
+										<div className="col-lg-6">
+											<div className="searchBox">
+												<div className="input-group">
+													<input
+														type="text"
+														className="form-control"
+														placeholder="Search Products"
+														value={searchTerm}
+														onChange={(e) => {
+															const val = e.target.value;
+															setSearchTerm(val);
+
+															if (val.trim() === "") {
+																fetchProducts();
+															} else {
+																handleSearch(val);
+															}
+														}}
+													/>
+													<button
+														className="btn btn-green"
+														onClick={() => {
+															if (searchTerm.trim() === "") {
+																fetchProducts();
+															} else {
+																handleSearch(searchTerm);
+															}
+														}}
+													>
+														<i className="cb-icon cb-search"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+
+										{searchTerm.trim() !== "" && (
+											<div className="col-lg-6 d-flex justify-content-lg-start justify-content-start">
+												<p className="mb-0">
+													Results for "<strong>{searchTerm}</strong>"
+												</p>
+											</div>
+										)}
+									</div>
+
 									<div className="row row-gap-4">
 										{products.length === 0 ? (
 											<div className="col-12 text-center">

@@ -5,6 +5,9 @@ export const registerUser = async (userData) => {
 export const saveContactForm = async (userData) => {
   return await callApi('/api/public/saveContactForm', 'POST', userData);
 };
+export const saveSubscribeForm = async (Data) => {
+  return await callApi('/api/public/subscribe', 'POST', Data);
+}
 export const forgotPassword = async (userData) => {
   return await callApi('/api/public/forgotPassword', 'POST', userData);
 };
@@ -25,6 +28,9 @@ export const getAboutUspageData = async () => {
 };
 export const getProductsData = async (query) => {
   return await callApiWithAuth(`/api/public/products?${query}`, 'GET');
+};
+export const getsearchData = async (query) => {
+  return await callApiWithAuth(`/api/public/search/${query}`, 'GET');
 };
 export const filtersData = async () => {
   return await callApiWithAuth('/api/public/filters', 'GET');

@@ -1,14 +1,17 @@
 import { useAuth } from '@/context/AuthContext';
-import { filtersData } from '@/services/user';
+import { filtersData, saveSubscribeForm } from '@/services/user';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Footer: React.FC = () => {
   const [filterData, setFilterData] = useState<any[]>([]);
+  const [formData, setFormData] = useState({ email: "" });
+
   useEffect(() => {
     getFiltersData();
   }, []);
+
   const getFiltersData = async () => {
     try {
       const response = await filtersData();
@@ -17,6 +20,37 @@ const Footer: React.FC = () => {
       toast.error(error.message || "Failed to load filters");
     }
   };
+
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.email.trim()) {
+      toast.error("Please enter an email address");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    const payload = { email: formData.email };
+
+    try {
+      const res = await saveSubscribeForm(payload);
+      toast.success(res?.message || "You have been subscribed");
+      setFormData({ email: "" });
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to send message");
+    }
+
+  };
+
   return (
     <div>
       <div className="secWrap home_sec_six green-bg">
@@ -33,13 +67,21 @@ const Footer: React.FC = () => {
           <div className="row justify-content-center mb__40">
             <div className="col-lg-6">
               <div className="newsletter_sec mb__15" data-aos="fade-up" data-aos-delay="300">
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="d-lg-flex align-items-center justify-content-center gap-2">
                     <div className="formGroup w-100">
-                      <input type="text" name="" placeholder="Enter your Email Address" className="cst-input" />
+                      <input
+                        type="email"
+                        placeholder="Enter your Email Address"
+                        className="cst-input"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ email: e.target.value })}
+                      />
                     </div>
                     <div className="subscribe_btnWrap">
-                      <button type="submit" className="subscribe_btn secondary-clr"> Subscribe </button>
+                      <button type="submit" className="subscribe_btn secondary-clr">
+                        Subscribe
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -48,7 +90,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="row justify-content-center">
+          {/* <div className="row justify-content-center">
             <div className="col-lg-8">
               <div className="row justify-content-center row-gap-3">
                 <div className="col-6 col-sm-3 col-md-3">
@@ -77,7 +119,7 @@ const Footer: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -192,7 +234,7 @@ const Footer: React.FC = () => {
                         <ul className="list-unstyled">
                           <li className="footer-item mb__5"> <Link href="/termsConditions" className="footer-link text-white opacity-8"> Terms & Conditions </Link></li>
                           <li className="footer-item mb__5"> <Link href="/privacyPolicy" className="footer-link text-white opacity-8"> Privacy Policy </Link></li>
-                    
+
                         </ul>
                       </div>
                     </div>

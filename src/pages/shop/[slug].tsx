@@ -16,10 +16,12 @@ const Productdetails: React.FC = () => {
     const pharmacistSelectorRef = useRef<any>(null);
     const { id, slug } = router.query;
     const [prductDetails, setPrductDetails] = useState<any>(null);
+    const [BlogDetails, setBlogDetails] = useState<any>(null);
+
     const [showLogin, setShowLogin] = useState(false);
     const [selectedPharmacyId, setSelectedPharmacyId] = useState<string | null>(null);
     const [quantity, setQuantity] = useState<string>("1");
-     const testimonialCarousel = {
+    const testimonialCarousel = {
         slidesToShow: 3,
         infinite: false,
         slidesToScroll: 1,
@@ -56,7 +58,7 @@ const Productdetails: React.FC = () => {
     const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedPharmacyId(event.target.value);
     };
-   
+
     const parseQuantity = (value: string) => {
         const number = parseFloat(value);
         return isNaN(number) ? 0 : number;
@@ -80,6 +82,8 @@ const Productdetails: React.FC = () => {
             const response = await getProductsDetails(id);
             console.log(response);
             setPrductDetails(response.data || [])
+            setBlogDetails(response.blogs || [])
+
             setLoading(false);
 
         } catch (error: any) {
@@ -128,6 +132,39 @@ const Productdetails: React.FC = () => {
                                         <h5 className="f-size-18 f-w-M clr-green mb-2 pb-1">Product Description</h5>
                                         <div>{prductDetails?.description}</div>
                                     </div>
+                                    <div className="mt-3 pb-1" data-aos="fade-up">
+                                        <div className="cb_border_1 rounded-3 p-3" style={{ backgroundColor: "#eaf8e68c" }}>
+                                            <div className="row text-center">
+
+
+                                                {prductDetails?.irradiation && (
+                                                    <div className="col-md-4">
+                                                        <strong className="text-black d-block mb-1">Irradiation</strong>
+                                                        <span>{prductDetails.irradiation}</span>
+                                                    </div>
+                                                )}
+
+
+                                                {prductDetails?.origin && (
+                                                    <div className="col-md-4">
+                                                        <strong className="text-black d-block mb-1">Country</strong>
+                                                        <span>{prductDetails.origin}</span>
+                                                    </div>
+                                                )}
+
+
+                                                {prductDetails?.manufacturer?.title && (
+                                                    <div className="col-md-4">
+                                                        <strong className="text-black d-block mb-1">Producer</strong>
+                                                        <span>{prductDetails.manufacturer.title}</span>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
 
 
 
@@ -226,71 +263,100 @@ const Productdetails: React.FC = () => {
                                                     <p className="f-size-18 clr-black mb-0">No Data found.</p>
                                                 </div>
                                             ) : (
-                                                prductDetails?.terpenes?.map((item: any, index: number) => {
-                                                    const [title, count] = Object.entries(item)[0] as [string, any];
-                                                    return (
-                                                        <div key={index} className="col-md-3">
-                                                            <div><strong className="f-w-SB text-black">{title}:</strong> {count}</div>
-                                                        </div>
-                                                    );
-                                                }))}
+                                                prductDetails.terpenes.map((item: any) => (
+                                                    <div key={item.id} className="col-md-4 mb-3">
+                                                        {/* Title */}
+                                                        <h5 className="f-w-SB text-black mb-2">{item.title}</h5>
+
+                                                        {/* Effects */}
+                                                        {item.effects && item.effects.length > 0 && (
+                                                            <div className="mb-2">
+                                                                <strong>Effects:</strong> {item.effects.join(", ")}
+                                                            </div>
+                                                        )}
+
+                                                        {/* Flavours */}
+                                                        {item.flavours && item.flavours.length > 0 && (
+                                                            <div className="mb-2">
+                                                                <strong>Flavours:</strong> {item.flavours.join(", ")}
+                                                            </div>
+                                                        )}
+
+                                                        {/* Complaints */}
+                                                        {item.complaints && item.complaints.length > 0 && (
+                                                            <div className="mb-2">
+                                                                <strong>Complaints:</strong> {item.complaints.join(", ")}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            )}
                                         </div>
+
                                     </div>
                                 </div>
+
 
                             </div>
                         </div>
 
                         <div>
-                            <h4 className="f-size-34 f-w-B text-black mb-4" data-aos="fade-up">Latest Health Insights</h4>
-                            <div className="row row-gap-4">
-                                <div className="col-md-6 d-flex flex-column">
-                                    <div className="cb_post_card flex-grow-1" data-aos="fade-up">
-                                        <div className="headWrapper d-flex">
-                                            <div className="iconbx">
-                                                <i className="cb-icon cb-brain"></i>
-                                            </div>
-                                            <div className="flex-grow-1">
-                                                <span className="cb_cstLabel_2 mb-1">THC 25%</span>
-                                                <div className="cb_post_title">
-                                                    <Link href="/" className="linkText text-black">Indica Strains Effective for Anxiety Relief</Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post_summary f-size-14">New research confirms indica varieties reduce anxiety symptoms by 70%</div>
-                                        <div className="bt_wrapp f-size-14 d-flex gap-2 justify-content-between">
-                                            <div>5 min read</div>
-                                            <div>
-                                                <Link href="/" className="text-black">Read More</Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 d-flex flex-column">
-                                    <div className="cb_post_card flex-grow-1" data-aos="fade-up">
-                                        <div className="headWrapper d-flex">
-                                            <div className="iconbx">
-                                                <i className="cb-icon cb-leaf"></i>
-                                            </div>
-                                            <div className="flex-grow-1">
-                                                <span className="cb_cstLabel_2 mb-1">Safety & Usage</span>
-                                                <div className="cb_post_title">
-                                                    <Link href="/" className="linkText text-black">Vaporizing Cannabis Flowers Safer Than Smoking</Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post_summary f-size-14">Study shows vaporization preserves therapeutic compounds while reducing toxins</div>
-                                        <div className="bt_wrapp f-size-14 d-flex gap-2 justify-content-between">
-                                            <div>3 min read</div>
-                                            <div>
-                                                <Link href="/" className="text-black">Read More</Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <h4
+                                className="f-size-34 f-w-B text-black mb-4"
+                                data-aos="fade-up"
+                            >
+                                Latest Health Insights
+                            </h4>
 
+                            <div className="row row-gap-4">
+                                {!BlogDetails || BlogDetails.length === 0 ? (
+                                    <div className="col-12 text-center">
+                                        <p className="f-size-18 clr-black mb-0">No Blogs Found.</p>
+                                    </div>
+                                ) : (
+                                    BlogDetails.map((blog: any) => (
+                                        <div key={blog.id} className="col-md-6 d-flex flex-column">
+                                            <div className="cb_post_card flex-grow-1" data-aos="fade-up">
+                                                <div className="headWrapper d-flex">
+                                                    <div className="iconbx">
+
+                                                        <i className="cb-icon cb-leaf"></i>
+                                                    </div>
+                                                    <div className="flex-grow-1">
+                                                        <span className="cb_cstLabel_2 mb-1">
+                                                            {new Date(blog.created_at).toLocaleDateString()}
+                                                        </span>
+                                                        <div className="cb_post_title">
+                                                            <Link
+                                                                href={`/blog/${blog.slug}`}
+                                                                className="linkText text-black"
+                                                            >
+                                                                {blog.title}
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="post_summary f-size-14">{blog.excerpt}</div>
+
+                                                <div className="bt_wrapp f-size-14 d-flex gap-2 justify-content-between">
+                                                    <div>
+                                                        {/* simple word count to estimate read time */}
+                                                        {Math.ceil(blog.content.split(" ").length / 200)} min read
+                                                    </div>
+                                                    <div>
+                                                        <Link href={`/blog/${blog.slug}`} className="text-black">
+                                                            Read More
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
+
 
                         <div className="mt-5 pt-4">
                             <div className="text-center mb-4" data-aos="fade-up">
@@ -320,83 +386,50 @@ const Productdetails: React.FC = () => {
                             </div>
 
                             <div className="mt-4 pt-3" data-aos="fade-up">
-                                <Slider {...testimonialCarousel} className='cb_cstSlider arrow-sm-stl'>
-                                    <div>
-                                        <div className="cb_testimonialCard">
-                                            <div className="wrap_head d-flex">
-                                                <div className="pic_wrap"><i className="cb-icon cb-users"></i></div>
-                                                <div className="flex-grow-1 align-self-center line_H_1_2">
-                                                    <div className="cont-head f-w-M text-black">Maria K.</div>
-                                                    <div className="cont-subText">Chronic Pain</div>
+                                <Slider {...testimonialCarousel} className="cb_cstSlider arrow-sm-stl">
+                                    {prductDetails?.reviews && prductDetails.reviews.length > 0 ? (
+                                        prductDetails.reviews.map((review: any, index: number) => (
+                                            <div key={index}>
+                                                <div className="cb_testimonialCard">
+                                                    <div className="wrap_head d-flex">
+                                                        <div className="pic_wrap">
+                                                            <i className="cb-icon cb-users"></i>
+                                                        </div>
+                                                        <div className="flex-grow-1 align-self-center line_H_1_2">
+                                                            <div className="cont-head f-w-M text-black">
+                                                                {review.user?.name || "Anonymous"}
+                                                            </div>
+                                                            <div className="cont-subText">Verified User</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="cb_testimonialStars">
+                                                        {[...Array(5)].map((_, starIndex) => (
+                                                            <i
+                                                                key={starIndex}
+                                                                className={`cb-icon cb-star ${starIndex < review.rating ? "text-warning" : "text-muted"
+                                                                    }`}
+                                                            ></i>
+                                                        ))}
+                                                    </div>
+
+
+                                                    <div className="mt-1 testimonial_summary f-size-14">
+                                                        {review.comment}
+                                                    </div>
+
+
                                                 </div>
                                             </div>
-                                            <div className="cb_testimonialStars">
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                            </div>
-                                            <div className="mt-1 testimonial_summary f-size-14">
-                                                "Cannabis oil has changed my life. After years of prescription painkillers, I finally found natural relief that works."
-                                            </div>
-                                            <div className="bt_Info_row text-black f-size-14">
-                                                Berlin, Germany
-                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center w-100">
+                                            <p className="f-size-16 clr-black mb-0">No Reviews Yet.</p>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div className="cb_testimonialCard">
-                                            <div className="wrap_head d-flex">
-                                                <div className="pic_wrap"><i className="cb-icon cb-users"></i></div>
-                                                <div className="flex-grow-1 align-self-center line_H_1_2">
-                                                    <div className="cont-head f-w-M text-black">Maria K.</div>
-                                                    <div className="cont-subText">Chronic Pain</div>
-                                                </div>
-                                            </div>
-                                            <div className="cb_testimonialStars">
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                            </div>
-                                            <div className="mt-1 testimonial_summary f-size-14">
-                                                "Cannabis oil has changed my life. After years of prescription painkillers, I finally found natural relief that works."
-                                            </div>
-                                            <div className="bt_Info_row text-black f-size-14">
-                                                Berlin, Germany
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="cb_testimonialCard">
-                                            <div className="wrap_head d-flex">
-                                                <div className="pic_wrap"><i className="cb-icon cb-users"></i></div>
-                                                <div className="flex-grow-1 align-self-center line_H_1_2">
-                                                    <div className="cont-head f-w-M text-black">Maria K.</div>
-                                                    <div className="cont-subText">Chronic Pain</div>
-                                                </div>
-                                            </div>
-                                            <div className="cb_testimonialStars">
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                                <i className="cb-icon cb-star"></i>
-                                            </div>
-                                            <div className="mt-1 testimonial_summary f-size-14">
-                                                "Cannabis oil has changed my life. After years of prescription painkillers, I finally found natural relief that works."
-                                            </div>
-                                            <div className="bt_Info_row text-black f-size-14">
-                                                Berlin, Germany
-                                            </div>
-                                        </div>
-                                    </div>
+                                    )}
                                 </Slider>
-
-
                             </div>
+
                         </div>
 
                         <div className="mt-4 pt-4">
@@ -405,7 +438,12 @@ const Productdetails: React.FC = () => {
                                     <h5 className="f-w-SB f-size-24 text-black mb-1">Need Help?</h5>
                                     <div className="f-size-14">Our team is available to assist with product selection and prescription guidance.</div>
                                     <div className="mt-3">
-                                        <button className="btn cb_cmnBtn btn-o flex-grow-1"><i className="cb-icon cb-phone"></i> Contact Support</button>
+                                        <a href="tel:+4917640587385">
+                                            <button className="btn cb_cmnBtn btn-o flex-grow-1">
+                                                <i className="cb-icon cb-phone"></i> Contact Support
+                                            </button>
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
