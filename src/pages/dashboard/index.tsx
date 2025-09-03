@@ -860,57 +860,64 @@ const Dashboard: React.FC = () => {
                                             </li>
                                         </ul>
                                     </div>
-                                    <div className="sepLine mb-3 pb-3">
-                                        <div className="d-flex justify-content-between align-items-center mb-0">
-                                            <div className="text-black line_H_1_3 f-w-SB mb__5">
-                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
-                                                Prescription Status
+                                    {selectedOrder.orderPrescription && (
+                                        <>
+                                            <div className="sepLine mb-3 pb-3">
+                                                <div className="d-flex justify-content-between align-items-center mb-0">
+                                                    <div className="text-black line_H_1_3 f-w-SB mb__5">
+                                                        <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
+                                                        Prescription Status
+                                                    </div>
+                                                    <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
+                                                        <li>
+                                                            <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.orderPrescription?.status)}`}>
+                                                                {selectedOrder.orderPrescription?.status}
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
+
+                                                    <li>
+                                                        <span className="text-black">Prescription Payment Status :</span>{" "}
+
+                                                        <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.orderPrescription?.payment_status)}`}>
+                                                            {selectedOrder.orderPrescription?.payment_status}
+                                                        </span>
+                                                    </li>
+                                                    {selectedOrder.orderPrescription?.prescriptionDoctor && (
+                                                        <li>
+                                                            <span className="text-black">Prescription Doctor Name :</span>{" "}
+                                                            <span className="text-black">
+                                                                {selectedOrder.orderPrescription.prescriptionDoctor.name}
+                                                            </span>
+                                                        </li>
+                                                    )}
+
+                                                </ul>
                                             </div>
-                                            <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
-                                            <li>
-                                                <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.payment_status)}`}>
-                                                    {selectedOrder.payment_status}
-                                                </span>
-                                            </li>
-                                            </ul>
-                                        </div>
+                                            <div className="sepLine mb-3 pb-3">
+                                                <div className="d-flex justify-content-between align-items-center mb-0">
+                                                    <div className="text-black line_H_1_3 f-w-SB mb__5">
+                                                        <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
+                                                        Product Information
+                                                    </div>
+                                                </div>
 
-                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
-                                           
-                                            <li>
-                                                <span className="text-black">Prescription Payment Status</span>{" "}
-
-                                                <span className={`cb_cstLabel_3 ${getPaymentStatusClass(selectedOrder.payment_status)}`}>
-                                                    {selectedOrder.payment_status}
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span className="text-black">Notes :</span>{" "}
-
-                                                  <span className="text-black">Notes from dr here</span>{" "}    
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="sepLine mb-3 pb-3">
-                                        <div className="d-flex justify-content-between align-items-center mb-0">
-                                            <div className="text-black line_H_1_3 f-w-SB mb__5">
-                                                <i className="textsm-icon cb-icon cb-circle-tick me-1"></i>{" "}
-                                                Product Information
+                                                <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
+                                                    <li>
+                                                        <span className="text-black">Pharmacy: </span>
+                                                        {selectedOrder.pharmacist?.store_name || "N/A"}
+                                                    </li>
+                                                    <li>
+                                                        <span className="text-black">Address: </span>
+                                                        {selectedOrder.pharmacist?.address || "N/A"}
+                                                    </li>
+                                                </ul>
                                             </div>
-                                        </div>
-
-                                        <ul className="list-unstyled m-0 d-flex flex-column row-gap-1 ms-4">
-                                            <li>
-                                                <span className="text-black">Pharmacy: </span>
-                                                {selectedOrder.pharmacist?.store_name || "N/A"}
-                                            </li>
-                                            <li>
-                                                <span className="text-black">Address: </span>
-                                                {selectedOrder.pharmacist?.address || "N/A"}
-                                            </li>
-                                        </ul>
-                                    </div>
-
+                                        </>
+                                    )}
                                     <div>
                                         <div className="d-flex justify-content-between align-items-center mb-0">
                                             <div className="text-black line_H_1_3 f-w-SB mb__5">
